@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://secparest/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://secparest/locale/overlay.dtd">
+<overlay id="secparest-overlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<script src="overlay.js"/>
+
+	<menupopup id="menu_ToolsPopup">
+		<menuseparator/>
+		<menuitem id="secparest-hello" label="Hello"
+			oncommand="Secparest.onMenuItemCommand(event);"/>
+	</menupopup>
+	<menubar id="main-menubar">
+		<menu id="sprs-menu" label="&sprs-menu.label;">
+			<menupopup name="menu_SPRSPopup">
+				<menuitem id="sprs-hello2" label="Hello"
+					oncommand="SPRS_Menus.onMenuItemCommand(event);"/>
+				<menu id="sprs-certs-menu" label="&sprs-certs-menu.label;">
+					<menupopup name="menu_sprs-certs">
+						<menuitem id="sprs-certs-view" label="&sprs-certs-view.label;"
+							oncommand="SPRS_Menus.onMenuCertsView(event);"/>
+						<menuitem id="sprs-certs-gen" label="&sprs-certs-gen.label;"
+							oncommand="SPRS_Menus.onMenuCertsGenerate(event);"/>
+						<menuitem id="sprs-certs-sign" label="&sprs-certs-sign.label;"
+							oncommand="SPRS_Menus.onMenuCertsSign(event);"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</overlay>

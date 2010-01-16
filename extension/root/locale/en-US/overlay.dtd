@@ -1,0 +1,6 @@
+<!ENTITY helloworld "Hello World!">
+<!ENTITY sprs-menu.label "Persona">
+<!ENTITY sprs-certs-menu.label "Certificates">
+<!ENTITY sprs-certs-view.label "View">
+<!ENTITY sprs-certs-gen.label "Generate">
+<!ENTITY sprs-certs-sign.label "Sign">

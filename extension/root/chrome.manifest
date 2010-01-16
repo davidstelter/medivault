@@ -1,0 +1,7 @@
+content secparest content/
+overlay chrome://browser/content/browser.xul chrome://secparest/content/overlay.xul
+
+locale secparest en-US locale/en-US/
+
+skin secparest classic/1.0 skin/
+style chrome://global/content/customizeToolbar.xul chrome://secparest/skin/overlay.css
