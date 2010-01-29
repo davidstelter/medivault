@@ -1,0 +1,6 @@
+content fireftp                                  jar:chrome/fireftp.jar!/content/ xpcnativewrappers=yes
+locale  fireftp en-US                         jar:chrome/fireftp.jar!/locale/en-US/
+skin    fireftp classic/1.0                      jar:chrome/fireftp.jar!/skin/
+overlay chrome://browser/content/browser.xul         chrome://fireftp/content/fireftpOverlay.xul
+style   chrome://global/content/customizeToolbar.xul chrome://fireftp/skin/overlay.css
+style   chrome://fireftp/content/fireftp.xul chrome://fireftp/skin/mac.css os=Darwin
