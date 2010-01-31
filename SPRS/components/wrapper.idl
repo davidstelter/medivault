@@ -1,0 +1,22 @@
+#include "nsISupports.idl"
+[scriptable, uuid(b23e4e97-4e78-4da5-bf18-1accf19361db)]
+interface nsISPRS_PKCS11_Wrapper : nsISupports
+{
+
+  //Utility Functions
+  long SPRS_getLastError();
+  boolean SPRS_initCrypto();
+  void SPRS_finalizeCrypto();
+  nsIArray SPRS_enumerateCards();
+  boolean SPRS_selectCard(in nsAString card);
+  nsIArray SPRS_listCerts();
+  boolaen SPRS_createCert(in nsAString cert);
+
+  //File Functions
+  boolean SPRS_encryptFile(in nsAString input, in nsAString output_file, in nsAString cert);
+  boolean signFile(in nsAString input_file, in nsAString output_file, in nsAString cert);
+  nsAString SPRS_decrypt(in nsAString input_file);
+  nsAString SPRS_verify(in nsAString input_file);
+  
+};
+
