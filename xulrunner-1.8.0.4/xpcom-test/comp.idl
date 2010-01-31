@@ -1,0 +1,15 @@
+#include "nsISupports.idl"
+[scriptable, uuid(b23e4e97-4e78-4da5-bf18-1accf19361db)]
+interface ISecPaReSt : nsISupports
+{
+  long add(in long a, in long b);
+  long readFile();
+  attribute AString name;
+  attribute AString fileName;
+  attribute AString fileContents;
+  long SPRS_getLastError();
+  boolean SPRS_initCrypto();
+  void finalizeCrypto();
+  
+};
+
