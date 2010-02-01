@@ -1,0 +1,30 @@
+In order to build the XPCOM component, download:
+
+http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.8.0.4/sdk/gecko-sdk-win32-msvc-1.8.0.4.zip
+
+Unzip into a dir named gecko-sdk in the same dir as the folder holding your clone of the repo.
+
+Next download http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip
+In this zip find glib-1.2.dll and libIDL-0.6.dll, put them in gecko-sdk/bin
+
+So your directory structure should look like:
+projectroot/
+	|
+	-gecko-sdk/
+	| -bin/
+	| | _ ...
+	|	| -glib-1.2.dll
+	| | -libIDL-0.6.dll
+	| |
+	| +idl/
+	| +include/
+	| +lib/
+	|
+	-medivault/
+		+.git/
+		| ...
+		-SPRS/
+			+content/
+			+components/
+			+skin/
+
