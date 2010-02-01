@@ -1,4 +1,8 @@
 #include "nsISupports.idl"
+
+interface nsIArray;
+interface nsAString;
+
 [scriptable, uuid(b23e4e97-4e78-4da5-bf18-1accf19361db)]
 interface nsISPRS_PKCS11_Wrapper : nsISupports
 {
@@ -10,7 +14,7 @@ interface nsISPRS_PKCS11_Wrapper : nsISupports
   nsIArray SPRS_enumerateCards();
   boolean SPRS_selectCard(in nsAString card);
   nsIArray SPRS_listCerts();
-  boolaen SPRS_createCert(in nsAString cert);
+  boolean SPRS_createCert(in nsAString cert);
 
   //File Functions
   boolean SPRS_encryptFile(in nsAString input, in nsAString output_file, in nsAString cert);
