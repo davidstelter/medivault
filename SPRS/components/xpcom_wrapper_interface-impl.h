@@ -6,12 +6,8 @@
 
 #define SPRS_PKCS11_WRAPPER_CONTRACTID "@capstone.pdx.edu/sprs;1"
 #define SPRS_PKCS11_WRAPPER_CLASSNAME "SPRS_PKCS11_Wrapper"
-
-/* no idea what this next define does (if anything)...
-#define SPRS_PKCS11_WRAPPER_CID \
-  {0xb23e4e97, 0x4e78, 0x4da5, \
-    { 0xbf, 0x18, 0x1a, 0xcc, 0xf1, 0x93, 0x61, 0xdb }}
-*/
+#define SPRS_PKCS11_WRAPPER_CID {0xc0a65ae3, 0x43d1, 0x4917, \
+    { 0xb5, 0x05, 0x28, 0xd8, 0xc3, 0x29, 0xc8, 0x26 }}
 
 class nsSPRS_PKCS11_Wrapper : public nsISPRS_PKCS11_Wrapper
 {
