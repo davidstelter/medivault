@@ -1,5 +1,5 @@
 #include "nsIGenericFactory.h"
-#include "xpcom_pkcs11_wrapper-impl.h"
+#include "xpcom_wrapper_interface-impl.h"
 
 NS_GENERIC_FACTORY_CONSTRUCTOR(nsSPRS_PKCS11_Wrapper)
 

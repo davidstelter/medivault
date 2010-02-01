@@ -1,7 +1,7 @@
 #ifndef __SPRS_PKCS11_WRAPPER_IMPL_H__
 #define __SPRS_PKCS11_WRAPPER_IMPL_H__
 
-#include "xpcom_pkcs11_wrapper.h"
+#include "xpcom_wrapper_interface.h"
 #include "nsStringAPI.h"
 
 #define SPRS_PKCS11_WRAPPER_CONTRACTID "@capstone.pdx.edu/sprs;1"
