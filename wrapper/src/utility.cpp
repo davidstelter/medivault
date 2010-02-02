@@ -42,6 +42,9 @@ bool initCrypto() {
 }
 
 void finalizeCrypto() {
+	if(!PKCSLibraryModule) {
+		return  //if there is nothing loaded we are done
+	}
 	funcList->C_Finalize(NULL_PTR);
 	FreeLibrary(PKCSLibraryModule);
 	PKCSLibraryModule = 0;  //set library to zero to be safe
