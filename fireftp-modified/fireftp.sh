@@ -1,6 +1,6 @@
 #!/bin/bash
 
-builddir=$HOME/Projects/fireftp-modified/
+builddir=$HOME/Projects/medivault/fireftp-modified/
 chrome=$builddir/chrome/
 
 

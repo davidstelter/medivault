@@ -314,8 +314,7 @@ var localDirTree2 = {
         gSlash  = "\\";
       }
 
-      try {
-		thePath = "/home";                                                                                       // make sure we have a valid drive
+      try {                                                                                      // make sure we have a valid drive
         var dir     = localFile2.init(thePath);
         var entries = dir.directoryEntries;
       } catch (ex) {

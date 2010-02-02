@@ -30,8 +30,8 @@ function startup() {
   gStatusMeter           = $('statusmeter');
   gLocalTree.view        = localTree;
   gLocalDirTree.view     = localDirTree;
-  gRemoteTree.view       = remoteTree;
-  gRemoteDirTree.view    = remoteDirTree;
+  gRemoteTree.view       = localTree2;//remoteTree;
+  gRemoteDirTree.view    = localDirTree2;//remoteDirTree;
   gQueueTree.view        = queueTree;
 
   gProfileDir            = Components.classes["@mozilla.org/file/directory_service;1"].createInstance(Components.interfaces.nsIProperties)
@@ -90,6 +90,7 @@ function startup() {
   accountButtonsDisabler(true);
   connectedButtonsDisabler();
   localDirTree.changeDir(gLocalPath.value);
+  localDirTree2.changeDir(gRemotePath.value);
   loadSiteManager(true);
   loadPrograms();
 

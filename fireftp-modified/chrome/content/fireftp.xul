@@ -26,14 +26,14 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/controlSocket.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/sftp.js"/>
+  <!--<script type="application/x-javascript" src="chrome://fireftp/content/js/connection/sftp.js"/>-->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/dataSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/ftpController.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/fxp.js"/>
+  <!--<script type="application/x-javascript" src="chrome://fireftp/content/js/connection/fxp.js"/>-->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/transfer.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/common.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/diff.js"/>
+  <!-- <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/diff.js"/> -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/dragDrop.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/fileSort.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/loadUnload.js"/>
@@ -43,7 +43,7 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/programs.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/queueTree.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/search.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/sessionsPasswords.js"/>
+  <!--<script type="application/x-javascript" src="chrome://fireftp/content/js/etc/sessionsPasswords.js"/> -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/threads.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeHighlighter.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeSync.js"/>
@@ -58,8 +58,8 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local2/localDirTree2.js"/>
 
 
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteTree.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteDirTree.js"/>
+  <!--<script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteTree.js"/>
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteDirTree.js"/>-->
 
   <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
 
@@ -141,9 +141,9 @@
         <popup id="advancedpopup"       position="after_start" onpopupshowing="toolsPopupMenu()">
       <menuitem oncommand="showSearch(true)"                    label="&search.label;"              accesskey="&search.access;"     id="searchMenuItem" key="key_search"/>
       <menuseparator/>
-      <menuitem oncommand="diff(false)"                         label="&diff.label;"                accesskey="&diff.access;"       id="diffMenuItem"/>
+      <!-- <menuitem oncommand="diff(false)"                         label="&diff.label;"                accesskey="&diff.access;"       id="diffMenuItem"/>
       <menuitem oncommand="diff(true)"                          label="&recdiff.label;"             accesskey="&recdiff.access;"    id="recDiffMenuItem"/>
-      <menuseparator/>
+      <menuseparator/>-->
       <menuitem oncommand="custom()"                            label="&custom.label;"              accesskey="&custom.access;"     id="customMenuItem"/>
       <menuseparator/>
       <menuitem oncommand="importSites()"                       label="&import.label;"              accesskey="&import.access;"     id="importMenuItem"/>
