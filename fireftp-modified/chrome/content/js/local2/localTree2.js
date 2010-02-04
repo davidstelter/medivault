@@ -89,7 +89,7 @@ var localTree2 = {
 
     if (!files) {
       this.searchMode = 0;
-      glocalTree2Children.removeAttribute('search');
+      gRemoteTreeChildren.removeAttribute('search');
 
       try {
         this.localSize               = 0;
@@ -154,7 +154,7 @@ var localTree2 = {
 
       this.localSize  = -1;
       this.searchMode = this.searchMode ? this.searchMode : (gSearchRecursive ? 2 : 1);
-      glocalTree2Children.setAttribute('search', true);
+      gRemoteTreeChildren.setAttribute('search', true);
     }
 
     this.sort(files);
@@ -556,7 +556,7 @@ var localTree2 = {
 
     this.editType   = "create";
     this.editParent = gRemotePath.value;
-    setTimeout("glocalTree2.startEditing(localTree2.rowCount - 1, glocalTree2.columns['localname'])", 0);
+    setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['localname'])", 0);
   },
 
   remove : function() {
@@ -615,7 +615,7 @@ var localTree2 = {
 
       this.editType   = "rename";
       this.editParent = gRemotePath.value;
-      glocalTree2.startEditing(this.selection.currentIndex, glocalTree2.columns["localname"]);
+      gRemoteTree.startEditing(this.selection.currentIndex, gRemoteTree.columns["localname"]);
     }
   },
 
@@ -649,7 +649,7 @@ var localTree2 = {
       } else {
         this.displayData[row].leafName = val;
         this.treebox.invalidateRow(row);
-        setTimeout("glocalTree2.startEditing(" + row + ", glocalTree2.columns['localname'])", 0);
+        setTimeout("gRemoteTree.startEditing(" + row + ", gRemoteTree.columns['localname'])", 0);
       }
     } else if (this.editType == "create") {
       if (val) {
@@ -667,7 +667,7 @@ var localTree2 = {
           this.data[row].leafName        = val;
           this.displayData[row].leafName = val;
           this.treebox.invalidateRow(row);
-          setTimeout("glocalTree2.startEditing(localTree2.rowCount - 1, glocalTree2.columns['localname'])", 0);
+          setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['localname'])", 0);
         }
       } else {
         --this.rowCount;
@@ -896,14 +896,14 @@ var localTree2 = {
   // ************************************************* keyEvent *****************************************************
 
   keyPress : function(event) {
-    if (glocalTree2.editingRow != -1) {
+    if (gRemoteTree.editingRow != -1) {
       if (event.keyCode == 27) {
         if (this.editType == "create") {
           this.setCellText(-1, "", "");
         } else {
-          this.displayData[glocalTree2.editingRow].leafName = this.displayData[glocalTree2.editingRow].origLeafName;
-          this.displayData[glocalTree2.editingRow].path     = this.displayData[glocalTree2.editingRow].origPath;
-          this.treebox.invalidateRow(glocalTree2.editingRow);
+          this.displayData[gRemoteTree.editingRow].leafName = this.displayData[gRemoteTree.editingRow].origLeafName;
+          this.displayData[gRemoteTree.editingRow].path     = this.displayData[gRemoteTree.editingRow].origPath;
+          this.treebox.invalidateRow(gRemoteTree.editingRow);
         }
       }
 
@@ -955,7 +955,7 @@ var localTree2 = {
       var x = {};    var y = {};    var width = {};    var height = {};
       this.treebox.getCoordsForCellItem(this.selection.currentIndex, this.treebox.columns["localname"], "text", x, y, width, height);
       this.createContextMenu();
-      $('localmenu').showPopup(glocalTree2Children, glocalTree2Children.boxObject.x + 75, glocalTree2Children.boxObject.y + y.value + 5, "context");
+      $('localmenu').showPopup(gRemoteTreeChildren, gRemoteTreeChildren.boxObject.x + 75, gRemoteTreeChildren.boxObject.y + y.value + 5, "context");
     } else if (event.charCode == 112 && accelKey && this.selection.count != 0) {                // accel-p
       event.preventDefault();
       this.showProperties(false);

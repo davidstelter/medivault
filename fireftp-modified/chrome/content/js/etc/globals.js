@@ -1,6 +1,6 @@
 var gConnections;               // array of all our ftp connections
 var gFtp;                       // the main ftp connection - where the magic happens
-var gVersion  = "1.0.7";  // version of FireFTP we're using
+var gVersion  = "1.0.7";  		// version of FireFTP we're using
 var gSlash;                     // holds '/' or '\\' depending on local system
 var gPlatform;                  // holds what platform we're on
 var gTransferTypes;             // holds 'Auto', 'Binary', 'ASCII'
@@ -76,10 +76,6 @@ var gLocalTree;
 var gLocalDirTree;
 var gLocalTreeChildren;
 var gLocalDirTreeChildren;
-var gLocalTree2;
-var gLocalDirTree2;
-var gLocalTreeChildren2;
-var gLocalDirTreeChildren2;
 var gRemotePath;
 var gRemoteTree;
 var gRemoteDirTree;
