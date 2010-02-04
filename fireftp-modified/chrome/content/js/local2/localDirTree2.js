@@ -50,6 +50,12 @@ var localDirTree2 = {
       var localPathSlash = gRemotePath.value    + (gRemotePath.value.charAt(gRemotePath.value.length - 1)       != gSlash ? gSlash : '');
       var dataPathSlash  = this.data[row].path + (this.data[row].path.charAt(this.data[row].path.length - 1) != gSlash ? gSlash : '');
 
+
+
+	  localTree2.updateView();
+
+
+
       if (localPathSlash.indexOf(dataPathSlash) == 0 && gRemotePath.value != this.data[row].path
        && gRemotePath.value.match(gSlash == "/" ? /\x2f/g : /\x5c/g ).length > this.data[row].level && !suppressChange) {
         gRemotePath.value = this.data[row].path;                                                    // we were in a subdirectory and we collapsed
@@ -413,6 +419,10 @@ var localDirTree2 = {
         }
         this.ignoreSelect = false;
 
+
+		localTree2.updateView();
+
+
         if (gRemotePath.value == this.data[x].path
             || (gSlash == "\\" && gRemotePath.value.toLowerCase() == this.data[x].path.toLowerCase())) {
           gRemotePathFocus = gRemotePath.value;                                                      // directory approved
@@ -498,7 +508,7 @@ var localDirTree2 = {
       return false;
     }*/
 
-    if (dragObserver.origin == 'localTree2children') {                                              // can't move into a subdirectory of itself
+    if (dragObserver.origin == 'localtreechildren') {                                              // can't move into a subdirectory of itself
       for (var x = 0; x < localTree2.rowCount; ++x) {
         var dataPathSlash  = this.data[index].path  + (this.data[index].path.charAt(this.data[index].path.length - 1)   != gSlash ? gSlash : '');
         var localTree2Slash = localTree2.data[x].path + (localTree2.data[x].path.charAt(localTree2.data[x].path.length - 1) != gSlash ? gSlash : '');
@@ -515,7 +525,7 @@ var localDirTree2 = {
   },
 
   drop : function(index, orient) {
-    if (dragObserver.origin == 'localTree2children') {
+    if (dragObserver.origin == 'localtreechildren') {
       localTree2.cut();
       localTree2.paste(this.data[index].path);
     } else if (dragObserver.origin == 'remotetreechildren') {

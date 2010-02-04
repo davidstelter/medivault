@@ -82,7 +82,7 @@ function browseLocal(title) {          // browse the local file structure
   var fp            = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
   fp.init(window, title ? title : gStrbundle.getString("selectFolder"), nsIFilePicker.modeGetFolder);
   var res = fp.show();
-
+	
   if (res == nsIFilePicker.returnOK) {
     localDirTree.changeDir(fp.file.path);
   }
@@ -95,8 +95,9 @@ function browseLocal2(title) {          // browse the local file structure
   var fp            = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
   fp.init(window, title ? title : gStrbundle.getString("selectFolder"), nsIFilePicker.modeGetFolder);
   var res = fp.show();
-
+  
   if (res == nsIFilePicker.returnOK) {
+	  
     localDirTree2.changeDir(fp.file.path);
   }
 

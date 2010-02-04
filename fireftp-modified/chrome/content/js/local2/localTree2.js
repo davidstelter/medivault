@@ -1179,7 +1179,7 @@ var localTree2 = {
       return false;
     }
 
-    if (dragObserver.origin == 'localTree2children') {                                           // don't drag onto itself
+    if (dragObserver.origin == 'localtreechildren') {                                           // don't drag onto itself
       for (var x = 0; x < this.rowCount; ++x) {
         if (this.selection.isSelected(x) && index == x) {
           return false;
@@ -1195,7 +1195,7 @@ var localTree2 = {
   },
 
   drop : function(index, orient) {
-    if (dragObserver.origin == 'localTree2children') {
+    if (dragObserver.origin == 'localtreechildren') {
       this.cut();
       this.paste(this.data[index].path);
     } else if (dragObserver.origin == 'remotetreechildren') {
