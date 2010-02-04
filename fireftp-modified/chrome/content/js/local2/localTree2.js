@@ -22,15 +22,15 @@ var localTree2 = {
   getCellText         : function(row, column)       {                                           // text for the files
     if (row >= 0 && row < this.data.length) {
       switch(column.id) {
-        case "localname":
+        case "remotename":
           return this.searchMode == 2 ? this.displayData[row].path : this.displayData[row].leafName;
-        case "localsize":
+        case "remotesize":
           return this.displayData[row].fileSize;
-        case "localdate":
+        case "remotedate":
           return this.displayData[row].date;
-        case "localtype":
+        case "remotetype":
           return this.displayData[row].extension;
-        case "localattr":
+        case "remoteattr":
           return this.displayData[row].attr;
         default:
           return " ";
@@ -41,24 +41,24 @@ var localTree2 = {
   },
 
   getImageSrc  : function(row, col)  {
-    return row >= 0 && row < this.data.length && col.id == "localname" && this.displayData[row].icon ? this.displayData[row].icon : "";
+    return row >= 0 && row < this.data.length && col.id == "remotename" && this.displayData[row].icon ? this.displayData[row].icon : "";
   },
 
   cycleHeader : function(col) {
     var sortDirection = col.element.getAttribute("sortDirection") == "descending"
                      || col.element.getAttribute("sortDirection") == "natural"  ? "ascending" : "descending";
-    $('localname').setAttribute("sortDirection", "natural");
-    $('localsize').setAttribute("sortDirection", "natural");
-    $('localdate').setAttribute("sortDirection", "natural");
-    $('localtype').setAttribute("sortDirection", "natural");
-    $('localattr').setAttribute("sortDirection", "natural");
+    $('remotename').setAttribute("sortDirection", "natural");
+    $('remotesize').setAttribute("sortDirection", "natural");
+    $('remotedate').setAttribute("sortDirection", "natural");
+    $('remotetype').setAttribute("sortDirection", "natural");
+    $('remoteattr').setAttribute("sortDirection", "natural");
     col.element.setAttribute(   "sortDirection", sortDirection);
     this.sort();
   },
 
   getCellProperties : function(row, col, props)   {
     if (row >= 0 && row < this.data.length && this.data[row]) {
-      if (col.id == "localname") {
+      if (col.id == "remotename") {
         if (this.displayData[row].isDirectory) {
           props.AppendElement(gAtomService.getAtom("isFolder"));
         } else if (this.displayData[row].isSymlink) {
@@ -138,12 +138,12 @@ var localTree2 = {
         this.displayData = new Array();
         this.treebox.rowCountChanged(0, -this.rowCount);
 
-        this.rememberSort = { cols : ["localname", "localsize", "localdate", "localtype", "localattr"],
-                              vals : [$('localname').getAttribute("sortDirection"),
-                                      $('localsize').getAttribute("sortDirection"),
-                                      $('localdate').getAttribute("sortDirection"),
-                                      $('localtype').getAttribute("sortDirection"),
-                                      $('localattr').getAttribute("sortDirection")] };
+        this.rememberSort = { cols : ["remotename", "remotesize", "remotedate", "remotetype", "remoteattr"],
+                              vals : [$('remotename').getAttribute("sortDirection"),
+                                      $('remotesize').getAttribute("sortDirection"),
+                                      $('remotedate').getAttribute("sortDirection"),
+                                      $('remotetype').getAttribute("sortDirection"),
+                                      $('remoteattr').getAttribute("sortDirection")] };
       }
 
       files.sort(compareName);
@@ -213,19 +213,19 @@ var localTree2 = {
         this.rememberSort = null;
       }
 
-      this.sortHelper($('localname'), this.searchMode == 2 ? directorySort2 : compareName);
-      this.sortHelper($('localsize'), compareSize);
-      this.sortHelper($('localdate'), compareDate);
-      this.sortHelper($('localtype'), compareType);
-      this.sortHelper($('localattr'), compareLocalAttr);
+      this.sortHelper($('remotename'), this.searchMode == 2 ? directorySort2 : compareName);
+      this.sortHelper($('remotesize'), compareSize);
+      this.sortHelper($('remotedate'), compareDate);
+      this.sortHelper($('remotetype'), compareType);
+      this.sortHelper($('remoteattr'), compareLocalAttr);
 
       this.displayData = new Array();
     } else {
-      $('localname').setAttribute("sortDirection", "natural");
-      $('localsize').setAttribute("sortDirection", "natural");
-      $('localdate').setAttribute("sortDirection", "natural");
-      $('localtype').setAttribute("sortDirection", "natural");
-      $('localattr').setAttribute("sortDirection", "natural");
+      $('remotename').setAttribute("sortDirection", "natural");
+      $('remotesize').setAttribute("sortDirection", "natural");
+      $('remotedate').setAttribute("sortDirection", "natural");
+      $('remotetype').setAttribute("sortDirection", "natural");
+      $('remoteattr').setAttribute("sortDirection", "natural");
     }
 
     var start = files ? this.data.length - files.length : 0;
@@ -556,7 +556,7 @@ var localTree2 = {
 
     this.editType   = "create";
     this.editParent = gRemotePath.value;
-    setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['localname'])", 0);
+    setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['remotename'])", 0);
   },
 
   remove : function() {
@@ -615,12 +615,12 @@ var localTree2 = {
 
       this.editType   = "rename";
       this.editParent = gRemotePath.value;
-      gRemoteTree.startEditing(this.selection.currentIndex, gRemoteTree.columns["localname"]);
+      gRemoteTree.startEditing(this.selection.currentIndex, gRemoteTree.columns["remotename"]);
     }
   },
 
   isEditable : function(row, col) {
-    var canEdit = row >= 0 && row < this.data.length && col.id == "localname";
+    var canEdit = row >= 0 && row < this.data.length && col.id == "remotename";
     this.isEditing = canEdit;
     return canEdit;
   },
@@ -649,7 +649,7 @@ var localTree2 = {
       } else {
         this.displayData[row].leafName = val;
         this.treebox.invalidateRow(row);
-        setTimeout("gRemoteTree.startEditing(" + row + ", gRemoteTree.columns['localname'])", 0);
+        setTimeout("gRemoteTree.startEditing(" + row + ", gRemoteTree.columns['remotename'])", 0);
       }
     } else if (this.editType == "create") {
       if (val) {
@@ -667,7 +667,7 @@ var localTree2 = {
           this.data[row].leafName        = val;
           this.displayData[row].leafName = val;
           this.treebox.invalidateRow(row);
-          setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['localname'])", 0);
+          setTimeout("gRemoteTree.startEditing(localTree2.rowCount - 1, gRemoteTree.columns['remotename'])", 0);
         }
       } else {
         --this.rowCount;
@@ -953,7 +953,7 @@ var localTree2 = {
       this.remove();
     } else if (event.keyCode  == 93) {                                                          // display context menu
       var x = {};    var y = {};    var width = {};    var height = {};
-      this.treebox.getCoordsForCellItem(this.selection.currentIndex, this.treebox.columns["localname"], "text", x, y, width, height);
+      this.treebox.getCoordsForCellItem(this.selection.currentIndex, this.treebox.columns["remotename"], "text", x, y, width, height);
       this.createContextMenu();
       $('localmenu').showPopup(gRemoteTreeChildren, gRemoteTreeChildren.boxObject.x + 75, gRemoteTreeChildren.boxObject.y + y.value + 5, "context");
     } else if (event.charCode == 112 && accelKey && this.selection.count != 0) {                // accel-p

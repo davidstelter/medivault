@@ -1,3 +1,5 @@
+// Note: changed localdirname to remotedirname made cpu goes up
+
 var localDirTree2 = {
   data         : new Array(),
   rowCount     : 0,
@@ -195,7 +197,7 @@ var localDirTree2 = {
       }
     }
 
-    $('localdirname').removeAttribute('flex');                                                     // horizontal scrollbars, baby!
+    $('remotedirname').removeAttribute('flex');                                                     // horizontal scrollbars, baby!
 
     var max = 125;
     for (var z = 0; z < this.rowCount; ++z) {                                                     // this is what we CS folk like to call a TOTAL HACK
@@ -211,7 +213,7 @@ var localDirTree2 = {
       this.readjustHorizontalPosition(row);
     //}
 
-    $('localdirname').setAttribute('width', max);
+    $('remotedirname').setAttribute('width', max);
   },
 
   readjustHorizontalPosition : function(row) {
@@ -219,7 +221,7 @@ var localDirTree2 = {
     var first = this.treebox.getFirstVisibleRow()    >  0 ? this.treebox.getFirstVisibleRow()    : 0;
     var last  = this.treebox.getLastVisibleRow() - 1 >= 0 ? this.treebox.getLastVisibleRow() - 1 : 0;
 
-    this.treebox.getCoordsForCellItem(row != -1 ? row : 0, this.treebox.columns["localdirname"], "text", x, y, width, height);
+    this.treebox.getCoordsForCellItem(row != -1 ? row : 0, this.treebox.columns["remotedirname"], "text", x, y, width, height);
     this.treebox.scrollToHorizontalPosition(this.treebox.horizontalPosition + x.value - 60 >= 0 ? this.treebox.horizontalPosition + x.value - 60 : 0);
 
     var self = this;
