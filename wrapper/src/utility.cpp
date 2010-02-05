@@ -6,8 +6,6 @@
 HMODULE PKCSLibraryModule = 0;
 CK_RV	returnValue;
 CK_FUNCTION_LIST_PTR funcList;
-CK_SLOT_ID_PTR slotList;
-
 
 bool initCrypto() {
 	if(PKCSLibraryModule) {
@@ -43,7 +41,7 @@ bool initCrypto() {
 
 void finalizeCrypto() {
 	if(!PKCSLibraryModule) {
-		return  //if there is nothing loaded we are done
+		return;  //if there is nothing loaded we are done
 	}
 	funcList->C_Finalize(NULL_PTR);
 	FreeLibrary(PKCSLibraryModule);
