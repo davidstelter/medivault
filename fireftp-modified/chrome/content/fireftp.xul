@@ -26,14 +26,11 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/controlSocket.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/sftp.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/dataSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/ftpController.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/fxp.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/transfer.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/common.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/diff.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/dragDrop.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/fileSort.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/loadUnload.js"/>
@@ -43,7 +40,6 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/programs.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/queueTree.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/search.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/sessionsPasswords.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/threads.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeHighlighter.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeSync.js"/>
@@ -53,13 +49,9 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local/localTree.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local/localDirTree.js"/>
   
-    <script type="application/x-javascript" src="chrome://fireftp/content/js/local2/localFile2.js"/>
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/local2/localFile2.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local2/localTree2.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local2/localDirTree2.js"/>
-
-
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteTree.js"/>
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/remote/remoteDirTree.js"/>
 
   <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
 
@@ -141,9 +133,6 @@
         <popup id="advancedpopup"       position="after_start" onpopupshowing="toolsPopupMenu()">
       <menuitem oncommand="showSearch(true)"                    label="&search.label;"              accesskey="&search.access;"     id="searchMenuItem" key="key_search"/>
       <menuseparator/>
-      <menuitem oncommand="diff(false)"                         label="&diff.label;"                accesskey="&diff.access;"       id="diffMenuItem"/>
-      <menuitem oncommand="diff(true)"                          label="&recdiff.label;"             accesskey="&recdiff.access;"    id="recDiffMenuItem"/>
-      <menuseparator/>
       <menuitem oncommand="custom()"                            label="&custom.label;"              accesskey="&custom.access;"     id="customMenuItem"/>
       <menuseparator/>
       <menuitem oncommand="importSites()"                       label="&import.label;"              accesskey="&import.access;"     id="importMenuItem"/>
@@ -176,105 +165,9 @@
       </hbox>
     </panel>
   </popupset>
-    <!-- <popup id="remotemenu" onpopupshowing="remoteTree.createContextMenu()">
-      <menuitem oncommand="remoteTree.openContainingFolder();"  label="&openContaining.label;"                                      id="remoteOpenCont"/>
-      <menuseparator                                                                                                                id="remoteOpenContSep"/>
-      <menuitem oncommand="new transfer().start(true)"          label="&download.label;"            key="key_transfer"              id="remoteDownload"/>
-      <menuitem oncommand="remoteTree.launch()"                 label="&open.label;"                key="key_open"                  id="remoteOpen"/>
-      <menu label="&openwith.label;"                                                                                                id="remoteOpenWith">
-        <menupopup id="remoteOpenWithMenu">
-        </menupopup>
-      </menu>
-      <menuseparator/>
-      <menuitem oncommand="remoteTree.viewOnTheWeb()"           label="&viewweb.label;"                                             id="remoteWeb"/>
-      <menu label="&copyUrl.label;"                                                                                                 id="remoteCopyUrl">
-        <menupopup>
-          <menuitem oncommand="remoteTree.copyUrl(true)"        label="HTTP"                        key="key_url"/>
-          <menuitem oncommand="remoteTree.copyUrl(false)"       label="FTP"/>
-          <menuitem oncommand="remoteTree.copyUrl(false, true)" label="&copyUrlLogin.label;"/>
-        </menupopup>
-      </menu>
-      <menu label="FXP"                                                                                                             id="remoteFXP">
-        <menupopup id="remoteFXPMenu">
-        </menupopup>
-      </menu>
-      <menuseparator/>
-      <menuitem oncommand="remoteTree.cut()"                    label="&cut.label;"                 key="key_cut"                   id="remoteCutContext"/>
-      <menuitem oncommand="remoteTree.paste()"                  label="&paste.label;"               key="key_paste" disabled="true" id="remotePasteContext"/>
-      <menuseparator/>
-      <menuitem oncommand="remoteTree.create(true)"             label="&makedir.label;"             key="key_dir"                   id="remoteCreateDir"/>
-      <menuitem oncommand="remoteTree.create(false)"            label="&makefile.label;"            key="key_file"                  id="remoteCreateFile"/>
-      <menuitem oncommand="remoteTree.remove()"                 label="&delete.label;"              key="key_remove"                id="remoteRemove"/>
-      <menuitem oncommand="remoteTree.rename()"                 label="&rename.label;"              key="key_rename"                id="remoteRename"/>
-      <menuseparator/>
-      <menuitem oncommand="remoteTree.showProperties(false)"    label="&properties.label;"          key="key_properties"            id="remoteProperties"/>
-      <menuitem oncommand="remoteTree.showProperties(true)"     label="&rproperties.label;"                                         id="remoteRecursiveProperties"/>
-    </popup>
-    <popup id="queuemenu" onpopupshowing="queueTree.createContextMenu()">
-      <menuitem oncommand="queueTree.retry();"                  label="&retry.label;"                                               id="queueRetry"/>
-      <menuitem oncommand="queueTree.cancel();"                 label="&cancel.label;"              key="key_remove"                id="queueCancel"/>
-      <menuseparator/>
-      <menuitem oncommand="doAbort()"                           label="&cancelAll.label;"                                           id="queueCancelAll"/>
-    </popup>
-    <popup id="advancedpopup"       position="after_start" onpopupshowing="toolsPopupMenu()">
-      <menuitem oncommand="showSearch(true)"                    label="&search.label;"              accesskey="&search.access;"     id="searchMenuItem" key="key_search"/>
-      <menuseparator/>
-      <menuitem oncommand="diff(false)"                         label="&diff.label;"                accesskey="&diff.access;"       id="diffMenuItem"/>
-      <menuitem oncommand="diff(true)"                          label="&recdiff.label;"             accesskey="&recdiff.access;"    id="recDiffMenuItem"/>
-      <menuseparator/>
-      <menuitem oncommand="custom()"                            label="&custom.label;"              accesskey="&custom.access;"     id="customMenuItem"/>
-      <menuseparator/>
-      <menuitem oncommand="importSites()"                       label="&import.label;"              accesskey="&import.access;"     id="importMenuItem"/>
-      <menuitem oncommand="exportSites()"                       label="&export.label;"              accesskey="&export.access;"     id="exportMenuItem"/>
-      <menuseparator/>
-      <menuitem oncommand="showPreferences()"                   label="&preferencestab.label;"      accesskey="&prefbutton.access;" id="prefbutton"/>
-    </popup>
-    <popup id="searchpopup"       position="before_start">
-      <menuitem oncommand="showSearchDates()" type="checkbox"   label="&searchDates.label;"         accesskey="&searchDates.access;"  id="searchDates"      persist="checked"/>
-      <menuitem type="checkbox"                                 label="&searchRegexp.label;"        accesskey="&searchRegexp.access;" id="searchRegExp"     persist="checked"/>
-      <menuitem type="checkbox"                                 label="&searchMatch.label;"         accesskey="&searchMatch.access;"  id="searchMatchCase"  persist="checked"/>
-      <menuitem type="checkbox"                                 label="&searchSubdir.label;"        accesskey="&searchSubdir.access;" id="searchSubdir"     persist="checked"/>
-    </popup>
-
-    <panel id="identity-popup" position="after_start" noautofocus="true">
-      <hbox id="identity-popup-container" align="top">
-        <image id="identity-popup-icon"/>
-        <vbox id="identity-popup-content-box">
-          <description id="identity-popup-content-supplemental"/>
-          <description id="identity-popup-content"/>
-          <description id="identity-popup-content-verifier"/>
-          <hbox id="identity-popup-encryption" flex="1">
-            <vbox>
-              <image id="identity-popup-encryption-icon"/>
-              <spacer flex="1"/>
-            </vbox>
-            <description id="identity-popup-encryption-label" flex="1"/>
-          </hbox>
-        </vbox>
-      </hbox>
-    </panel>
-  </popupset> -->
+    
 
   <vbox flex="1">
-
-    <!-- :::::::::::::::::::::::::::::: main toolbar :::::::::::::::::::::::::::::: -->
-	<!-- <toolbar         id="main-toolbar"  align="center">
-      <toolbaritem   collapsed="true" id="folderItem">
-        <menulist    id="folder"                                                                       oncommand="onFolderChange(false, true)" width="150"/>
-      </toolbaritem>
-      <toolbaritem>
-        <menulist    id="account"       label="&accountlist.label;"    onclick="createAccount()"       oncommand="onAccountChange()" width="150"/>
-      </toolbaritem>
-      <toolbarbutton id="connectbutton"/>
-      <toolbarbutton id="editMenuItem"  label="&edit.label;"           accesskey="&edit.access;"       oncommand="editSite()"/>
-      <toolbarbutton id="abortbutton"   label="&abort.label;"          accesskey="&abort.access;"      oncommand="doAbort()"/>
-      <toolbarspacer flex="1"/>
-      <toolbarbutton id="logbutton"     label="&logtab.label;"         accesskey="&logbutton.access;"  oncommand="showLog()" type="checkbox" persist="checked"  autoCheck="false" />
-      <toolbarbutton id="advmenu"       label="&advanced.label;"       accesskey="&advanced.access;"   popup="advancedpopup"/>
-      <toolbarbutton id="helpbutton"    label="&help.label;"           accesskey="&helpbutton.access;"
-                     oncommand="runInFirefox('&help.url;')"/>
-    </toolbar>-->
-
     <box flex="10">
       <vbox id="localview" flex="1"> 
         <!-- :::::::::::::::::::::::::::::: local toolbar :::::::::::::::::::::::::::::: -->
@@ -350,42 +243,10 @@
       <vbox id="remoteview" flex="1">
 
         <!-- :::::::::::::::::::::::::::::: remote toolbar :::::::::::::::::::::::::::::: -->
-		<!--
-        <toolbar>
-          <toolbarbutton id="remoteUpButton"      class="upButton"      oncommand="remoteDirTree.cdup()" tooltiptext="&parentdir.tip;"/>
-          <toolbarbutton id="remoteRefreshButton" class="refreshButton" oncommand="remoteTree.refresh()" tooltiptext="&refresh.tip;"/>
-          <textbox id                      = "remotepath"
-                   value                   = "/"
-                   flex                    = "1"
-                   tooltiptext             = "&remotepath.tip;"
-                   onfocus                 = "onRemotePathFocus(event)"
-                   onblur                  = "onRemotePathBlur(event)"
-                   onkeypress              = "if (event.keyCode == 13) remoteDirTree.changeDir(this.value)"
-                   ontextentered           = "remoteDirTree.changeDir(this.value)"
-                   type                    = "autocomplete"
-                   tabscrolling            = "true"
-                   enablehistory           = "true"
-                   autocompletepopup       = "PopupAutoComplete"
-                   autocompletesearch      = "form-history"
-                   autocompletesearchparam = "remotepath">
-            <box id="identity-box" align="center" popup="identity-popup">
-              <deck id="page-proxy-deck">
-                <image id="page-proxy-button"/>
-                <image id="page-proxy-favicon" validate="never"
-                       onload="this.parentNode.selectedIndex = 1; event.stopPropagation();"
-                       onerror="this.removeAttribute('src'); this.parentNode.selectedIndex = 0;"/>
-              </deck>
-            </box>
-          </textbox>
-          <toolbarbutton id="remoteChangeButton" label="&change.label;" oncommand="remoteDirTree.changeDir(gRemotePath.value)" accesskey="&changebutton.access;"/>
-        </toolbar> -->
-        
          <toolbar>
           <toolbarbutton id="remoteUpButton"      class="upButton"      oncommand="localDirTree2.cdup()" tooltiptext="&parentdir.tip;"/>
-          <!-- <toolbarbutton id="remoteRefreshButton" class="refreshButton" oncommand="localTree2.refresh()" tooltiptext="&refresh.tip;"/> -->
           <toolbarbutton class="refreshButton" oncommand="localTree2.refresh(false, true)" tooltiptext="&refresh.tip;"/>
           <textbox id                      = "remotepath"
-				   value				   = "/"
                    flex                    = "1"
                    tooltiptext             = "&remotepath.tip;"
                    onfocus                 = "onRemotePathFocus(event)"
@@ -398,31 +259,7 @@
                    autocompletepopup       = "PopupAutoComplete"
                    autocompletesearch      = "form-history"
                    autocompletesearchparam = "remotepath"/>
-          <!--<textbox id                      = "remotepath"
-                   value                   = "/"
-                   flex                    = "1"
-                   tooltiptext             = "&remotepath.tip;"
-                   onfocus                 = "onLocalPathFocus(event)"
-                   onblur                  = "onLocalPathBlur(event)"
-                   onkeypress              = "if (event.keyCode == 13) localDirTree2.changeDir(this.value)"
-                   ontextentered           = "localDirTree2.changeDir(this.value)"
-                   type                    = "autocomplete"
-                   tabscrolling            = "true"
-                   enablehistory           = "true"
-                   autocompletepopup       = "PopupAutoComplete"
-                   autocompletesearch      = "form-history"
-                   autocompletesearchparam = "remotepath"> 
-            <box id="identity-box" align="center" popup="identity-popup">
-              <deck id="page-proxy-deck">
-                <image id="page-proxy-button"/>
-                <image id="page-proxy-favicon" validate="never"
-                       onload="this.parentNode.selectedIndex = 1; event.stopPropagation();"
-                       onerror="this.removeAttribute('src'); this.parentNode.selectedIndex = 0;"/>
-              </deck>
-            </box>
-          </textbox>-->
           <toolbarbutton label="&browse.label;" oncommand="browseLocal2()" accesskey="&browsebutton.access;"/>
-          <!--<toolbarbutton id="remoteChangeButton" label="&change.label;" oncommand="localDirTree.changeDir(gRemotePath.value)" accesskey="&changebutton.access;"/> -->
         </toolbar>
 
         <!-- :::::::::::::::::::::::::::::: remote file view :::::::::::::::::::::::::::::: -->
@@ -459,41 +296,7 @@
         </hbox>
       </vbox>
     </box> 
-    
-		<!--
-        <hbox   width="1" flex="1" onmouseover="remoteTree.mouseOver(event)">
-          <tree id="remotedirtree" class="plain" flex="1" hidecolumnpicker="true" persist="collapsed"
-                onkeypress="remoteDirTree.keyPress(event)"
-                onselect  ="remoteDirTree.select(event)"
-                onclick   ="remoteDirTree.click(event)">
-            <treecols>
-              <treecol    id="remotedirname" flex="1" primary="true" persist="width ordinal hidden"/>
-            </treecols>
-            <treechildren id="remotedirtreechildren" class="dirTree" context="remotedirmenu"/>
-          </tree>
-          <splitter id="remotesplitter" collapse="before" persist="state">
-            <grippy/>
-          </splitter>
-          <tree        id="remotetree" class="plain" flex="2" enableColumnDrag="true" onkeypress="remoteTree.keyPress(event)">
-            <treecols>
-              <treecol id="remotename" label="&name.label;" flex="2" persist="width ordinal hidden sortDirection" sortDirection="ascending"/>
-              <splitter                 class="tree-splitter"/>
-              <treecol id="remotesize" label="&size.label;" flex="1" persist="width ordinal hidden sortDirection"/>
-              <splitter                 class="tree-splitter"/>
-              <treecol id="remotetype" label="&type.label;" flex="1" persist="width ordinal hidden sortDirection"/>
-              <splitter                 class="tree-splitter"/>
-              <treecol id="remotedate" label="&date.label;" flex="1" persist="width ordinal hidden sortDirection"/>
-              <splitter                 class="tree-splitter"/>
-              <treecol id="remoteattr" label="&attr.label;" flex="1" persist="width ordinal hidden sortDirection" hidden="true"/>
-            </treecols>
-            <treechildren id="remotetreechildren" class="fileTree" context="remotemenu"
-                          ondblclick="remoteTree.dblClick(event)"
-                          onclick   ="remoteTree.click(event)"/>
-          </tree>
-        </hbox>
-      </vbox>
-    </box> -->
-
+ 
     <!-- :::::::::::::::::::::::::::::: log/queue :::::::::::::::::::::::::::::: -->
 
     <splitter id="logsplitter" collapse="after" resizebefore="closest" onmousedown="checkLogMouseDown()" onmouseup="checkLogCollapsed()">
