@@ -1,4 +1,5 @@
 #include "xpcom_wrapper_interface-impl.h"
+#include "wrapper.h"
 
 NS_IMPL_ISUPPORTS1(nsSPRS_PKCS11_Wrapper, nsISPRS_PKCS11_Wrapper)
 
@@ -15,19 +16,28 @@ nsSPRS_PKCS11_Wrapper::~nsSPRS_PKCS11_Wrapper()
 /* long SPRS_getLastError (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	*_retval = getLastError();
+	return NS_OK;
 }
 
 /* boolean SPRS_initCrypto (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	if (initCrypto()){
+		*_retval = true;
+		return NS_OK;
+	}
+	else{
+		*_retval = false;
+		return NS_OK; //not the sort of failure we'd handle with a non-ok return code here, would make JS sad
+	}
 }
 
 /* void SPRS_finalizeCrypto (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	finalizeCrypto();
+    return NS_OK; //that probably worked! 
 }
 
 /* nsIArray SPRS_enumerateCards (); */

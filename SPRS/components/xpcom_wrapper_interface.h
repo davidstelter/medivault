@@ -64,9 +64,6 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   /* nsAString SPRS_verify (in nsAString input_file); */
   NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval) = 0;
 
-  /* boolean SPRS_deleteFile (in nsAString filename); */
-  NS_IMETHOD SPRS_deleteFile(nsAString *filename, PRBool *_retval) = 0;
-
 };
 
 /* Use this macro when declaring classes that implement this interface. */
@@ -81,8 +78,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_encryptFile(nsAString *input, nsAString *output_file, nsAString *cert, PRBool *_retval); \
   NS_IMETHOD SignFile(nsAString *input_file, nsAString *output_file, nsAString *cert, PRBool *_retval); \
   NS_IMETHOD SPRS_decrypt(nsAString *input_file, nsAString **_retval); \
-  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval); \
-  NS_IMETHOD SPRS_deleteFile(nsAString *filename, PRBool *_retval); 
+  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval); 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object. */
 #define NS_FORWARD_NSISPRS_PKCS11_WRAPPER(_to) \
@@ -96,8 +92,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_encryptFile(nsAString *input, nsAString *output_file, nsAString *cert, PRBool *_retval) { return _to SPRS_encryptFile(input, output_file, cert, _retval); } \
   NS_IMETHOD SignFile(nsAString *input_file, nsAString *output_file, nsAString *cert, PRBool *_retval) { return _to SignFile(input_file, output_file, cert, _retval); } \
   NS_IMETHOD SPRS_decrypt(nsAString *input_file, nsAString **_retval) { return _to SPRS_decrypt(input_file, _retval); } \
-  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval) { return _to SPRS_verify(input_file, _retval); } \
-  NS_IMETHOD SPRS_deleteFile(nsAString *filename, PRBool *_retval) { return _to SPRS_deleteFile(filename, _retval); } 
+  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval) { return _to SPRS_verify(input_file, _retval); } 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object in a safe way. */
 #define NS_FORWARD_SAFE_NSISPRS_PKCS11_WRAPPER(_to) \
@@ -111,8 +106,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_encryptFile(nsAString *input, nsAString *output_file, nsAString *cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_encryptFile(input, output_file, cert, _retval); } \
   NS_IMETHOD SignFile(nsAString *input_file, nsAString *output_file, nsAString *cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SignFile(input_file, output_file, cert, _retval); } \
   NS_IMETHOD SPRS_decrypt(nsAString *input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_decrypt(input_file, _retval); } \
-  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_verify(input_file, _retval); } \
-  NS_IMETHOD SPRS_deleteFile(nsAString *filename, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_deleteFile(filename, _retval); } 
+  NS_IMETHOD SPRS_verify(nsAString *input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_verify(input_file, _retval); } 
 
 #if 0
 /* Use the code below as a template for the implementation class for this interface. */
@@ -208,12 +202,6 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_decrypt(nsAString *input_file, nsAStri
 
 /* nsAString SPRS_verify (in nsAString input_file); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_verify(nsAString *input_file, nsAString **_retval)
-{
-    return NS_ERROR_NOT_IMPLEMENTED;
-}
-
-/* boolean SPRS_deleteFile (in nsAString filename); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_deleteFile(nsAString *filename, PRBool *_retval)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
