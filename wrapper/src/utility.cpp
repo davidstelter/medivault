@@ -1,5 +1,6 @@
 #include <windows.h>   
-#include <pkcs11.h>
+#include "pkcs11.h"
+#include <stdio.h>
 
 #include "error.h"
 
@@ -13,7 +14,7 @@ bool initCrypto() {
 		return false;
 	}
 	//Load the DLL file.
-	if (!(PKCSLibraryModule = LoadLibrary(L"acospkcs11.dll"))) {
+	if (!(PKCSLibraryModule = LoadLibrary(L".\\acospkcs11.dll"))) {
 		setError(DLL_LOAD_ERROR);
 		return false;
 	}
@@ -29,7 +30,7 @@ bool initCrypto() {
 		return false;
 	}
 	//initialize the cryptoEngine
-	returnValue = funcList->C_Initialize(NULL_PTR);
+	returnValue = (funcList->C_Initialize)(NULL_PTR);
 	if (returnValue != CKR_OK) {
 		setError(INIT_FAILED);
 		FreeLibrary(PKCSLibraryModule);
@@ -46,4 +47,23 @@ void finalizeCrypto() {
 	funcList->C_Finalize(NULL_PTR);
 	FreeLibrary(PKCSLibraryModule);
 	PKCSLibraryModule = 0;  //set library to zero to be safe
+}
+
+int getTokenCount(){
+	CK_ULONG ulSlotCount;			//Number of connected readers
+	//Search readers to get count
+		returnValue = (funcList->C_GetSlotList)(TRUE,NULL_PTR,&ulSlotCount);
+	return ulSlotCount;
+}
+
+int main(){
+	if(initCrypto()){
+		int num = getTokenCount();
+		printf("Token count: %d\n", num);
+	}
+	else{
+		printf("Initialization error: %d", getLastError());
+	}
+	
+	return 0;
 }

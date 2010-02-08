@@ -1,0 +1,50 @@
+<html>
+
+<head>
+  <script>
+    function initCrypto() {
+      try {
+        netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+
+        const cid = "@capstone.pdx.edu/sprs;1";
+        var obj = Components.classes[cid].createInstance();
+        obj = obj.QueryInterface(Components.interfaces.nsISPRS_PKCS11_Wrapper);
+				alert(obj.SPRS_initCrypto());
+				alert(obj.SPRS_getTokenCount());
+      }
+      catch (err) {
+        alert(err);
+				/*
+				try{
+				//	var error = obj.SPRS_getLastError();
+				//	alert(error);
+				}
+				catch (err){
+					alert(err);
+				}
+        return;
+				*/
+      }
+			alert('maybe worked?');
+/*
+      var res = obj.add(3, 4);
+      alert('3+4 = ' + res);
+
+      var name = obj.name;
+      alert('Name = ' + name);
+
+      obj.name = 'New Name';
+      name = obj.name;
+      alert('Name = ' + name);
+			*/
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <input type="button" value="Test XPCOM Component" onClick="initCrypto()"/>
+
+</body>
+</html>

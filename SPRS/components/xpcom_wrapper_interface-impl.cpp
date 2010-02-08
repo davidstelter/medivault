@@ -87,3 +87,11 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_verify(nsAString *input_file, nsAStrin
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
+
+/* long SPRS_getTokenCount (); */
+/* returns number of tokens recognized in the system*/
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getTokenCount(PRInt32 *_retval)
+{
+	*_retval = getTokenCount();
+	return NS_OK;
+}
