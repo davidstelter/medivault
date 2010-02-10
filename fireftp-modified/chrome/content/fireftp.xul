@@ -6,7 +6,7 @@
 
 <!DOCTYPE window SYSTEM "chrome://fireftp/locale/fireftp.dtd">
 <window id            = "fireftp-main-window"
-        title         = "FireFTP"
+        title         = "Persona"
         width         = "800"
         height        = "600"
         orient        = "vertical"
@@ -235,6 +235,9 @@
         <box      id="storbutton">
           <button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
         </box>
+		<box      id="openbutton">
+			<button id="openButton" label="Open" tooltiptext="Open"/>
+		</box>
       </vbox>
       <splitter   id="rightsplitter"  collapse="after" resizebefore="farthest" resizeafter="closest" oncommand="setInterfaceMode()">
         <grippy/>

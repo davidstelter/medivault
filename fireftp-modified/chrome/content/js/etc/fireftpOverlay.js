@@ -16,7 +16,7 @@ function loadFireFTP() {
 
   if (loadInTab) {
     var theTab          = gBrowser.addTab('chrome://fireftp/content/');
-    theTab.label        = "FireFTP";
+    theTab.label        = "Persona";
     gBrowser.selectedTab = theTab;
     var func = function () { gBrowser.setIcon(theTab, "chrome://fireftp/skin/icons/logo.png"); };
     setTimeout(func, 500);
