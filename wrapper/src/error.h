@@ -10,6 +10,8 @@
 #define	INVALID_ATTRIBUTE			7
 #define COULD_NOT_INIT_DECRYPTION	8
 #define FAILED_TO_DECRYPT			9
+#define NO_DEVICES_FOUND			10
+
 
 void setError(int);
 
