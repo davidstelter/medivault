@@ -186,8 +186,6 @@ transfer.prototype = {
         }
       }
 	  
-	  window.alert(download);
-	  
       if (download) {
 	if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
           if (!file.exists()) {

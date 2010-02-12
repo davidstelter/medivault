@@ -83,7 +83,7 @@ int encryptFile( string fileToEncrypt, string encryptedFile )
 	
 	try 
 	{
-		fileRead.open( filename.c_str() );
+		fileRead.open( fileToEncrypt.c_str() );
 		getline(fileRead,strToEncrypt); 
 		
         	while(fileRead) 
@@ -106,10 +106,17 @@ int encryptFile( string fileToEncrypt, string encryptedFile )
 	/* writing header, data, footer to file */
 	try
 	{
-		fileWrite.open( filename.c_str(), fstream::in | fstream::out | fstream::app );
+		/* create file */
+		fileWrite.open( encryptedFile.c_str(), fstream::in | fstream::out | fstream::app );
+		
+		/* write stream to file, APPEND MODE */
+		fileWrite << "<header></header>";
 		fileWrite << "<type>encrypted</type>";
 		fileWrite.<< "<cert>" << strKeyLabel << "</cert>";
 		fileWrite << "<enc>" << strEncrypted << "</enc>";
+		fileWrite << "footer></footer>";
+		
+		/* close */
 		fileWrite.close();
 	}
 	catch (ofstream:: failure e) 
