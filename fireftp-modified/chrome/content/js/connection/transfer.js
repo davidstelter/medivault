@@ -10,19 +10,6 @@ function transfer() {
 
 transfer.prototype = {
   start : function(download, aFile, aLocalParent, aRemoteParent, aListData) {
-    /*if (!gFtp.isConnected || this.cancel || remoteTree.isLoading
-      || ( download && !aFile && remoteTree.selection.count == 0 && !aLocalParent)
-      || (!download && !aFile && localTree.selection.count  == 0 && !aLocalParent)) {
-      return;
-    }
-
-    if (this.busy) {                                         // we're doing locking, sort of, see below
-      var self = this;
-      var currentListData = aListData ? aListData : cloneArray(gFtp.listData);
-      var func = function() { self.start(download, aFile, aLocalParent, aRemoteParent, currentListData); };
-      setTimeout(func, 500);
-      return;
-    }*/
 
     var localParent  = aLocalParent  ? aLocalParent  : gLocalPath.value;
     var remoteParent = aRemoteParent ? aRemoteParent : gRemotePath.value;
@@ -40,10 +27,6 @@ transfer.prototype = {
       if (aRemoteParent) {                                   // if recursive
         files = listData;
       } else {                                               // if not recursive
-        /*for (var x = 0; x < remoteTree.rowCount; ++x) {
-          if (remoteTree.selection.isSelected(x)) {
-            files.push(remoteTree.data[x]);
-          }*/
           for (var x = 0; x < localTree2.rowCount; ++x) {
           if (localTree2.selection.isSelected(x)) {
             files.push(localTree2.data[x]);
@@ -52,17 +35,6 @@ transfer.prototype = {
       }
     } else {                                                 // upload specific
       if (aLocalParent) {                                    // if recursive
-        /*try {
-          var dir     = localFile.init(localParent);
-          var innerEx = gFireFTPUtils.getFileList(dir, new wrapperClass(files));
-
-          if (innerEx) {
-            throw innerEx;
-          }
-        } catch (ex) {
-          debug(ex);
-          return;                                            // skip this directory
-        }*/
         for (var x = 0; x < localTree.rowCount; ++x) {
 			if (localTree.selection.isSelected(x0)) {
 				if (!localFile.verifyExists(localTree.data[x])) {
@@ -87,7 +59,6 @@ transfer.prototype = {
     if (download && aLocalParent) {
       localDirTree.addDirtyList(aLocalParent);
     } else if (!download && aRemoteParent) {
-      //remoteDirTree.addDirtyList(aRemoteParent);
       localDirTree2.addDirtyList(aRemoteParent);
     }
 
@@ -104,7 +75,6 @@ transfer.prototype = {
         fileName = fileName.replace(/[/\\:*?|"<>]/g, '_');
       }
 
-      //var remotePath = !download ? gFtp.constructPath     (remoteParent, fileName) : files[x].path;
       var remotePath = !download ? localTree2.constructPath     (remoteParent, fileName) : files[x].path;
       var localPath  =  download ? localTree.constructPath(localParent,  fileName) : files[x].path;
       var file;
@@ -113,7 +83,6 @@ transfer.prototype = {
         file           = localFile.init(localPath);
       } else {
         file           = { exists: function() { return false; } };
-        //var remoteList = aRemoteParent ? listData : remoteTree.data;
 		var remoteList = aRemoteParent ? listData : localTree2.data;
 
         for (var y = 0; y < remoteList.length; ++y) {
@@ -200,24 +169,7 @@ transfer.prototype = {
         }
       }
 
-      if (download) {
-        /*if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
-          if (!file.exists()) {
-            try {
-              file.create(Components.interfaces.nsILocalFile.DIRECTORY_TYPE, 0755);
-            } catch (ex) {
-              debug(ex);
-              error(gStrbundle.getFormattedString("failedDir", [remotePath]));
-              continue;
-            }
-          }
-
-          this.downloadHelper(localPath, remotePath);
-        } else {                                             // download the file
-          var connection = this.getConnection();
-          connection.download(remotePath, localPath, files[x].fileSize, resume, resume ? file.fileSize : -1, files[x].isSymlink());
-        }*/
-        
+      if (download) {  
         if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
 			if (!file.exists()) {
 				try {
@@ -229,7 +181,6 @@ transfer.prototype = {
 					}
 			}
         } else { 		// download the file
-			  window.alert("download");
 			  var dirpath = localPath.match(/(.*)[\/\\]([^\/\\]+\.\w+)$/);
 
 			  var nFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);  
@@ -243,19 +194,6 @@ transfer.prototype = {
         }
         
       } else {
-        /*if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
-          if (!file.exists()) {
-            gFtp.makeDirectory(remotePath);
-            gFtp.listData = new Array();                     // we know the new directory is empty
-            this.start(false, '', localPath, remotePath);
-          } else {
-            this.uploadHelper(localPath, remotePath);
-          }
-        } else {
-          var connection = this.getConnection();
-          connection.upload(localPath, remotePath, resume, files[x].fileSize, resume ? file.fileSize : -1);
-        }*/
-        
            if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
 			if (!file.exists()) {
 				try {
@@ -281,76 +219,6 @@ transfer.prototype = {
       }
     }
   },
-
-  /*downloadHelper : function(localPath, remotePath) {
-    var self = this;
-    var func = function() {                                  // we use downloadHelper b/c if we leave it inline the closures will apply
-      self.start(true,  '', localPath, remotePath);
-    };
-    gFtp.list(remotePath, func, true);
-  },
-
-  uploadHelper   : function(localPath, remotePath) {
-    var self = this;
-    var func = function() {                                  // we use uploadHelper   b/c if we leave it inline the closures will apply
-      gFtp.removeCacheEntry(remotePath);
-      self.start(false, '', localPath, remotePath);
-    };
-    gFtp.list(remotePath, func, true);
-  },
-
-  getConnection : function(func) {
-    if (gConcurrent == 1) {                                                 // short circuit
-      return gFtp;
-    }
-
-    for (var x = 0; x < gConcurrent && x < gMaxCon; ++x) {
-      if (gConnections[x].isConnected && gConnections[x].isReady) {         // pick the first ready connection
-        return gConnections[x];
-      }
-
-      if (x && !gConnections[x].isConnected && gConnections[x].type != 'bad' && !gConnections[x].isReady && !gConnections[x].eventQueue.length) {
-        gConnections[x].featMLSD   = gFtp.featMLSD;                         // copy over feats b/c we add to the queue even b/f connecting
-        gConnections[x].featMDTM   = gFtp.featMDTM;
-        gConnections[x].featXMD5   = gFtp.featXMD5;
-        gConnections[x].featXSHA1  = gFtp.featXSHA1;
-        gConnections[x].featXCheck = gFtp.featXCheck;
-        gConnections[x].featModeZ  = gFtp.featModeZ;
-
-        gConnections[x].connect();                                          // turn on a connection
-        return gConnections[x];
-      }
-    }
-
-    var minConnection = gFtp;
-    var minSize       = Number.MAX_VALUE;
-
-    for (var x = 0; x < gConcurrent && x < gMaxCon; ++x) {                  // if all connections are busy add to the queue with the least bytes to be transferred
-      if (gConnections[x].type == 'bad') {
-        continue;
-      }
-
-      var size = 0;
-
-      for (var y = 0; y < gConnections[x].eventQueue.length; ++y) {
-        if (gConnections[x].eventQueue[y].cmd == "PASV" && parseInt(gConnections[x].eventQueue[y].callback2)) {
-          size += gConnections[x].eventQueue[y].callback2;
-        }
-      }
-
-      if (gConnections[x].dataSocket) {
-        size += gConnections[x].dataSocket.progressEventSink.bytesTotal;
-        size += gConnections[x].dataSocket.dataListener.bytesTotal;
-      }
-
-      if (size < minSize) {
-        minConnection = gConnections[x];
-        minSize       = size;
-      }
-    }
-
-    return minConnection;
-  },*/
 
   getPlatform : function() {
     var platform = navigator.platform.toLowerCase();
