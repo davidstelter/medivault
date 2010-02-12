@@ -10,7 +10,7 @@ function transfer() {
 
 transfer.prototype = {
   start : function(download, aFile, aLocalParent, aRemoteParent, aListData) {
-    if (!gFtp.isConnected || this.cancel || remoteTree.isLoading
+    /*if (!gFtp.isConnected || this.cancel || remoteTree.isLoading
       || ( download && !aFile && remoteTree.selection.count == 0 && !aLocalParent)
       || (!download && !aFile && localTree.selection.count  == 0 && !aLocalParent)) {
       return;
@@ -22,7 +22,7 @@ transfer.prototype = {
       var func = function() { self.start(download, aFile, aLocalParent, aRemoteParent, currentListData); };
       setTimeout(func, 500);
       return;
-    }
+    }*/
 
     var localParent  = aLocalParent  ? aLocalParent  : gLocalPath.value;
     var remoteParent = aRemoteParent ? aRemoteParent : gRemotePath.value;
@@ -78,8 +78,11 @@ transfer.prototype = {
       remoteDirTree.addDirtyList(aRemoteParent);
     }
 
+	window.alert(files.length);
+	
     for (var x = 0; x < files.length; ++x) {
       var fileName = files[x].leafName;
+      window.alert(files[x].leafName);
 
       if ((download && gDownloadCaseMode == 1) || (!download && gUploadCaseMode == 1)) {
         fileName = fileName.toLowerCase();                   // special request to change filename case
@@ -96,8 +99,10 @@ transfer.prototype = {
       var file;
 
       if (download) {                                        // check to see if file exists
+		window.alert("test1");
         file           = localFile.init(localPath);
       } else {
+		window.alert("test2");
         file           = { exists: function() { return false; } };
         var remoteList = aRemoteParent ? listData : remoteTree.data;
 
@@ -184,8 +189,11 @@ transfer.prototype = {
           gFtp.remoteRefreshLater = this.remoteRefresh ? this.remoteRefresh : remoteParent;
         }
       }
-
+	  
+	  window.alert(download);
+	  
       if (download) {
+		   window.alert("download");
         if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
           if (!file.exists()) {
             try {
@@ -199,10 +207,13 @@ transfer.prototype = {
 
           this.downloadHelper(localPath, remotePath);
         } else {                                             // download the file
-          var connection = this.getConnection();
-          connection.download(remotePath, localPath, files[x].fileSize, resume, resume ? file.fileSize : -1, files[x].isSymlink());
+          /*var connection = this.getConnection();
+          connection.download(remotePath, localPath, files[x].fileSize, resume, resume ? file.fileSize : -1, files[x].isSymlink());*/
+          file.copyTo(localPath, file.leafName);
+          window.alert("download");
         }
       } else {
+		   window.alert("upload");
         if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
           if (!file.exists()) {
             gFtp.makeDirectory(remotePath);
@@ -212,8 +223,10 @@ transfer.prototype = {
             this.uploadHelper(localPath, remotePath);
           }
         } else {
-          var connection = this.getConnection();
-          connection.upload(localPath, remotePath, resume, files[x].fileSize, resume ? file.fileSize : -1);
+          /*var connection = this.getConnection();
+          connection.upload(localPath, remotePath, resume, files[x].fileSize, resume ? file.fileSize : -1);*/
+          file.copyTo(remotePath, file.leafName);
+          window.alert("upload");
         }
       }
     }
