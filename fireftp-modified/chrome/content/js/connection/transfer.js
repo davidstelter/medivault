@@ -77,8 +77,6 @@ transfer.prototype = {
     } else if (!download && aRemoteParent) {
       remoteDirTree.addDirtyList(aRemoteParent);
     }
-
-	window.alert(files.length);
 	
     for (var x = 0; x < files.length; ++x) {
       var fileName = files[x].leafName;
@@ -99,10 +97,8 @@ transfer.prototype = {
       var file;
 
       if (download) {                                        // check to see if file exists
-		window.alert("test1");
-        file           = localFile.init(localPath);
+	file           = localFile.init(localPath);
       } else {
-		window.alert("test2");
         file           = { exists: function() { return false; } };
         var remoteList = aRemoteParent ? listData : remoteTree.data;
 
@@ -193,8 +189,7 @@ transfer.prototype = {
 	  window.alert(download);
 	  
       if (download) {
-		   window.alert("download");
-        if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
+	if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
           if (!file.exists()) {
             try {
               file.create(Components.interfaces.nsILocalFile.DIRECTORY_TYPE, 0755);
@@ -209,11 +204,9 @@ transfer.prototype = {
         } else {                                             // download the file
           /*var connection = this.getConnection();
           connection.download(remotePath, localPath, files[x].fileSize, resume, resume ? file.fileSize : -1, files[x].isSymlink());*/
-          file.copyTo(localPath, file.leafName);
-          window.alert("download");
+          file.copyTo(localPath, null);
         }
       } else {
-		   window.alert("upload");
         if (files[x].isDirectory()) {                        // if the directory doesn't exist we create it
           if (!file.exists()) {
             gFtp.makeDirectory(remotePath);
@@ -225,8 +218,7 @@ transfer.prototype = {
         } else {
           /*var connection = this.getConnection();
           connection.upload(localPath, remotePath, resume, files[x].fileSize, resume ? file.fileSize : -1);*/
-          file.copyTo(remotePath, file.leafName);
-          window.alert("upload");
+          file.copyTo(remotePath, null);
         }
       }
     }
