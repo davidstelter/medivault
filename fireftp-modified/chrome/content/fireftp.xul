@@ -44,6 +44,7 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeHighlighter.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/treeSync.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/UIUpdate.js"/>
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/readFile.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local/localFile.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/local/localTree.js"/>
@@ -236,7 +237,7 @@
           <button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
         </box>
 		<box      id="openbutton">
-			<button id="openButton" label="Open" tooltiptext="Open"/>
+		  <button id="openButton" 	  oncommand="new readFile().start(true)"  label="Open" tooltiptext="Open"/>
 		</box>
       </vbox>
       <splitter   id="rightsplitter"  collapse="after" resizebefore="farthest" resizeafter="closest" oncommand="setInterfaceMode()">

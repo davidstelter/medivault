@@ -11,7 +11,8 @@
 #define COULD_NOT_INIT_DECRYPTION	8
 #define FAILED_TO_DECRYPT			9
 #define NO_DEVICES_FOUND			10
-
+#define FAILED_TO_OPEN_READ_FILE		11
+#define FAILED_TO_OPEN_WRITE_FILE		12
 
 void setError(int);
 
