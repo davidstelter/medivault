@@ -3,4 +3,5 @@ bool initCrypto();
 void finalizeCrypto();
 int getLastError();
 bool trivial();
+int getTokenCount();
 
