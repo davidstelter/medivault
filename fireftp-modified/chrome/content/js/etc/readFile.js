@@ -9,16 +9,16 @@ function readFile() {
 }
 
 readFile.prototype = {
-  start : function(read, bFile, bLocalParent, bRemoteParent, aListData) {
+  start : function(read, aFile, aLocalParent, aRemoteParent, aListData) {
 	
 	window.alert(bLocalParent);
 	window.alert(bRemoteParent);
 	  
-    var localParent  = bLocalParent  ? bLocalParent  : gLocalPath.value;
-    var remoteParent = bRemoteParent ? bRemoteParent : gRemotePath.value;
+    var localParent  = aLocalParent  ? aLocalParent  : gLocalPath.value;
+    var remoteParent = aRemoteParent ? aRemoteParent : gRemotePath.value;
     var files        = new Array();
     var data         = "";
-    var listData     = bListData ? bListData : [];
+    var listData     = aListData ? aListData : [];
     
     window.alert(localParent);
     window.alert(remoteParent);
@@ -45,11 +45,16 @@ readFile.prototype = {
 	window.alert(files.length);
 	
 	for (var x = 0; x < files.length; ++x) {
-      var fileName = files[x].leafName;
+		var fileName = files[x].leafName;
+		
+		if (this.getPlatform() == "windows")
+		{
+			fileName = fileName.replace(/[/\\:*?|"<>]/g, '_');
+		}
 	
-	  var remotePath = read ? localTree2.constructPath(remoteParent, fileName) : files[x].path;
-	  var localPath  = read ? localTree.constructPath(localParent,  fileName) : files[x].path;
-	  var nFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);  
+		var remotePath = read ? localTree2.constructPath(remoteParent, fileName) : files[x].path;
+		var localPath  = read ? localTree.constructPath(localParent,  fileName) : files[x].path;
+		var nFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);  
 
 		var appInfo=Components.classes["@mozilla.org/xre/app-info;1"]
                    .getService(Components.interfaces.nsIXULAppInfo);
@@ -81,7 +86,21 @@ readFile.prototype = {
 		  sl.init(observer);
 		  channel.asyncOpen(sl, channel);
 		}
-    }
-}
+    	 }
+  },
+
+  getPlatform : function() {
+	var platform = navigator.platform.toLowerCase();
+	
+	if (platform.indexOf('linux') != -1) {
+	       	return 'linux';
+	}
+
+	if (platform.indexOf('mac') != -1) {
+		return 'mac';
+	}
+	
+	return 'windows';
+  }
 };
 

@@ -13,15 +13,15 @@ interface nsISPRS_PKCS11_Wrapper : nsISupports
   boolean SPRS_initCrypto();
   void SPRS_finalizeCrypto();
   nsIArray SPRS_enumerateCards();
-  boolean SPRS_selectCard(in nsAString card);
+  boolean SPRS_selectCard(in long card, in AString pin);
   nsIArray SPRS_listCerts();
-  boolean SPRS_createCert(in nsAString cert);
+  boolean SPRS_createCert(in AString cert);
 
   //File Functions
-  boolean SPRS_encryptFile(in nsAString input, in nsAString output_file, in nsAString cert);
-  boolean signFile(in nsAString input_file, in nsAString output_file, in nsAString cert);
-  nsAString SPRS_decrypt(in nsAString input_file);
-  nsAString SPRS_verify(in nsAString input_file);
+  boolean SPRS_encryptFile(in AString input, in AString output_file, in AString cert);
+  boolean signFile(in AString input_file, in AString output_file, in AString cert);
+  nsAString SPRS_decrypt(in AString input_file);
+  nsAString SPRS_verify(in AString input_file);
   
 	//stuff not in the wrapper API
 	long SPRS_getTokenCount();
