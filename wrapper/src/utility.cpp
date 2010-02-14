@@ -1,5 +1,4 @@
-#include <cryptoki.h>
-#include <pkcs11.h>
+#include "cryptoki.h"
 #include <stdio.h>
 #include <windows.h>
 #include <string>
@@ -121,7 +120,19 @@ bool selectCard(int SlotID)
 						CKF_SERIAL_SESSION| CKF_RW_SESSION, NULL, NULL, &hSession);
 
 		if (returnValue == CKR_OK) 
-			return true;
+		{
+			CK_UTF8CHAR UserPIN[] = {"123"};
+			
+			returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
+
+			if (returnValue != CKR_OK) 
+			{
+				setError(WRONG_PASSWORD);
+				return false;
+			}
+			else				
+				return true;
+		}
 		else
 		{
 			setError(OPEN_SESSION_FAILED);
@@ -139,8 +150,7 @@ int main(){
 			slots = enumerateCards();
 			
 
-			if (!selectCard(0))
-				printf("Opening session error: %d", getLastError());
+			selectCard(0);
 
 			delete [] slots;
 		}
