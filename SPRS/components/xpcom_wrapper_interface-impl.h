@@ -3,7 +3,14 @@
 
 #include "xpcom_wrapper_interface.h"
 #include "nsStringAPI.h"
+#include "cryptoki.h"
+#include "sprs_error.h"
+#include <stdio.h>
+#include <windows.h>
+#include <string>
+#include <iostream>
 
+using namespace std;
 
 #define SPRS_PKCS11_WRAPPER_CONTRACTID "@capstone.pdx.edu/sprs;1"
 #define SPRS_PKCS11_WRAPPER_CLASSNAME "SPRS_PKCS11_Wrapper"
@@ -19,10 +26,25 @@ public:
   nsSPRS_PKCS11_Wrapper();
 
 private:
+	HMODULE PKCSLibraryModule;
+	CK_RV	returnValue;
+	CK_FUNCTION_LIST_PTR funcList;
+
+	CK_SLOT_ID_PTR pSlotWithTokenList;
+	CK_SESSION_HANDLE hSession;
+	int TokenCount;
+	int m_lastError;
   ~nsSPRS_PKCS11_Wrapper();
 
 protected:
-  /* additional members */
+	void setError(int error);
+	bool initCrypto();
+	void finalizeCrypto();
+	int getLastError(void);
+
+	int getTokenCount();
+	bool selectCard(long slotID, const nsAString & pin);
+	string *enumerateCards(void);
 };
 
 #endif

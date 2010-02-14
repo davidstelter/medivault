@@ -10,7 +10,14 @@
         var obj = Components.classes[cid].createInstance();
         obj = obj.QueryInterface(Components.interfaces.nsISPRS_PKCS11_Wrapper);
 				alert(obj.SPRS_initCrypto());
+				alert("Error code: " + obj.SPRS_getLastError());
 				alert(obj.SPRS_getTokenCount());
+				alert("Error code: " + obj.SPRS_getLastError());
+				alert(obj.SPRS_enumerateCards());
+				alert("Error code: " + obj.SPRS_getLastError());
+
+				alert(obj.SPRS_selectCard(0, "hello"));
+				alert("Error code: " + obj.SPRS_getLastError());
       }
       catch (err) {
         alert(err);

@@ -184,10 +184,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\wrapper\src\utility.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\xpcom_wrapper_interface-impl.cpp"
 				>
 			</File>
@@ -202,11 +198,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\wrapper\src\error.h"
+				RelativePath=".\cryptoki.h"
 				>
 			</File>
 			<File
-				RelativePath=".\wrapper.h"
+				RelativePath=".\pkcs11.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pkcs11f.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pkcs11t.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sprs_error.h"
 				>
 			</File>
 			<File
