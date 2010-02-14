@@ -1,8 +1,4 @@
-//#include "cryptoki.h"
 #include "xpcom_wrapper_interface-impl.h"
-//#include "wrapper.h"
-//#include <string>
-//#include <windows.h>
 
 using namespace std;
 
@@ -52,8 +48,9 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 /* nsIArray SPRS_enumerateCards (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
 {
-	enumerateCards();
-
+		
+		string* cardlist = enumerateCards();
+		
     return NS_OK;
 }
 
@@ -232,9 +229,17 @@ bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
 
 		if (returnValue == CKR_OK) 
 		{
-			CK_UTF8CHAR UserPIN[] = "12345678";
+			//CK_UTF8CHAR UserPIN[] = "12345678";
+			CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
+			const PRUnichar* cur = pin.BeginReading();
+			const PRUnichar* end = pin.EndReading();
+			int i;
+			for(i=0; cur < end; ++cur, ++i){
+				UserPIN[i] = (CK_UTF8CHAR)*cur;
+			}
+			UserPIN[pin.Length()] = 0;
 			
-			returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
+			returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, pin.Length());
 
 			if (returnValue != CKR_OK) 
 			{
