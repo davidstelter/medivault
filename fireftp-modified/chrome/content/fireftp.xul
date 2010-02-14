@@ -236,8 +236,8 @@
         <box      id="storbutton">
           <button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
         </box>
-		<box      id="openbutton">
-		  <button id="openButton" 	  oncommand="new readFile().start(true)"  label="Open" tooltiptext="Open"/>
+		<box      id="readbutton">
+		  <button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
 		</box>
       </vbox>
       <splitter   id="rightsplitter"  collapse="after" resizebefore="farthest" resizeafter="closest" oncommand="setInterfaceMode()">

@@ -70,11 +70,7 @@ function onRemotePathFocus(event) {
 }
 
 function onRemotePathBlur(event) {
-  /*if (!gFtp.isConnected) {
-    gRemotePathFocus  = gRemotePath.value;
-  } else {*/
     gRemotePath.value = gRemotePathFocus;
-  //}
 }
 
 function browseLocal(title) {          // browse the local file structure
