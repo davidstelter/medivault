@@ -2,12 +2,16 @@
 #include <stdio.h>
 #include <windows.h>
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <fstream>
 
 #include "error.h"
 
 #define BUFFER_SIZE 256
+#define DEBUG_STDOUT_MSGS
+#define SC_PIN_CODE "12345678"
+#define SURVIVE_READ_FAIL
 
 using namespace std;
 
@@ -128,7 +132,7 @@ bool selectCard(int SlotID)
 
 		if (returnValue == CKR_OK) 
 		{
-			CK_UTF8CHAR UserPIN[] = {"123"};
+			CK_UTF8CHAR UserPIN[] = SC_PIN_CODE;
 			
 			returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
 
@@ -199,11 +203,17 @@ string encrypt( string plainText, string keyLabel )
 bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel )
 {
 	int retval = 0;
-	char buffer[BUFFER_SIZE];
+	//char buffer[BUFFER_SIZE];
 	ifstream fileRead;
 	ofstream fileWrite;
+#ifdef SURVIVE_READ_FAIL
 	string strToEncrypt = "BOB";
+#else
+	string strToEncrypt = "BOB";
+#endif
+	stringstream inputStream;
 	string strEncrypted;
+
 	
 	fileRead.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
 	fileWrite.exceptions ( ofstream::eofbit | ofstream::failbit | ofstream::badbit );
@@ -211,19 +221,30 @@ bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel
 	try 
 	{
 		fileRead.open( fileToEncrypt.c_str() );
-        	while(fileRead.readsome(buffer, BUFFER_SIZE)) 
-			{  	 				
-            		strToEncrypt += buffer;
-        	}
-
-        	fileRead.close();
+		if(fileRead.fail()){
+#ifdef DEBUG_STDOUT_MSGS
+			cout << "Failed to open file " << fileToEncrypt << endl;
+#endif
+			return false;
+		}
+		inputStream << fileRead.rdbuf();
+		strToEncrypt = inputStream.str();
+	
+		fileRead.close();
 	}
 	catch (ifstream::failure e) 
 	{
+#ifdef DEBUG_STDOUT_MSGS
 		cout << "Exception opening/reading file";
+#endif
 		setError(FAILED_TO_OPEN_READ_FILE);
+#ifndef SURVIVE_READ_FAIL
 		return false;
+#endif
 	}
+#ifdef DEBUG_STDOUT_MSGS
+	cout << "Read file: " << strToEncrypt << endl;
+#endif
 	
 	/* encrypt sucka */
 	strEncrypted = encrypt(strToEncrypt, strKeyLabel);
@@ -243,14 +264,16 @@ bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel
 		fileWrite << "<type>encrypted</type>";
 		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
 		fileWrite << "<enc>" << strEncrypted.c_str() << "</enc>";
-		//fileWrite << "footer></footer>";
+		fileWrite << "<footer></footer>";
 		
 		/* close */
 		fileWrite.close();
 	}
 	catch (ofstream:: failure e) 
 	{
+#ifdef DEBUG_STDOUT_MSGS
 		cout << "Exception opening/writing to file";
+#endif
 		setError(FAILED_TO_OPEN_WRITE_FILE);
 		return false;
 	}
@@ -269,7 +292,6 @@ int main(){
 			string *slots;
 			slots = enumerateCards();
 			
-
 			selectCard(0);
 
 			delete [] slots;
@@ -278,8 +300,13 @@ int main(){
 	else{
 		printf("Initialization error: %d", getLastError());
 	}
+	listCerts();
+	printf("about to encrypt...\n");
 	encryptFile( "bob.txt", "bob.enc", "bob" );
 	finalizeCrypto();
+
+	
+	cout << "Press almost any key to continue..." << endl;
 	getchar();
 	return 0;
 }

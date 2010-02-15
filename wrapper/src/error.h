@@ -14,6 +14,7 @@
 #define FAILED_TO_OPEN_READ_FILE	11
 #define FAILED_TO_OPEN_WRITE_FILE	12
 #define FAILED_TO_ENCRYPT			13
+#define WRONG_PASSWORD				14
 
 void setError(int);
 
