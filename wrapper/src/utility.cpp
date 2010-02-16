@@ -154,6 +154,7 @@ bool selectCard(int SlotID)
 }
 
 bool getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey);
+bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey);
 
 string encrypt( string plainText, string keyLabel )
 {
@@ -264,7 +265,7 @@ bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel
 		fileWrite << "<type>encrypted</type>";
 		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
 		fileWrite << "<enc>" << strEncrypted.c_str() << "</enc>";
-		fileWrite << "<footer></footer>";
+		//fileWrite << "<footer></footer>";
 		
 		/* close */
 		fileWrite.close();
@@ -279,6 +280,81 @@ bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel
 	}
 
 	return true;
+}
+
+string decrypt(string cipherText, string keyLabel)
+{
+	CK_OBJECT_HANDLE key;
+	//we will be decrypting using RSA PKCS
+	CK_MECHANISM mechanism = {CKM_RSA_PKCS, NULL_PTR, 0};
+	//get the key
+	getPrivateKey(keyLabel, key);
+	//begin decryption
+	if(funcList->C_DecryptInit(hSession, &mechanism, key) != CKR_OK) {
+		setError(COULD_NOT_INIT_DECRYPTION);
+		return "";
+	}
+	CK_ULONG length = sizeof(cipherText.c_str());
+	CK_ULONG decrypted;
+	CK_BYTE* inBuffer = (CK_BYTE*)cipherText.c_str();
+	//encrypt once to get the size
+	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, length, NULL_PTR, &decrypted);
+	if(returnValue != CKR_OK) 
+	{
+			setError(FAILED_TO_ENCRYPT);
+			return "";
+	}
+	CK_BYTE* outBuffer = (CK_BYTE*)malloc(decrypted);
+
+	if(funcList->C_Decrypt(hSession, inBuffer, length, outBuffer, &decrypted)
+		!= CKR_OK) {
+			setError(FAILED_TO_DECRYPT);
+			return "";
+	}
+	string output = (char*)outBuffer;
+	return output;
+}
+
+string LoadFile(string filename) {
+	stringstream inputStream;
+	string buffer;
+
+	ifstream file;
+	file.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
+	try 
+	{
+		file.open( filename.c_str() );
+		inputStream << file.rdbuf();
+		buffer = inputStream.str();
+		file.close();
+	}
+	catch (ifstream::failure e) 
+	{
+		setError(FAILED_TO_OPEN_READ_FILE);
+		return false;
+	}
+	if(buffer.substr(0,6) == "<type>") {
+		if(buffer.substr(6,9) == "encrypted") {
+			string temp;
+			//skip over the first encoding
+			string::size_type pos = buffer.find_first_of("<",22);
+			if(string::npos == pos) {
+				return inputStream.str();
+			}
+			buffer = buffer.substr(pos);
+			pos = buffer.find_first_of("<",6);
+			string cert = buffer.substr(6,pos-6);
+			//skip over the cipherText
+			pos = buffer.find_first_of("<",pos + 1);
+			if(string::npos == pos) {
+				return inputStream.str();
+			}
+			buffer = buffer.substr(pos);
+			string cipherText = buffer.substr(5,buffer.find_last_of("<") - 5);
+			return decrypt(cipherText, cert);
+		}
+	}
+	return inputStream.str();
 }
 
 void listCerts(void);
@@ -308,6 +384,7 @@ int main(){
 	
 	cout << "Press almost any key to continue..." << endl;
 	getchar();
+	LoadFile("bob.enc");
 	return 0;
 }
 
@@ -324,22 +401,56 @@ bool getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey) {
 
 	returnValue = (funcList->C_FindObjectsInit)(hSession, pubKeyTemplate, 3);
 	if (returnValue != CKR_OK) {
-		return 0;
+		return false;
 	}
 
 	returnValue = (funcList->C_FindObjects)(hSession, &pubKey, 1, &count);		
 	if (returnValue != CKR_OK) {
-		return 0;
+		return false;
 	}
 	
 	returnValue = (funcList->C_FindObjectsFinal)(hSession);
 	if (returnValue != CKR_OK) {
-		return 0;
+		return false;
 	}
 
 	if (count < 1 ) {
 		setError(KEY_NOT_FOUND);
-		return 0;
+		return false;
+	}
+
+	return true;
+}
+
+bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
+	CK_OBJECT_CLASS keyClass  = CKO_PRIVATE_KEY;
+	CK_KEY_TYPE keyType = CKK_RSA;
+	CK_ULONG count;
+
+	CK_ATTRIBUTE keyTemplate[] = {
+		{CKA_CLASS,		&keyClass,		sizeof(CK_OBJECT_CLASS)},
+		{CKA_KEY_TYPE,	&keyType,		sizeof(CK_KEY_TYPE)},
+		{CKA_TOKEN,		&True,			sizeof (True) },
+	};
+
+	returnValue = (funcList->C_FindObjectsInit)(hSession, keyTemplate, 3);
+	if (returnValue != CKR_OK) {
+		return false;
+	}
+
+	returnValue = (funcList->C_FindObjects)(hSession, &privKey, 1, &count);		
+	if (returnValue != CKR_OK) {
+		return false;
+	}
+	
+	returnValue = (funcList->C_FindObjectsFinal)(hSession);
+	if (returnValue != CKR_OK) {
+		return false;
+	}
+
+	if (count < 1 ) {
+		setError(KEY_NOT_FOUND);
+		return false;
 	}
 
 	return true;
