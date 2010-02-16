@@ -175,7 +175,7 @@ string encrypt( string plainText, string keyLabel )
 	/* begin encryption */
 	if((funcList->C_EncryptInit)(hSession, &mechanism, key) != CKR_OK) 
 	{
-		setError(COULD_NOT_INIT_DECRYPTION);
+		setError(COULD_NOT_INIT_ENCRYPT);
 		return "";
 	}
 	
