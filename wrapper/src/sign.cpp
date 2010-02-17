@@ -113,7 +113,7 @@ bool signFile( string fileToSign, string signedFile, string strKeyLabel )
 	cout << "Read file: " << strToDigestSign << endl;
 #endif
 
-	strSigned = digestsign(strToDigestSign, strKeyLabel);
+	strSigned = sign(strToDigestSign, strKeyLabel);
 	
 	if (strSigned == "")
 		return false;
