@@ -18,8 +18,8 @@
 #define WRONG_PASSWORD				15
 #define COULD_NOT_INIT_SIGN			16
 #define FAILED_TO_SIGN				17
-#define COULD_NOT_INIT_DIGEST		16
-#define FAILED_TO_DIGEST			17
+#define COULD_NOT_INIT_DIGEST		18
+#define FAILED_TO_DIGEST			19
 
 void setError(int);
 
