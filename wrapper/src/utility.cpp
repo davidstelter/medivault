@@ -171,9 +171,9 @@ string encrypt( string plainText, string keyLabel )
 	/* search for label which matches our key */
 	getPublicKey(keyLabel, key);
 
-//	funcList->C_FindObjectsFinal(hSession);
 	/* begin encryption */
-	if((funcList->C_EncryptInit)(hSession, &mechanism, key) != CKR_OK) 
+	returnValue = (funcList->C_EncryptInit)(hSession, &mechanism, key);
+	if(returnValue != CKR_OK)
 	{
 		setError(COULD_NOT_INIT_ENCRYPT);
 		return "";
@@ -181,15 +181,16 @@ string encrypt( string plainText, string keyLabel )
 	
 	plainTextLength = sizeof(plainText.c_str());
 	inBuffer = (CK_BYTE*)plainText.c_str();
-	//encrypt once to get the size
+	
+	/* encrypt once to get the size */
 	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, plainTextLength, NULL_PTR, &encrypted);
 	if(returnValue != CKR_OK) 
 	{
 			setError(FAILED_TO_ENCRYPT);
 			return "";
 	}
+	
 	outBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * encrypted);
-
 	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, plainTextLength, outBuffer, &encrypted);
 	if(returnValue != CKR_OK) 
 	{
@@ -204,7 +205,6 @@ string encrypt( string plainText, string keyLabel )
 bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel )
 {
 	int retval = 0;
-	//char buffer[BUFFER_SIZE];
 	ifstream fileRead;
 	ofstream fileWrite;
 #ifdef SURVIVE_READ_FAIL
@@ -261,11 +261,9 @@ bool encryptFile( string fileToEncrypt, string encryptedFile, string strKeyLabel
 		fileWrite.open( encryptedFile.c_str(), fstream::in | fstream::out | fstream::app );
 		
 		/* write stream to file, APPEND MODE */
-		//fileWrite << "<header></header>";
 		fileWrite << "<type>encrypted</type>";
 		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
 		fileWrite << "<enc>" << strEncrypted.c_str() << "</enc>";
-		//fileWrite << "<footer></footer>";
 		
 		/* close */
 		fileWrite.close();
