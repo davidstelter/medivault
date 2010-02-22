@@ -4,14 +4,21 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
   <Description about="urn:mozilla:install-manifest">
-    <em:creator>Mime &#268;uvalo</em:creator>
+    <em:creator>Portland State Capstone Team B 2009/2010</em:creator>
+    <em:contributor>Dylan Enloe</em:contributor>
+    <em:contributor>Holly Decker</em:contributor>
+    <em:contributor>Muath Alissa</em:contributor>
+    <em:contributor>Majed AlHudaib</em:contributor>
+    <em:contributor>Vincent Cao</em:contributor>
+    <em:contributor>David Stelter</em:contributor>
+    <em:contributor>Mime &#268;uvalo</em:contributor>
     <em:contributor>Devin Pohly</em:contributor>
     <em:contributor>Scott Bentley</em:contributor>
-    <em:description>FTP client for Mozilla Firefox.</em:description>
-    <em:homepageURL>http://fireftp.mozdev.org</em:homepageURL>
-    <em:name>FireFTP</em:name>
-    <em:version>1.0.7</em:version>
-    <em:id>{a7c6cf7f-112c-4500-a7ea-39801a327e5f}</em:id>
+    <em:description>Encrypted File Manager for Mozilla Firefox</em:description>
+    <em:homepageURL>http://cs.pdx.edu</em:homepageURL>
+    <em:name>Secure Patient Record Storage</em:name>
+    <em:version>0.1</em:version>
+    <em:id>{78e40dea-c8ab-490f-9e13-e7de513a6d9b}</em:id>
     <em:file>
       <Description about="urn:mozilla:extension:file:fireftp.jar">
         <em:package>content/</em:package>
@@ -26,7 +33,6 @@
         <em:maxVersion>3.6.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-    <em:optionsURL>chrome://fireftp/content/preferences.xul</em:optionsURL>
-    <em:iconURL>chrome://fireftp/skin/icons/logo32.png</em:iconURL>
+    <em:iconURL>chrome://fireftp/skin/icons/caduceus_shadow.png</em:iconURL>
   </Description>
 </RDF>
