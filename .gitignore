@@ -1,6 +1,6 @@
 .*.swo
 .*.swp
-.DS_STORE
+.DS_Store
 ~*
 *.xpi
 *.jar
