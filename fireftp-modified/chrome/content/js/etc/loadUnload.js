@@ -81,20 +81,24 @@ function startup() {
     $('searchWhich').selectedIndex = 0;
   }
 
-  searchSelectType();
-  showSearchDates();
-  securityPopup();
+	searchSelectType();
+	showSearchDates();
+	securityPopup();
+//commented-out stuff was causing startup to break, not defined, must have been pulled out??? --David
 
   readPreferences(true);
-  setConnectButton(true);
-  accountButtonsDisabler(true);
-  connectedButtonsDisabler();
+//  setConnectButton(true);
+//  accountButtonsDisabler(true);
+//  connectedButtonsDisabler();
   localDirTree.changeDir(gLocalPath.value);
-  localDirTree2.changeDir(gRemotePath.value);
-  loadSiteManager(true);
+// this was causing a non-fatal error...
+  //localDirTree2.changeDir(gRemotePath.value);
+  localDirTree2.changeDir(gLocalPath.value);
+
+  //loadSiteManager(true);
   loadPrograms();
 
-  var trht = 'http://www.trht.net/fireftp';
+/*  var trht = 'http://www.trht.net/fireftp';
   appendLog("<span id='opening' style='line-height:16px'><span style='cursor:pointer;text-decoration:underline;color:blue;' onclick=\"window.open('http://fireftp.mozdev.org/donate.html','FireFTP');\">"
       + "FireFTP</span> <span>" + gVersion
       + "  '</span><span style='cursor:pointer;text-decoration:underline;' onclick=\"window.open('" + trht + "','trht');\">"
@@ -103,9 +107,11 @@ function startup() {
       + trht + "','trht');\" src='chrome://fireftp/skin/icons/trht.png'/>"
       + " " + gStrbundle.getString("opening")
       + "</span><br style='font-size:5pt'/><br style='font-size:5pt'/>", 'blue', "info");
+	*/
   gCmdlogBody.scrollTop = 0;
 
-  onAccountChange(gDefaultAccount);
+	//This was breaking too...
+ // onAccountChange(gDefaultAccount);
   setTimeout("gAccountField.focus()", 0);
 
   tipJar();
@@ -115,6 +121,8 @@ function startup() {
   if (gLoadUrl) {
     setTimeout("externalLink()", 1000);
   }
+
+	initCrypto();
 }
 
 function beforeUnload() {
@@ -122,6 +130,7 @@ function beforeUnload() {
 }
 
 function unload() {
+	finalizeCrypto();
   if (gPrefsService instanceof Components.interfaces.nsIPrefBranchInternal) {
     gPrefsService.removeObserver("fireftp", prefsObserver, false);
   }

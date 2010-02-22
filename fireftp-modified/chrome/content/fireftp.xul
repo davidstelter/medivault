@@ -24,6 +24,9 @@
         onresize      = "doResizeReverseHack()">
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
+	
+	<!-- ACOS5/PKCS11 initialization -->
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/controlSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/dataSocket.js"/>
@@ -57,6 +60,7 @@
   <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
 
   <stringbundle id="strings" src="chrome://fireftp/locale/strings.properties"/>
+
 
   <commandset>
     <command id="cmd_connect"    oncommand="connect()"/>
