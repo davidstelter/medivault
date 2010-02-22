@@ -24,6 +24,9 @@
         onresize      = "doResizeReverseHack()">
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
+	
+	<!-- ACOS5/PKCS11 initialization -->
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/controlSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/dataSocket.js"/>
@@ -57,6 +60,7 @@
   <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
 
   <stringbundle id="strings" src="chrome://fireftp/locale/strings.properties"/>
+
 
   <commandset>
     <command id="cmd_connect"    oncommand="connect()"/>
@@ -233,13 +237,19 @@
         <box      id="retrbutton">
           <button id="retrieveButton" oncommand="new transfer().start(true)"  tooltiptext="&download.label;"/>
         </box>
-        <box      id="storbutton">
-          <button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
-        </box>
-		<box      id="readbutton">
-		  <button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
-		</box>
-      </vbox>
+				<box      id="storbutton">
+					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
+				</box>
+				<box      id="readbutton">
+					<button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
+				</box>
+				
+				<box			id="reinitbutton">
+					<button id="reinitButton" 	  oncommand="reinitializeCrypto()" label="Detect Token"  tooltiptext="&wrap.tip.reinit;"/>
+			<!--		<button id="reinitButton" 	oncommand="reinitializeCrypto()"  label="Detect Token" tooltiptext="&wrap.tip.reinit;"/> -->
+				</box>
+				
+				</vbox>
       <splitter   id="rightsplitter"  collapse="after" resizebefore="farthest" resizeafter="closest" oncommand="setInterfaceMode()">
         <grippy/>
       </splitter>

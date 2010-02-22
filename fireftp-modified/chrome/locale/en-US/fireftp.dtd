@@ -109,3 +109,13 @@
 
 <!ENTITY mozilla.quote        "And, <html:em>lo</html:em>, from the <html:em>darkness</html:em> they emerged: a host of the faithful to <html:em>aide</html:em> the reborn beast in its quest to <html:em>reclaim</html:em> the land.  Together they <html:em>extended</html:em> the power of the beast and <html:em>spread</html:em> the good news of its return.  One by one the followers of <html:em>Mammon</html:em> were converted and their hearts were set <html:em>aflame</html:em>.">
 <!ENTITY mozilla.from         "from <html:strong>The Book of Mozilla</html:strong>, 8:2">
+
+<!-- wrapper stuff -->
+<!ENTITY wrap.initSuccess "Hardware initialization suceeded">
+<!ENTITY wrap.initFailure "Hardware initialization failed">
+
+<!ENTITY wrap.noTokens "No cryptographic tokens detected">
+<!ENTITY wrap.oneToken "One cryptographic token detected">
+<!ENTITY wrap.nTokens  " cryptographic tokens detected">
+
+<!ENTITY wrap.tip.reinit "Detect cryptographic tokens">
