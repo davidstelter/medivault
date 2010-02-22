@@ -28,6 +28,8 @@ function finalizeCrypto(){
 }
 
 function reinitializeCrypto(){
+	alert("reinitializing");
 	finalizeCrypto();
 	initCrypto();
 }
+

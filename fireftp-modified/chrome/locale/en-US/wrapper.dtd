@@ -5,3 +5,5 @@
 <!ENTITY wrap.noTokens "No cryptographic tokens detected">
 <!ENTITY wrap.oneToken "One cryptographic token detected">
 <!ENTITY wrap.nTokens  " cryptographic tokens detected">
+
+<!ENTITY wrap.tip.reinit "Detect cryptographic tokens">

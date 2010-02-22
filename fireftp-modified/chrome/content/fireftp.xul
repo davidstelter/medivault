@@ -237,13 +237,19 @@
         <box      id="retrbutton">
           <button id="retrieveButton" oncommand="new transfer().start(true)"  tooltiptext="&download.label;"/>
         </box>
-        <box      id="storbutton">
-          <button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
-        </box>
-		<box      id="readbutton">
-		  <button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
-		</box>
-      </vbox>
+				<box      id="storbutton">
+					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
+				</box>
+				<box      id="readbutton">
+					<button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
+				</box>
+				
+				<box			id="reinitbutton">
+					<button id="reinitButton" 	  oncommand="reinitializeCrypto()" label="Detect Token"  tooltiptext="&wrap.tip.reinit;"/>
+			<!--		<button id="reinitButton" 	oncommand="reinitializeCrypto()"  label="Detect Token" tooltiptext="&wrap.tip.reinit;"/> -->
+				</box>
+				
+				</vbox>
       <splitter   id="rightsplitter"  collapse="after" resizebefore="farthest" resizeafter="closest" oncommand="setInterfaceMode()">
         <grippy/>
       </splitter>
