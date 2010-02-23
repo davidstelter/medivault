@@ -18,9 +18,10 @@ function initCrypto(){
 		appendLog(msg);
 	}
 	else{
-		alert("Fail!");
-		appendLog(gStrbundle.getString("wrap.initFailure")+": "+strings.getFormattedString("wrap.errorCode", [acos5.SPRS_getLastError()]));
+		alert('Hardware initialization has failed, is your device connected?');
+		//appendLog(gStrbundle.getString("wrap.initFailure")+": "+strings.getFormattedString("wrap.errorCode", [acos5.SPRS_getLastError()]));
 	}
+
 }
 
 function finalizeCrypto(){
