@@ -395,3 +395,132 @@ bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
 
 	return true;
 }
+
+string CryptoWrapper::sign( string plainText, string keyLabel )
+{
+	CK_RV	returnValue;	//holds the return value
+	CK_OBJECT_HANDLE key;
+	CK_ULONG PlainTextLength;
+	CK_ULONG DigestLen;			
+	CK_ULONG SignatureLen;								
+	CK_BYTE* inBuffer;
+	CK_BYTE* signBuffer;
+	CK_BYTE* digestBuffer;
+	CK_MECHANISM mechanism_digest = {CKM_SHA_1, NULL_PTR, 0};
+	CK_MECHANISM mechanism_sign = {CKM_RSA_PKCS, NULL_PTR, 0};
+
+	/* get private keys for signing, verify using public key */
+	getPrivateKey(keyLabel, key);
+	
+	/* init digest */
+	returnValue = (funcList->C_DigestInit)(hSession, &mechanism_digest);
+	if(returnValue != CKR_OK)
+	{
+		setError(COULD_NOT_INIT_DIGEST);
+		return"";
+	}
+
+	PlainTextLength = plainText.size();
+	inBuffer = (CK_BYTE*)plainText.c_str();
+	
+	/* do to get length for digest buffer */
+	returnValue = (funcList->C_Digest)(hSession, inBuffer, PlainTextLength, NULL_PTR, &DigestLen);
+	if(returnValue != CKR_OK)
+	{ 
+		setError(FAILED_TO_DIGEST);
+		return "";
+	}
+	
+	/* digest data */
+	digestBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * DigestLen);
+	returnValue = (funcList->C_Digest)(hSession, inBuffer, PlainTextLength, digestBuffer, &DigestLen);
+	if(returnValue != CKR_OK)
+	{
+		setError(FAILED_TO_DIGEST);
+		return ""; 
+	}
+	
+	/* init sign function */
+	returnValue = (funcList->C_SignInit)(hSession, &mechanism_sign, key);
+	if(returnValue != CKR_OK)
+	{
+		setError(COULD_NOT_INIT_SIGN);
+		return ""; 
+	}
+	
+	/* get length for sign buffer */
+	returnValue = (funcList->C_Sign)(hSession, digestBuffer, DigestLen, NULL_PTR, &SignatureLen);
+	if(returnValue != CKR_OK)
+	{
+		setError(FAILED_TO_SIGN);
+		return ""; 
+	}
+	
+	/* sign */
+	signBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * SignatureLen);
+	returnValue = (funcList->C_Sign)(hSession, digestBuffer, DigestLen, signBuffer, &SignatureLen);
+	if(returnValue != CKR_OK)
+	{
+		setError(FAILED_TO_SIGN);
+		return ""; 
+	}
+	
+	string output = (char*)signBuffer;
+	return output;
+}
+
+bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKeyLabel )
+{
+	ifstream fileRead;
+	ofstream fileWrite;
+	string strSigned;
+	string strToDigestSign;
+	stringstream inputStream;
+	
+	fileRead.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
+	fileWrite.exceptions ( ofstream::eofbit | ofstream::failbit | ofstream::badbit );
+
+	try
+	{
+		fileRead.open( fileToSign.c_str() );
+		if (fileRead.fail()) 
+		{ 
+
+			return false;
+		}
+		inputStream << fileRead.rdbuf();
+		strToDigestSign = inputStream.str();
+
+		fileRead.close();
+	}
+	catch (ifstream::failure e)
+	{
+		setError(FAILED_TO_OPEN_READ_FILE);
+	       	return	false;
+	}
+
+	strSigned = sign(strToDigestSign, strKeyLabel);
+	
+	if (strSigned == "")
+		return false;
+
+	try 
+	{
+		fileWrite.open( signedFile.c_str(), fstream::in | fstream::out | fstream::trunc );
+		
+		/* write stream to file, TRUNCATE MODE */
+		fileWrite << strToDigestSign;
+		fileWrite << "<type>signature</type>";
+		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
+		fileWrite << "<sign>" << strSigned.c_str() << "</sign>";
+		
+		fileWrite.close();
+	}
+	catch (ofstream:: failure e) 
+	{
+		setError(FAILED_TO_OPEN_WRITE_FILE);
+		return false;
+	}
+
+	return true;
+}

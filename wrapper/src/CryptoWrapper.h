@@ -23,6 +23,8 @@ public:
 	bool encryptFile(string fileToEncrypt, string encryptedFile, string strKeyLabel);
 	//functions for dealing with files
 	string LoadFile(string filename);
+	//functions for signing files
+	bool signFile(string fileToSign, string signedFile, string strKeyLabel);
 private:
 	//error functions
 	void setError(int errorCode) {lastError = errorCode;}
@@ -34,7 +36,9 @@ private:
 	//functions for encrypting stuff
 	string encrypt(string plainText, string keyLabel);
 	//functions for dealing with decryption
-	string decrypt(string cipherText, string keyLabel);\
+	string decrypt(string cipherText, string keyLabel);
+	//functions for signing stuff
+	string CryptoWrapper::sign(string plainText, string keyLabel);
 
 	//member variables
 	int lastError;					//Holds the last error

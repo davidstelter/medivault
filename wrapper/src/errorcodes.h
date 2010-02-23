@@ -19,4 +19,6 @@
 #define COULD_NOT_INIT_SIGN			16
 #define FAILED_TO_SIGN				17
 #define FAILED_TO_READ_FILE			18
+#define COULD_NOT_INIT_DIGEST		19
+#define FAILED_TO_DIGEST			20
 
