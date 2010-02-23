@@ -1,4 +1,7 @@
+#include <windows.h>
+
 #include "errorcodes.h"
+#include "cryptoki.h"
 
 #pragma once
 
@@ -13,6 +16,8 @@ public:
 	~CryptoWrapper(void);
 	//functions for handling errors
 	int getLastError() {return lastError;}
+	//utility functions
+	int getTokenCount();
 	//functions for setting up the crypto environment
 	bool initCrypto();
 	string* enumerateCards();
@@ -28,8 +33,6 @@ public:
 private:
 	//error functions
 	void setError(int errorCode) {lastError = errorCode;}
-	//utility functions
-	int getTokenCount();
 	//functions for finding keys
 	bool getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey);
 	bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey);

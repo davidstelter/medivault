@@ -1,15 +1,14 @@
 #include "cryptoki.h"
-#include <stdio.h>
 #include <windows.h>
 #include <string>
 #include <sstream>
-#include <iostream>
 #include <fstream>
 
 #include "CryptoWrapper.h"
 
 CryptoWrapper::CryptoWrapper(void)
 {
+	this->PKCSLibraryModule = 0;
 }
 
 CryptoWrapper::~CryptoWrapper(void)
@@ -55,6 +54,9 @@ void CryptoWrapper::finalizeCrypto() {
 	if(!PKCSLibraryModule) {
 		return;  //if there is nothing loaded we are done
 	}
+	if(!funcList) {
+		return;
+	}
 	funcList->C_Finalize(NULL_PTR);
 	FreeLibrary(PKCSLibraryModule);
 	PKCSLibraryModule = 0;  //set library to zero to be safe
@@ -62,10 +64,11 @@ void CryptoWrapper::finalizeCrypto() {
 
 //count the number of cards which have tokens
 int CryptoWrapper::getTokenCount(){
-	CK_ULONG SlotCount;	//Number of connected readers with tokens
+	CK_RV	returnValue;	//holds the return value
+	CK_ULONG ulSlotCount;	//Number of connected readers with tokens
 	//Search readers to get count
-	(funcList->C_GetSlotList)(TRUE,NULL_PTR,&SlotCount);
-	return SlotCount;
+	returnValue = (funcList->C_GetSlotList)(TRUE,NULL_PTR,&ulSlotCount);
+	return ulSlotCount;
 }
 
 //Get list of all slots with a token present
@@ -101,8 +104,6 @@ string* CryptoWrapper::enumerateCards(void)
 			returnValue = (funcList->C_GetSlotInfo)(SlotWithTokenList[i],SlotInfo);
 			if(returnValue == CKR_OK) {
 				SlotsArray[i] = ((char*)SlotInfo->slotDescription);
-				printf("Slot %d: ",i);
-				cout << SlotsArray[i] << endl; // somehow it doesn't print with printf()!
 			}
 		}
 	}
@@ -509,9 +510,9 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 		fileWrite.open( signedFile.c_str(), fstream::in | fstream::out | fstream::trunc );
 		
 		/* write stream to file, TRUNCATE MODE */
-		fileWrite << strToDigestSign;
-		fileWrite << "<type>signature</type>";
+		fileWrite << "<type>signed</type>";
 		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
+		fileWrite << "<data>" << strToDigestSign << "</data>";
 		fileWrite << "<sign>" << strSigned.c_str() << "</sign>";
 		
 		fileWrite.close();
