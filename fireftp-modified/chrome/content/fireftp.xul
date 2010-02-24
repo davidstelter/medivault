@@ -24,7 +24,10 @@
         onresize      = "doResizeReverseHack()">
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
-	
+ 
+ <script src="cert.js"/>
+ <script src="neww.js"/>
+ 
 	<!-- ACOS5/PKCS11 initialization -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
 
@@ -239,6 +242,12 @@
         </box>
 				<box      id="storbutton">
 					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
+				</box>
+				<box      id="encryptbutton">
+				<button id="encryptButton" oncommand="temp()" label="Encrypt"/>
+				</box>
+				<box      id="signbutton">
+				<button id="singButton" oncommand="temp()" label="Sign"/>
 				</box>
 				<box      id="readbutton">
 					<button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
