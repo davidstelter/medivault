@@ -27,6 +27,7 @@
  
  
  <script src="neww.js"/>
+ <script src="openStringInNewWindow.js"/>
  
 	<!-- ACOS5/PKCS11 initialization -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
@@ -250,7 +251,7 @@
 				<button id="singButton" oncommand="temp()" label="Sign"/>
 				</box>
 				<box      id="readbutton">
-					<button id="readButton" 	  oncommand="new readFile().start(true)"  label="Read" tooltiptext="Read"/>
+					<button id="readButton" 	  oncommand="openStringInNewWindow()"  label="Read"/>
 				</box>
 				
 				<box			id="reinitbutton">
