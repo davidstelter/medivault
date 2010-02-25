@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window id="cardselect" title="Card Select" width="300" height="300" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload ="fill(0)">
+<script src="fill.js"/>
+
+<label control="text1" value="choose the slot you want to connect to"/>
+
+  <menulist id = "slots">
+  <menupopup>
+  </menupopup>
+</menulist>
+  <button label="select" oncommand="submit()"/>
+  
+</window>

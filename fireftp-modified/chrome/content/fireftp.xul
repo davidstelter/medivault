@@ -25,7 +25,7 @@
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
  
- <script src="cert.js"/>
+ 
  <script src="neww.js"/>
  
 	<!-- ACOS5/PKCS11 initialization -->
