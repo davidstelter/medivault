@@ -40,8 +40,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zc:wchar_t-"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\gecko-sdk\include&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Documents and Settings\david\code\capstone\xulrunner-sdk\include&quot;;&quot;C:\Documents and Settings\david\code\capstone\xulrunner-sdk\sdk\include&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;XP_WIN;XP_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,9 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nspr4.lib xpcom.lib xpcomglue_s.lib"
+				AdditionalDependencies="xpcomglue_s.lib xpcom.lib nspr4.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;..\..\..\gecko-sdk\lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Documents and Settings\david\code\capstone\xulrunner-sdk\sdk\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -180,6 +181,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\wrapper\src\CryptoWrapper.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\wrapper\src\error.cpp"
 				>
 			</File>
@@ -202,19 +207,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pkcs11.h"
+				RelativePath="..\..\wrapper\src\CryptoWrapper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\pkcs11f.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pkcs11t.h"
-				>
-			</File>
-			<File
-				RelativePath=".\sprs_error.h"
+				RelativePath="..\..\wrapper\src\errorcodes.h"
 				>
 			</File>
 			<File

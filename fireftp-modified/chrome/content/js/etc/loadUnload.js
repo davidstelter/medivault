@@ -33,6 +33,7 @@ function startup() {
   gRemoteTree.view       = localTree2;//remoteTree;
   gRemoteDirTree.view    = localDirTree2;//remoteDirTree;
   gQueueTree.view        = queueTree;
+	initCrypto();
 
   gProfileDir            = Components.classes["@mozilla.org/file/directory_service;1"].createInstance(Components.interfaces.nsIProperties)
                                      .get("ProfD", Components.interfaces.nsILocalFile);
@@ -114,7 +115,7 @@ function startup() {
 
 	//This was breaking too...
  // onAccountChange(gDefaultAccount);
-  setTimeout("gAccountField.focus()", 0);
+  //setTimeout("gAccountField.focus()", 0);
 
   tipJar();
 
@@ -124,7 +125,22 @@ function startup() {
     setTimeout("externalLink()", 1000);
   }
 
-	initCrypto();
+/*
+var slots = {
+	value: []
+};
+var count = {
+	value: slots.value.length
+};
+*/
+var count = {};
+var slots = acos5.SPRS_enumerateCards(count);
+alert("slots = "+ slots);
+/*
+alert(slots.value+" : "+count.value);
+alert(slots + " " + count);
+alert(something);
+*/
 	
 	//here you go 
 	

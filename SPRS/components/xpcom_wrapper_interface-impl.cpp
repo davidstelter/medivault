@@ -6,6 +6,8 @@ NS_IMPL_ISUPPORTS1(nsSPRS_PKCS11_Wrapper, nsISPRS_PKCS11_Wrapper)
 
 nsSPRS_PKCS11_Wrapper::nsSPRS_PKCS11_Wrapper()
 {
+	//wrapper = new CryptoWrapper();
+	/*
 	m_lastError = 0;
 	PKCSLibraryModule = 0;
 	TokenCount = 0;
@@ -20,7 +22,7 @@ nsSPRS_PKCS11_Wrapper::~nsSPRS_PKCS11_Wrapper()
 /* long SPRS_getLastError (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 {
-	*_retval = getLastError();
+	*_retval = wrapper.getLastError();
 	return NS_OK;
 }
 
@@ -28,7 +30,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
 
-	if (initCrypto()){
+	if (wrapper.initCrypto()){
 		*_retval = true;
 		return NS_OK;
 	}
@@ -41,24 +43,100 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 /* void SPRS_finalizeCrypto (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 {
-	finalizeCrypto();
+	wrapper.finalizeCrypto();
     return NS_OK; //that probably worked! 
 }
 
 /* nsIArray SPRS_enumerateCards (); */
+
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
 {
+	nsCOMPtr<nsIMutableArray> cards = do_CreateInstance(NS_ARRAY_CONTRACTID);
+
+	//string* cardlist = wrapper.enumerateCards();
+	nsCOMPtr<nsISupportsString> first = do_CreateInstance(NS_SUPPORTS_STRING_CONTRACTID);
+	const char buf[] = "boring";
+	nsAutoString astr;// = new nsAString;//do_CreateInstance(NS_A_STRING_CONTRACTID);
+	astr.AppendLiteral("thing");
+	
+	first->SetData(astr);
+	//first->Append(string[0]);
+	//nsCOMPtr<nsIMyObserver> elem = 
+	cards->AppendElement(first, PR_FALSE);
+	
+	*_retval = cards;
+	NS_ADDREF(*_retval);
+    return NS_OK;
+}
+
+/*
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***str)
+{
+	
+	const static char *strings[] = {"one", "two", "three", "four"};
+	const static PRUint32 scount = 4;//sizeof(strings)/sizeof(strings[0]);
+
+	char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
+
+	for(PRUint32 i = 0; i < scount; ++i){
+		out[i] = (char*) nsMemory::Clone(strings[i], strlen(strings[i])+1);
+	}
+
+	*count = scount;
+	*str = out;
+	return NS_OK;
+	*/
+	/*NS_ENSURE_ARG_POINTER(count);
+   NS_ENSURE_ARG_POINTER(strings);
+   int count0 = 4;//wrapper.getTokenCount();
+   char **strings0 = (char**) nsMemory::Alloc(4*sizeof(char *));
+   if (strings0 == NULL)
+      return NS_ERROR_OUT_OF_MEMORY;
+   for (int i = 0; i < count0; i++)
+   {
+      strings0[i] = (char *)nsMemory::Alloc(2); // size of string
+      if (strings0[i] == NULL)
+      {
+         for (int j = 0; j < i; j++)
+            nsMemory::Free(strings0[j]);
+         nsMemory::Free(strings0);
+         return NS_ERROR_OUT_OF_MEMORY;
+      }
+	  strings0[i] = "a";
+      //snprintf(strings0[i], 2, "%d", i);
+   }
+   // If there are errors free all allocated memory
+   // and do not change [out] params. I'm not sure
+   // about this but it looks quite safe.
+   // return NS_ERROR_???
+   
+   // If no errors
+   *count = count0;
+   *strings = strings0;
+   return NS_OK;
+   
 		
-		string* cardlist = enumerateCards();
+	string* cardlist = wrapper.enumerateCards();
 		
     return NS_OK;
 }
+*/
 
 /* boolean SPRS_selectCard (in nsAString card); */
 
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval)
 {
-	if(selectCard(card, pin))
+	CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
+	const PRUnichar* cur = pin.BeginReading();
+	const PRUnichar* end = pin.EndReading();
+	int i;
+	for(i=0; cur < end; ++cur, ++i){
+		UserPIN[i] = (CK_UTF8CHAR)*cur;
+	}
+	UserPIN[pin.Length()] = 0;
+
+	//if(wrapper.selectCard(card, UserPIN))
+	if(true)
 		*_retval = true;
 	else
 		*_retval = false;
@@ -104,18 +182,21 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_verify(const nsAString & input_file, n
 
 /* long SPRS_getTokenCount (); */
 /* returns number of tokens recognized in the system*/
+
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getTokenCount(PRInt32 *_retval)
 {
-	
+	/*
 	CK_ULONG ulSlotCount;			//Number of connected readers
 		returnValue = (funcList->C_GetSlotList)(TRUE,NULL_PTR,&ulSlotCount);
 	*_retval = ulSlotCount;
+	*/
+	*_retval = wrapper.getTokenCount();
 	
-	//*_retval = 9;
 	return NS_OK;
 }
 
 /* protected wrapper methods */
+/*
 bool nsSPRS_PKCS11_Wrapper::initCrypto() {
 	if(PKCSLibraryModule) {
 		setError(ALREADY_LOADED);
@@ -147,7 +228,8 @@ bool nsSPRS_PKCS11_Wrapper::initCrypto() {
 	}
 	return true;
 }
-
+*/
+/*
 void nsSPRS_PKCS11_Wrapper::finalizeCrypto() {
 	if(!PKCSLibraryModule) {
 		return;  //if there is nothing loaded we are done
@@ -171,8 +253,10 @@ int nsSPRS_PKCS11_Wrapper::getLastError(void){
 void nsSPRS_PKCS11_Wrapper::setError(int errorcode){
 	m_lastError = errorcode;
 }
+*/
 
 //Get list of all slots with a token present//Get list of all slots with a token present
+/*
 string *nsSPRS_PKCS11_Wrapper::enumerateCards(void)
 {
 	CK_SLOT_INFO_PTR pSlotInfo;				//Pointer to slot info
@@ -218,9 +302,10 @@ string *nsSPRS_PKCS11_Wrapper::enumerateCards(void)
 		//returns list of all cards on the system. An empty list indicates an error;
 		return SlotsArray;
 }
-
+*/
 
 //Selects a card to use for subsequent operations.  Returns false on failure and sets 
+/*
 bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
 {
 	//Open session for selected card
@@ -255,3 +340,4 @@ bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
 			return false;
 		}
 }
+*/

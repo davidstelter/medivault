@@ -12,13 +12,22 @@ slots = acos5.SPRS_enumerateCards()
 
 */
 
-var slots = new Array("slot1","slot2","slot3");
+var slots = {
+	value: []
+};
+var count = {
+	value: slots.value.length
+};
+acos5.SPRS_enumerateCards(count, slots);
+alert(slots.value+" : "+count.value);
+
+//var slots = new Array("slot1","slot2","slot3");
 
 var list = document.getElementById('slots');
 
 for(var i=0; i<slots.length; i++){
 
-list.appendItem(slots[i], i);
+	list.appendItem(slots[i], i);
 
 }
 

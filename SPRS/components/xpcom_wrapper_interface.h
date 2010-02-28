@@ -26,93 +26,95 @@ class nsAString; /* forward declaration */
   {0xb23e4e97, 0x4e78, 0x4da5, \
     { 0xbf, 0x18, 0x1a, 0xcc, 0xf1, 0x93, 0x61, 0xdb }}
 
-class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
+class NS_NO_VTABLE NS_SCRIPTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
  public: 
 
-  NS_DEFINE_STATIC_IID_ACCESSOR(NS_ISPRS_PKCS11_WRAPPER_IID)
+  NS_DECLARE_STATIC_IID_ACCESSOR(NS_ISPRS_PKCS11_WRAPPER_IID)
 
   /* long SPRS_getLastError (); */
-  NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) = 0;
 
   /* boolean SPRS_initCrypto (); */
-  NS_IMETHOD SPRS_initCrypto(PRBool *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_initCrypto(PRBool *_retval) = 0;
 
   /* void SPRS_finalizeCrypto (); */
-  NS_IMETHOD SPRS_finalizeCrypto(void) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_finalizeCrypto(void) = 0;
 
   /* nsIArray SPRS_enumerateCards (); */
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) = 0;
 
   /* boolean SPRS_selectCard (in long card, in AString pin); */
-  NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) = 0;
 
   /* nsIArray SPRS_listCerts (); */
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_listCerts(nsIArray **_retval) = 0;
 
   /* boolean SPRS_createCert (in AString cert); */
-  NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) = 0;
 
   /* boolean SPRS_encryptFile (in AString input, in AString output_file, in AString cert); */
-  NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) = 0;
 
   /* boolean signFile (in AString input_file, in AString output_file, in AString cert); */
-  NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) = 0;
 
   /* nsAString SPRS_decrypt (in AString input_file); */
-  NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) = 0;
 
   /* nsAString SPRS_verify (in AString input_file); */
-  NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) = 0;
 
   /* long SPRS_getTokenCount (); */
-  NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) = 0;
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) = 0;
 
 };
 
+  NS_DEFINE_STATIC_IID_ACCESSOR(nsISPRS_PKCS11_Wrapper, NS_ISPRS_PKCS11_WRAPPER_IID)
+
 /* Use this macro when declaring classes that implement this interface. */
 #define NS_DECL_NSISPRS_PKCS11_WRAPPER \
-  NS_IMETHOD SPRS_getLastError(PRInt32 *_retval); \
-  NS_IMETHOD SPRS_initCrypto(PRBool *_retval); \
-  NS_IMETHOD SPRS_finalizeCrypto(void); \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval); \
-  NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval); \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval); \
-  NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval); \
-  NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
-  NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
-  NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval); \
-  NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval); \
-  NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval); 
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getLastError(PRInt32 *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_initCrypto(PRBool *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_finalizeCrypto(void); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_listCerts(nsIArray **_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval); \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval); 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object. */
 #define NS_FORWARD_NSISPRS_PKCS11_WRAPPER(_to) \
-  NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return _to SPRS_getLastError(_retval); } \
-  NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return _to SPRS_initCrypto(_retval); } \
-  NS_IMETHOD SPRS_finalizeCrypto(void) { return _to SPRS_finalizeCrypto(); } \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return _to SPRS_enumerateCards(_retval); } \
-  NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return _to SPRS_selectCard(card, pin, _retval); } \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return _to SPRS_listCerts(_retval); } \
-  NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return _to SPRS_createCert(cert, _retval); } \
-  NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SPRS_encryptFile(input, output_file, cert, _retval); } \
-  NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SignFile(input_file, output_file, cert, _retval); } \
-  NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) { return _to SPRS_decrypt(input_file, _retval); } \
-  NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) { return _to SPRS_verify(input_file, _retval); } \
-  NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) { return _to SPRS_getTokenCount(_retval); } 
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return _to SPRS_getLastError(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return _to SPRS_initCrypto(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_finalizeCrypto(void) { return _to SPRS_finalizeCrypto(); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return _to SPRS_enumerateCards(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return _to SPRS_selectCard(card, pin, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return _to SPRS_listCerts(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return _to SPRS_createCert(cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SPRS_encryptFile(input, output_file, cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SignFile(input_file, output_file, cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) { return _to SPRS_decrypt(input_file, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) { return _to SPRS_verify(input_file, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) { return _to SPRS_getTokenCount(_retval); } 
 
 /* Use this macro to declare functions that forward the behavior of this interface to another object in a safe way. */
 #define NS_FORWARD_SAFE_NSISPRS_PKCS11_WRAPPER(_to) \
-  NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_getLastError(_retval); } \
-  NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_initCrypto(_retval); } \
-  NS_IMETHOD SPRS_finalizeCrypto(void) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_finalizeCrypto(); } \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_enumerateCards(_retval); } \
-  NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_selectCard(card, pin, _retval); } \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_listCerts(_retval); } \
-  NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_createCert(cert, _retval); } \
-  NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_encryptFile(input, output_file, cert, _retval); } \
-  NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SignFile(input_file, output_file, cert, _retval); } \
-  NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_decrypt(input_file, _retval); } \
-  NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_verify(input_file, _retval); } \
-  NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_getTokenCount(_retval); } 
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_getLastError(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_initCrypto(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_finalizeCrypto(void) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_finalizeCrypto(); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_enumerateCards(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_selectCard(card, pin, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_listCerts(_retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_createCert(cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_encryptFile(input, output_file, cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SignFile(input_file, output_file, cert, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_decrypt(const nsAString & input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_decrypt(input_file, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_verify(const nsAString & input_file, nsAString **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_verify(input_file, _retval); } \
+  NS_SCRIPTABLE NS_IMETHOD SPRS_getTokenCount(PRInt32 *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_getTokenCount(_retval); } 
 
 #if 0
 /* Use the code below as a template for the implementation class for this interface. */

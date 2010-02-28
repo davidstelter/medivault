@@ -9,6 +9,7 @@
 CryptoWrapper::CryptoWrapper(void)
 {
 	this->PKCSLibraryModule = 0;
+	lastError = OK;
 }
 
 CryptoWrapper::~CryptoWrapper(void)
@@ -117,7 +118,7 @@ string* CryptoWrapper::enumerateCards(void)
 }
 
 //Selects a card to use for subsequent operations.  Returns false on failure and sets 
-bool CryptoWrapper::selectCard(int SlotID)
+bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN)
 {
 	CK_RV	returnValue;	//holds the return value
 	//Open session for selected card
@@ -125,9 +126,10 @@ bool CryptoWrapper::selectCard(int SlotID)
 					CKF_SERIAL_SESSION| CKF_RW_SESSION, NULL, NULL, &hSession);
 
 	if (returnValue == CKR_OK) {
-		CK_UTF8CHAR UserPIN[] = SC_PIN_CODE;
+		//CK_UTF8CHAR UserPIN[] = SC_PIN_CODE;
 		
-		returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
+		returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, (CK_ULONG) strlen((const char*)UserPIN));
+		//returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
 
 		if (returnValue != CKR_OK) {
 			setError(WRONG_PASSWORD);
@@ -142,6 +144,43 @@ bool CryptoWrapper::selectCard(int SlotID)
 		return false;
 	}
 }
+
+/*
+bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
+{
+	//Open session for selected card
+		returnValue = (funcList->C_OpenSession)(pSlotWithTokenList[SlotID],
+						CKF_SERIAL_SESSION| CKF_RW_SESSION, NULL, NULL, &hSession);
+
+		if (returnValue == CKR_OK) 
+		{
+			//CK_UTF8CHAR UserPIN[] = "12345678";
+			CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
+			const PRUnichar* cur = pin.BeginReading();
+			const PRUnichar* end = pin.EndReading();
+			int i;
+			for(i=0; cur < end; ++cur, ++i){
+				UserPIN[i] = (CK_UTF8CHAR)*cur;
+			}
+			UserPIN[pin.Length()] = 0;
+			
+			returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, pin.Length());
+
+			if (returnValue != CKR_OK) 
+			{
+				setError(WRONG_PASSWORD);
+				return false;
+			}
+			else				
+				return true;
+		}
+		else
+		{
+			setError(OPEN_SESSION_FAILED);
+			return false;
+		}
+}
+*/
 
 //encrypts data with the key given by keyLabel
 string CryptoWrapper::encrypt( string plainText, string keyLabel )
@@ -262,7 +301,7 @@ string CryptoWrapper::decrypt(string cipherText, string keyLabel)
 		setError(COULD_NOT_INIT_DECRYPTION);
 		return "";
 	}
-	CK_ULONG length = cipherText.size();
+	CK_ULONG length = (CK_ULONG)cipherText.size();
 	CK_ULONG decrypted;
 	CK_BYTE* inBuffer = (CK_BYTE*)cipherText.c_str();
 	//encrypt once to get the size
@@ -421,7 +460,7 @@ string CryptoWrapper::sign( string plainText, string keyLabel )
 		return"";
 	}
 
-	PlainTextLength = plainText.size();
+	PlainTextLength = (CK_ULONG) plainText.size();
 	inBuffer = (CK_BYTE*)plainText.c_str();
 	
 	/* do to get length for digest buffer */

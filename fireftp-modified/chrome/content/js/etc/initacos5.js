@@ -16,6 +16,12 @@ function initCrypto(){
 			}
 		}
 		appendLog(msg);
+	//	logSlots();
+	//	if(acos5.SPRS_selectCard(0, "12345678"))
+			appendLog("select/login successful");
+	//	else
+			appendLog("select/login failed: " + acos5.SPRS_getLastError());
+
 	}
 	else{
 		alert('Hardware initialization has failed, is your device connected?');
@@ -34,3 +40,15 @@ function reinitializeCrypto(){
 	initCrypto();
 }
 
+function logSlots(){
+
+	//var slots = acos5.SPRS_enumerateCards();
+	//alert(slots);
+	//appendLog(slots.length);
+	
+/*
+	var out = slots.queryElementAt(0, Components.interfaces.nsISupportsString);
+	appendLog(out);
+	*/
+
+}

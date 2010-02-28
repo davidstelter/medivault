@@ -2,13 +2,23 @@
 #define __SPRS_PKCS11_WRAPPER_IMPL_H__
 
 #include "xpcom_wrapper_interface.h"
+#include "xpcom-config.h"
+#include "nptypes.h"
+#include "mozilla-config.h"
 #include "nsStringAPI.h"
+#include "nsCOMPtr.h"
+#include "nsComponentManagerUtils.h"
+#include "nsISupportsPrimitives.h"
+#include "nsIArray.h"
+#include "nsIMutableArray.h"
+//#include "nsMemory.h"
 #include "cryptoki.h"
-#include "sprs_error.h"
 #include <stdio.h>
 #include <windows.h>
 #include <string>
 #include <iostream>
+
+#include "..\..\wrapper\src\CryptoWrapper.h"
 
 using namespace std;
 
@@ -26,6 +36,8 @@ public:
   nsSPRS_PKCS11_Wrapper();
 
 private:
+	CryptoWrapper wrapper;
+	/*
 	HMODULE PKCSLibraryModule;
 	CK_RV	returnValue;
 	CK_FUNCTION_LIST_PTR funcList;
@@ -34,6 +46,8 @@ private:
 	CK_SESSION_HANDLE hSession;
 	int TokenCount;
 	int m_lastError;
+	*/
+
   ~nsSPRS_PKCS11_Wrapper();
 
 protected:

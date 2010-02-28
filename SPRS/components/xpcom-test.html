@@ -9,19 +9,27 @@
         const cid = "@capstone.pdx.edu/sprs;1";
         var obj = Components.classes[cid].createInstance();
         obj = obj.QueryInterface(Components.interfaces.nsISPRS_PKCS11_Wrapper);
-				if(obj.SPRS_initCrypto()){
+				obj.SPRS_initCrypto();
 					alert("Successful initialization");
 					alert(obj.SPRS_getTokenCount());
-					alert("Error code: " + obj.SPRS_getLastError());
-					alert(obj.SPRS_enumerateCards());
-					alert("Error code: " + obj.SPRS_getLastError());
+					//alert("Error code: " + obj.SPRS_getLastError());
+					//var count = {};
+				//	var slots = obj.SPRS_enumerateCards();
+					//alert("Count: " + count.value);
+				//	alert(slots.length);
+				//	var out = slots.queryElementAt(0, Components.interfaces.nsISupportsString);
+				//	alert(out);
+			//		alert(slots);
+					//alert(obj.SPRS_enumerateCards());
+					//alert("Error code: " + obj.SPRS_getLastError());
 
 					alert(obj.SPRS_selectCard(0, "12345678"));
 					alert("Error code: " + obj.SPRS_getLastError());
-				}
+			/*	
 				else{
 					alert("Initialization failed: " + obj.SPRS_getLastError());
 				}
+				*/
 			}
       catch (err) {
         alert(err);

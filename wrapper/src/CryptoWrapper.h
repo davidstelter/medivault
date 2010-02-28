@@ -21,7 +21,7 @@ public:
 	//functions for setting up the crypto environment
 	bool initCrypto();
 	string* enumerateCards();
-	bool selectCard(int SlotID);
+	bool selectCard(int SlotID, CK_UTF8CHAR* UserPIN);
 	//functions for taking down the crypto environment
 	void finalizeCrypto();
 	//functions for dealing with encryption
@@ -46,7 +46,7 @@ private:
 	//member variables
 	int lastError;					//Holds the last error
 	HMODULE PKCSLibraryModule;		//Holds the library which we will load
-	CK_FUNCTION_LIST_PTR funcList;  //Holds enterance point for the functions
+	CK_FUNCTION_LIST_PTR funcList;  //Holds entrance point for the functions
 	CK_SLOT_ID_PTR SlotWithTokenList;	//Holds a list of slots with tokens
 	CK_SESSION_HANDLE hSession;		//Holds the session with the token
 };

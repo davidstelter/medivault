@@ -12,6 +12,7 @@ interface nsISPRS_PKCS11_Wrapper : nsISupports
 	
   boolean SPRS_initCrypto();
   void SPRS_finalizeCrypto();
+  //void SPRS_enumerateCards(out PRUint32 count, [array, size_is (count), retval] out string str);
   nsIArray SPRS_enumerateCards();
   boolean SPRS_selectCard(in long card, in AString pin);
   nsIArray SPRS_listCerts();
