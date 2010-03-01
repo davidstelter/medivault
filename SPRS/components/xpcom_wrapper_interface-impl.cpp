@@ -96,7 +96,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, c
 }
 
 /* boolean signFile (in nsAString input_file, in nsAString output_file, in nsAString cert); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SignFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval)
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
