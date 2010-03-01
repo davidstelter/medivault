@@ -120,6 +120,7 @@ string* CryptoWrapper::enumerateCards(void)
 //Selects a card to use for subsequent operations.  Returns false on failure and sets 
 bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 {
+	enumerateCards(); //this does a little housekeeping for us...
 	CK_RV	returnValue;	//holds the return value
 	//Open session for selected card
 	returnValue = (funcList->C_OpenSession)(SlotWithTokenList[SlotID],
