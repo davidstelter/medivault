@@ -20,7 +20,7 @@ nsSPRS_PKCS11_Wrapper::~nsSPRS_PKCS11_Wrapper()
 /* long SPRS_getLastError (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 {
-	*_retval = getLastError();
+	*_retval = wrapper.getLastError();
 	return NS_OK;
 }
 
@@ -28,7 +28,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
 
-	if (initCrypto()){
+	if (wrapper.initCrypto()){
 		*_retval = true;
 		return NS_OK;
 	}
@@ -49,7 +49,8 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
 {
 		
-		string* cardlist = enumerateCards();
+		//string* cardlist = enumerateCards();
+		wrapper.enumerateCards();
 		
     return NS_OK;
 }
@@ -58,7 +59,17 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
 
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval)
 {
-	if(selectCard(card, pin))
+	//CK_UTF8CHAR UserPIN[] = "12345678";
+	CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
+	const PRUnichar* cur = pin.BeginReading();
+	const PRUnichar* end = pin.EndReading();
+	int i;
+	for(i=0; cur < end; ++cur, ++i){
+		UserPIN[i] = (CK_UTF8CHAR)*cur;
+	}
+	UserPIN[pin.Length()] = 0;
+
+	if(wrapper.selectCard(card, UserPIN, pin.Length()))
 		*_retval = true;
 	else
 		*_retval = false;
@@ -107,9 +118,9 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_verify(const nsAString & input_file, n
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getTokenCount(PRInt32 *_retval)
 {
 	
-	CK_ULONG ulSlotCount;			//Number of connected readers
-		returnValue = (funcList->C_GetSlotList)(TRUE,NULL_PTR,&ulSlotCount);
-	*_retval = ulSlotCount;
+	//CK_ULONG ulSlotCount;			//Number of connected readers
+		//returnValue = (funcList->C_GetSlotList)(TRUE,NULL_PTR,&ulSlotCount);
+		*_retval = wrapper.getTokenCount();//ulSlotCount;
 	
 	//*_retval = 9;
 	return NS_OK;

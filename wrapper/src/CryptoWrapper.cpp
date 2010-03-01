@@ -9,6 +9,7 @@
 CryptoWrapper::CryptoWrapper(void)
 {
 	this->PKCSLibraryModule = 0;
+	lastError = OK;
 }
 
 CryptoWrapper::~CryptoWrapper(void)
@@ -117,7 +118,7 @@ string* CryptoWrapper::enumerateCards(void)
 }
 
 //Selects a card to use for subsequent operations.  Returns false on failure and sets 
-bool CryptoWrapper::selectCard(int SlotID)
+bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 {
 	CK_RV	returnValue;	//holds the return value
 	//Open session for selected card
@@ -125,9 +126,10 @@ bool CryptoWrapper::selectCard(int SlotID)
 					CKF_SERIAL_SESSION| CKF_RW_SESSION, NULL, NULL, &hSession);
 
 	if (returnValue == CKR_OK) {
-		CK_UTF8CHAR UserPIN[] = SC_PIN_CODE;
+		//CK_UTF8CHAR UserPIN[] = SC_PIN_CODE;
 		
-		returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
+		//returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, sizeof(UserPIN)-1);
+		returnValue = (funcList->C_Login)(hSession, CKU_USER, UserPIN, pinlen);
 
 		if (returnValue != CKR_OK) {
 			setError(WRONG_PASSWORD);

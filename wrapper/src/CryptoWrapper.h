@@ -21,7 +21,7 @@ public:
 	//functions for setting up the crypto environment
 	bool initCrypto();
 	string* enumerateCards();
-	bool selectCard(int SlotID);
+	bool selectCard(int SlotID, CK_UTF8CHAR* pin, int pinlen);
 	//functions for taking down the crypto environment
 	void finalizeCrypto();
 	//functions for dealing with encryption

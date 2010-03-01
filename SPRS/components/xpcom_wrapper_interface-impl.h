@@ -3,12 +3,12 @@
 
 #include "xpcom_wrapper_interface.h"
 #include "nsStringAPI.h"
-#include "cryptoki.h"
-#include "sprs_error.h"
 #include <stdio.h>
 #include <windows.h>
 #include <string>
 #include <iostream>
+
+#include "..\..\wrapper\src\CryptoWrapper.h"
 
 using namespace std;
 
@@ -26,6 +26,7 @@ public:
   nsSPRS_PKCS11_Wrapper();
 
 private:
+	CryptoWrapper wrapper;
 	HMODULE PKCSLibraryModule;
 	CK_RV	returnValue;
 	CK_FUNCTION_LIST_PTR funcList;

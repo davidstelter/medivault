@@ -180,7 +180,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\wrapper\src\error.cpp"
+				RelativePath="..\..\wrapper\src\CryptoWrapper.cpp"
 				>
 			</File>
 			<File
@@ -202,15 +202,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pkcs11.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pkcs11f.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pkcs11t.h"
+				RelativePath="..\..\wrapper\src\CryptoWrapper.h"
 				>
 			</File>
 			<File
