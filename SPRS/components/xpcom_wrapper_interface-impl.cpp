@@ -41,7 +41,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 /* void SPRS_finalizeCrypto (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 {
-	finalizeCrypto();
+	wrapper.finalizeCrypto();
     return NS_OK; //that probably worked! 
 }
 
