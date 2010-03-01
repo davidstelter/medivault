@@ -126,7 +126,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getTokenCount(PRInt32 *_retval)
 	return NS_OK;
 }
 
-/* protected wrapper methods */
+/* protected wrapper methods *//*
 bool nsSPRS_PKCS11_Wrapper::initCrypto() {
 	if(PKCSLibraryModule) {
 		setError(ALREADY_LOADED);
@@ -182,7 +182,8 @@ int nsSPRS_PKCS11_Wrapper::getLastError(void){
 void nsSPRS_PKCS11_Wrapper::setError(int errorcode){
 	m_lastError = errorcode;
 }
-
+*/
+/*
 //Get list of all slots with a token present//Get list of all slots with a token present
 string *nsSPRS_PKCS11_Wrapper::enumerateCards(void)
 {
@@ -229,8 +230,8 @@ string *nsSPRS_PKCS11_Wrapper::enumerateCards(void)
 		//returns list of all cards on the system. An empty list indicates an error;
 		return SlotsArray;
 }
-
-
+*/
+/*
 //Selects a card to use for subsequent operations.  Returns false on failure and sets 
 bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
 {
@@ -266,3 +267,4 @@ bool nsSPRS_PKCS11_Wrapper::selectCard(long SlotID, const nsAString & pin )
 			return false;
 		}
 }
+*/
