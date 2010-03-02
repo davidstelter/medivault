@@ -11,8 +11,8 @@ void main() {
 		if (TokenCount != 0){
 			string *slots;
 			slots = test.enumerateCards();
-			
-			test.selectCard(0);
+			CK_UTF8CHAR temp[9] = "12345678";
+			test.selectCard(0,temp,8);
 
 			delete [] slots;
 		}
@@ -20,4 +20,5 @@ void main() {
 	printf("about to encrypt...\n");
 	test.encryptFile( "bob.txt", "bob.enc", "bob" );
 	test.signFile("bob.txt", "bob.sign", "bob");
+	test.listKeys();
 }
