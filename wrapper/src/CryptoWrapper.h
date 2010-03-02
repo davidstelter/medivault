@@ -30,6 +30,8 @@ public:
 	string LoadFile(string filename);
 	//functions for signing files
 	bool signFile(string fileToSign, string signedFile, string strKeyLabel);
+	//functions for finding keys
+	string* listKeys();
 private:
 	//error functions
 	void setError(int errorCode) {lastError = errorCode;}

@@ -3,7 +3,9 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <vector>
 
+#include "subject.h"
 #include "CryptoWrapper.h"
 
 CryptoWrapper::CryptoWrapper(void)
@@ -527,4 +529,75 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 	}
 
 	return true;
+}
+
+string* CryptoWrapper::listKeys() {
+	CK_RV	returnValue;	//holds the return value
+	//set up the template
+	CK_OBJECT_CLASS certClass = CKO_CERTIFICATE;
+	CK_CERTIFICATE_TYPE certType = CKC_X_509;
+	CK_BBOOL True = TRUE;
+	CK_ULONG count;
+	CK_OBJECT_HANDLE *tempCert = new CK_OBJECT_HANDLE;
+
+	vector<string> keyList;
+
+	CK_ATTRIBUTE certTemplate[] = {
+		{CKA_CLASS,				&certClass,	sizeof(CK_OBJECT_CLASS)},
+		{CKA_CERTIFICATE_TYPE,	&certType,	sizeof(CK_CERTIFICATE_TYPE)},
+		{CKA_TOKEN,				&True,		sizeof (True) },
+	};
+	//init the search
+	returnValue = (funcList->C_FindObjectsInit)(hSession, certTemplate, 3);
+	if (returnValue != CKR_OK) {
+		return NULL;
+	}
+	//while more results keep searching	
+	while(true) {
+		CK_BYTE_PTR subject;
+		CK_ATTRIBUTE subjectTemplate[] = {
+			{CKA_SUBJECT, NULL_PTR, 0}
+		};
+		returnValue = (funcList->C_FindObjects)(hSession, tempCert, 1, &count);		
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		if(count == 0) {
+			break;
+		}
+		//get the subject of each cert
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		//ok now we have to allocate space for the subject
+		subject = (CK_BYTE_PTR)malloc(subjectTemplate[0].ulValueLen);
+		subjectTemplate[0].pValue = subject;
+		//get the actual value now that we have space for it
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		//decrypt the subject line and get the information that we want
+		//insert into vector
+		Subject sub(subject);
+		string temp = sub.getCertName();
+		keyList.insert(keyList.end(), temp);
+		//free the objects used
+		free(subject);
+	}
+	//finalize the seach
+	returnValue = (funcList->C_FindObjectsFinal)(hSession);
+	if (returnValue != CKR_OK) {
+		return NULL;
+	}
+	//turn vector into an array
+	string *stringArray = new string[keyList.size()];
+	for(int i = 0; i < keyList.size(); i++) {
+		stringArray[i] = keyList[i];
+	}
+	//return the array
+	return stringArray;
 }
