@@ -38,6 +38,7 @@ private:
 	//functions for finding keys
 	bool getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey);
 	bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey);
+	bool getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key);
 	//functions for encrypting stuff
 	string encrypt(string plainText, string keyLabel);
 	//functions for dealing with decryption
