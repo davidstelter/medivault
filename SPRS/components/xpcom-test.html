@@ -16,15 +16,19 @@
 					//var arr = alert(obj.getArray({}));
 					alert(obj.getArray({}));
 					//alert(arr);
+
 					var count = {};
 					var cards = obj.SPRS_enumerateCards(count);
-
-					alert("Count: " + count);
 					alert("Count.value: " + count.value);
 					alert("Cards: " + cards);
-					alert("Cards.value: " + cards.value);
 					alert("Error code: " + obj.SPRS_getLastError());
 
+					var count2 = {};
+					var keys = obj.SPRS_listCerts(count2);
+					alert("Count.value: " + count2.value);
+					alert("Keys: " + keys);
+					alert("Error code: " + obj.SPRS_getLastError());
+					
 					alert("Login: " + obj.SPRS_selectCard(0, "12345678"));
 					alert("Error code: " + obj.SPRS_getLastError());
 					obj.SPRS_finalizeCrypto();
