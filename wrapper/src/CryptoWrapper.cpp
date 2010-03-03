@@ -20,6 +20,13 @@ CryptoWrapper::~CryptoWrapper(void)
 	finalizeCrypto();
 }
 
+/*
+initCrypto() do the following:
+	- Makes sure that the DLL was not loaded before.
+	- Loads the DLL file.
+	- Gets the functions list from the DLL file.
+	- Initializes the Cryptoki library
+*/
 bool CryptoWrapper::initCrypto() {
 	CK_RV	returnValue;	//holds the return value
 	if(PKCSLibraryModule) {
@@ -53,6 +60,11 @@ bool CryptoWrapper::initCrypto() {
 	return true;
 }
 
+/*
+finalizeCrypto() do the following:
+	- Will finalize the Crypto library if it was loaded.
+	- Frees the the library.
+*/
 void CryptoWrapper::finalizeCrypto() {
 	if(!PKCSLibraryModule) {
 		return;  //if there is nothing loaded we are done
@@ -65,7 +77,10 @@ void CryptoWrapper::finalizeCrypto() {
 	PKCSLibraryModule = 0;  //set library to zero to be safe
 }
 
-//count the number of cards which have tokens
+/*
+getTokenCount() do the following:
+	- Returns the number of cards which have tokens
+*/
 int CryptoWrapper::getTokenCount(){
 	CK_RV	returnValue;	//holds the return value
 	CK_ULONG ulSlotCount;	//Number of connected readers with tokens
@@ -74,7 +89,15 @@ int CryptoWrapper::getTokenCount(){
 	return ulSlotCount;
 }
 
-//Get list of all slots with a token present
+/*
+enumerateCards() do the following:
+	- Gets the number of cards which have tokens.
+	- Creats a pointer to an array that contains slots info (return value).
+	- Search readers and store result in SlotWithTokenList.
+	- Gets all the slots info
+	- Returns list of all slots with a token present
+*/
+
 string* CryptoWrapper::enumerateCards(void)
 {
 	CK_RV	returnValue;			//holds the return value
@@ -119,7 +142,12 @@ string* CryptoWrapper::enumerateCards(void)
 	return SlotsArray;
 }
 
-//Selects a card to use for subsequent operations.  Returns false on failure and sets 
+/*
+selectCard() do the following:
+	- lists all slots with a token present.
+	- Opens a session for the selected card to use for subsequent operations.
+	- Logs into the selected token. 
+*/
 bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 {
 	enumerateCards(); //this does a little housekeeping for us...
@@ -147,6 +175,15 @@ bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 		return false;
 	}
 }
+
+/*
+encrypt() do the following:
+	- Search for label which matches our key.
+	- Initializes an encryption operation.
+	- Encrypts once to get the size.
+	- Encrypts the data.
+	- Returns the encrypted data.
+*/
 
 //encrypts data with the key given by keyLabel
 string CryptoWrapper::encrypt( string plainText, string keyLabel )
@@ -195,6 +232,14 @@ string CryptoWrapper::encrypt( string plainText, string keyLabel )
 	return output;
 }
 
+
+/*
+encryptFile() do the following:
+	- Opens the file that wanted to be encrypted, then reads the data, saves it, and then close the file.
+	- Encrypts the saved data by calling the encrypt function.
+	- Creates a new file to write the encryped data with a header and a footer.
+	- Closes the encrypted file.
+*/
 bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, string strKeyLabel)
 {
 	int retval = 0;
@@ -226,7 +271,6 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 		return false;
 	}
 	
-	/* encrypt sucka */
 	strEncrypted = encrypt(strToEncrypt, strKeyLabel);
 
 	if(strEncrypted == "") {
@@ -254,6 +298,13 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	return true;
 }
 
+/*
+decrypt() do the following:
+	- Gets the private key.
+	- Initializes a decryption operation.
+	- Encrypts once to get the size.
+	- Decrypts the data.
+*/
 string CryptoWrapper::decrypt(string cipherText, string keyLabel)
 {
 	CK_RV	returnValue;	//holds the return value
@@ -288,6 +339,13 @@ string CryptoWrapper::decrypt(string cipherText, string keyLabel)
 	return output;
 }
 
+/*
+LoadFile() do the following:
+	- Opens the file that wanted to be Decryped, reads the data and saves it, then closes the file.
+	- Skips over the first encoding of the data.
+	- Skips over the cipherText of the data.
+	- Decrypts the data by calling Decrypt function.
+*/
 string CryptoWrapper::LoadFile(string filename) {
 	stringstream inputStream;
 	string buffer;
@@ -330,16 +388,38 @@ string CryptoWrapper::LoadFile(string filename) {
 	return inputStream.str();
 }
 
+/*
+getPublicKey() do the following:
+	- Gets the public key.
+*/
 bool CryptoWrapper::getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey) {
 	CK_OBJECT_CLASS pubKeyClass  = CKO_PUBLIC_KEY;
 	return getKey(keyName, pubKeyClass, pubKey);
 }
 
+/*
+getPrivateKey() do the following:
+	- Gets the private key.
+*/
 bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
 	CK_OBJECT_CLASS keyClass  = CKO_PRIVATE_KEY;
 	return getKey(keyName,keyClass, privKey);
 }
 
+/*
+getKey() do the following:
+	- Sets up the template for the key and the certificate.
+	- Initializes the certificate search operation.
+	- Starts searching for certificate.
+	- Gets the subject field for each certificate it finds.
+	- Compares if it is the desired key.
+	- If no, Keep searching for another certificate.
+	- If yes, it finishes the certificate search operation.
+	- Gets the Key ID.
+	- Initializes the key search operation.
+	- Starts searching for the key.
+	- finishes the key search operation.
+*/
 bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key) {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
@@ -449,6 +529,16 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 	return false;
 }
 
+/*
+sign() do the following:
+	- gets private keys for signing, verify using public key.
+	- Initializes a message-digesting operation.
+	- Digests once to get the size.
+	- Starts digesting the data.
+	- Initializes a signature operation
+	- Signs once to get the size.
+	- Starts signing the data.
+*/
 string CryptoWrapper::sign( string plainText, string keyLabel )
 {
 	CK_RV	returnValue;	//holds the return value
@@ -522,6 +612,13 @@ string CryptoWrapper::sign( string plainText, string keyLabel )
 	return output;
 }
 
+/*
+signFile() do the following:
+	- Opens the file that wanted to be signed, then reads the data, saves it, and then close the file.
+	- Signs the saved data by calling the sign function.
+	- Creates a new file to write the signed data with a header and a footer.
+	- Closes the signed file.
+*/
 bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKeyLabel )
 {
 	ifstream fileRead;
@@ -578,6 +675,17 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 	return true;
 }
 
+/*
+listKeys() do the following:
+	- Sets up the template for the certificate.
+	- Initializes the certificate search operation.
+	- Starts and keeps searching for certificate.
+	- Gets the subject field for each certificate it finds.
+	- Decrypts the subject line and get the information that we want.
+	- Adds the key to the list.
+	- Finishes the certificate search operation.
+	- Turns vector into an array.
+*/
 string* CryptoWrapper::listKeys() {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
