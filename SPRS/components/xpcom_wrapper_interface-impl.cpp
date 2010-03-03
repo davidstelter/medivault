@@ -46,12 +46,45 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 }
 
 /* nsIArray SPRS_enumerateCards (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
 {
-		
+	
+	//const static char *strings[] = {"one", "two", "three", "four"};
+	string* strings = wrapper.enumerateCards();
+     const static PRUint32 scount = 1;//sizeof(strings)/sizeof(strings[0]);
+ 
+   // if(mReceiver)
+     //   return mReceiver->GetStrings(count, str);
+
+    char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
+     if(!out)
+         return NS_ERROR_OUT_OF_MEMORY;
+     for(PRUint32 i = 0; i < scount; ++i)
+	 {
+         out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
+         // failure unlikely, leakage foolishly tolerated in this test case
+         if(!out[i])
+             return NS_ERROR_OUT_OF_MEMORY;
+     }
+ 
+     *count = scount;
+     *cards = out;
+     return NS_OK;
+	
 		//string* cardlist = enumerateCards();
-		wrapper.enumerateCards();
+		//wrapper.enumerateCards();
+	
 		
+    return NS_OK;
+}
+
+/* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv)
+{
+	*count = 10;
+	*retv = (PRInt32*)nsMemory::Alloc(*count * sizeof(PRInt32));
+	for (int i = 0; i < 10; ++i) (*retv)[i] = i;
+
     return NS_OK;
 }
 
@@ -69,10 +102,12 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
 	}
 	UserPIN[pin.Length()] = 0;
 
+	
 	if(wrapper.selectCard(card, UserPIN, pin.Length()))
 		*_retval = true;
 	else
 		*_retval = false;
+	
 	
     return NS_OK;
 }

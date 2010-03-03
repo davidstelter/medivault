@@ -3,6 +3,7 @@
 
 #include "xpcom_wrapper_interface.h"
 #include "nsStringAPI.h"
+#include "nsMemory.h"
 #include <stdio.h>
 #include <windows.h>
 #include <string>

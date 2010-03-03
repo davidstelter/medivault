@@ -40,8 +40,11 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   /* void SPRS_finalizeCrypto (); */
   NS_IMETHOD SPRS_finalizeCrypto(void) = 0;
 
-  /* nsIArray SPRS_enumerateCards (); */
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) = 0;
+  /* void SPRS_enumerateCards (out PRUint32 count, [array, size_is (count), retval] out string cards); */
+  NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards) = 0;
+
+  /* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
+  NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv) = 0;
 
   /* boolean SPRS_selectCard (in long card, in AString pin); */
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) = 0;
@@ -74,7 +77,8 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_getLastError(PRInt32 *_retval); \
   NS_IMETHOD SPRS_initCrypto(PRBool *_retval); \
   NS_IMETHOD SPRS_finalizeCrypto(void); \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval); \
+  NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards); \
+  NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv); \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval); \
   NS_IMETHOD SPRS_listCerts(nsIArray **_retval); \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval); \
@@ -89,7 +93,8 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return _to SPRS_getLastError(_retval); } \
   NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return _to SPRS_initCrypto(_retval); } \
   NS_IMETHOD SPRS_finalizeCrypto(void) { return _to SPRS_finalizeCrypto(); } \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return _to SPRS_enumerateCards(_retval); } \
+  NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards) { return _to SPRS_enumerateCards(count, cards); } \
+  NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv) { return _to GetArray(count, retv); } \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return _to SPRS_selectCard(card, pin, _retval); } \
   NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return _to SPRS_listCerts(_retval); } \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return _to SPRS_createCert(cert, _retval); } \
@@ -104,7 +109,8 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_getLastError(PRInt32 *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_getLastError(_retval); } \
   NS_IMETHOD SPRS_initCrypto(PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_initCrypto(_retval); } \
   NS_IMETHOD SPRS_finalizeCrypto(void) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_finalizeCrypto(); } \
-  NS_IMETHOD SPRS_enumerateCards(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_enumerateCards(_retval); } \
+  NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_enumerateCards(count, cards); } \
+  NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv) { return !_to ? NS_ERROR_NULL_POINTER : _to->GetArray(count, retv); } \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_selectCard(card, pin, _retval); } \
   NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_listCerts(_retval); } \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_createCert(cert, _retval); } \
@@ -164,8 +170,14 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-/* nsIArray SPRS_enumerateCards (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
+/* void SPRS_enumerateCards (out PRUint32 count, [array, size_is (count), retval] out string cards); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
+{
+    return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
