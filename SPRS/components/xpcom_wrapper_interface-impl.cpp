@@ -77,6 +77,16 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char *
     return NS_OK;
 }
 
+/* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv)
+{
+	*count = 10;
+	*retv = (PRInt32*)nsMemory::Alloc(*count * sizeof(PRInt32));
+	for (int i = 0; i < 10; ++i) (*retv)[i] = i;
+
+    return NS_OK;
+}
+
 /* boolean SPRS_selectCard (in nsAString card); */
 
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval)

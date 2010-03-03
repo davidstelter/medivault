@@ -11,9 +11,18 @@
         obj = obj.QueryInterface(Components.interfaces.nsISPRS_PKCS11_Wrapper);
 				if(obj.SPRS_initCrypto()){
 					alert("Successful initialization");
-					alert(obj.SPRS_getTokenCount());
+					//alert(obj.SPRS_getTokenCount());
 					alert("Error code: " + obj.SPRS_getLastError());
-					alert("Enum: " + obj.SPRS_enumerateCards());
+					//var arr = alert(obj.getArray({}));
+					alert(obj.getArray({}));
+					//alert(arr);
+					var count = {};
+					var cards = obj.SPRS_enumerateCards(count);
+
+					alert("Count: " + count);
+					alert("Count.value: " + count.value);
+					alert("Cards: " + cards);
+					alert("Cards.value: " + cards.value);
 					alert("Error code: " + obj.SPRS_getLastError());
 
 					alert("Login: " + obj.SPRS_selectCard(0, "12345678"));
