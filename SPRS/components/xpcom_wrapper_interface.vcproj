@@ -62,6 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/NODEFAULTLIB:library"
 				AdditionalDependencies="nspr4.lib xpcom.lib xpcomglue_s.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\gecko-sdk\lib&quot;"

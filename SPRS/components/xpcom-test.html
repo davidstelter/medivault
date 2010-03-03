@@ -13,11 +13,12 @@
 					alert("Successful initialization");
 					alert(obj.SPRS_getTokenCount());
 					alert("Error code: " + obj.SPRS_getLastError());
-					alert(obj.SPRS_enumerateCards());
+					alert("Enum: " + obj.SPRS_enumerateCards());
 					alert("Error code: " + obj.SPRS_getLastError());
 
-					alert(obj.SPRS_selectCard(0, "12345678"));
+					alert("Login: " + obj.SPRS_selectCard(0, "12345678"));
 					alert("Error code: " + obj.SPRS_getLastError());
+					obj.SPRS_finalizeCrypto();
 				}
 				else{
 					alert("Initialization failed: " + obj.SPRS_getLastError());
