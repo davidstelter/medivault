@@ -30,12 +30,15 @@ public:
 	string LoadFile(string filename);
 	//functions for signing files
 	bool signFile(string fileToSign, string signedFile, string strKeyLabel);
+	//functions for finding keys
+	string* listKeys();
 private:
 	//error functions
 	void setError(int errorCode) {lastError = errorCode;}
 	//functions for finding keys
 	bool getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey);
 	bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey);
+	bool getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key);
 	//functions for encrypting stuff
 	string encrypt(string plainText, string keyLabel);
 	//functions for dealing with decryption

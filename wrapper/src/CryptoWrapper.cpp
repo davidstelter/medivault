@@ -3,7 +3,9 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <vector>
 
+#include "subject.h"
 #include "CryptoWrapper.h"
 
 CryptoWrapper::CryptoWrapper(void)
@@ -330,43 +332,17 @@ string CryptoWrapper::LoadFile(string filename) {
 
 bool CryptoWrapper::getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey) {
 	CK_OBJECT_CLASS pubKeyClass  = CKO_PUBLIC_KEY;
-	CK_KEY_TYPE KeyType = CKK_RSA;
-	CK_BBOOL True = TRUE;
-	CK_ULONG count;
-	CK_RV	returnValue;
-
-	CK_ATTRIBUTE pubKeyTemplate[] = {
-		{CKA_CLASS,		&pubKeyClass,	sizeof(CK_OBJECT_CLASS)},
-		{CKA_KEY_TYPE,	&KeyType,		sizeof(CK_KEY_TYPE)},
-		{CKA_TOKEN,		&True,			sizeof (True) },
-	};
-
-	returnValue = (funcList->C_FindObjectsInit)(hSession, pubKeyTemplate, 3);
-	if (returnValue != CKR_OK) {
-		return false;
-	}
-
-	returnValue = (funcList->C_FindObjects)(hSession, &pubKey, 1, &count);		
-	if (returnValue != CKR_OK) {
-		return false;
-	}
-	
-	returnValue = (funcList->C_FindObjectsFinal)(hSession);
-	if (returnValue != CKR_OK) {
-		return false;
-	}
-
-	if (count < 1 ) {
-		setError(KEY_NOT_FOUND);
-		return false;
-	}
-
-	return true;
+	return getKey(keyName, pubKeyClass, pubKey);
 }
 
 bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
-	CK_RV	returnValue;	//holds the return value
 	CK_OBJECT_CLASS keyClass  = CKO_PRIVATE_KEY;
+	return getKey(keyName,keyClass, privKey);
+}
+
+bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key) {
+	CK_RV	returnValue;	//holds the return value
+	//set up the template
 	CK_KEY_TYPE keyType = CKK_RSA;
 	CK_BBOOL True = TRUE;
 	CK_ULONG count;
@@ -375,29 +351,102 @@ bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
 		{CKA_CLASS,		&keyClass,		sizeof(CK_OBJECT_CLASS)},
 		{CKA_KEY_TYPE,	&keyType,		sizeof(CK_KEY_TYPE)},
 		{CKA_TOKEN,		&True,			sizeof (True) },
+		{CKA_ID,		NULL,			0 },
 	};
 
-	returnValue = (funcList->C_FindObjectsInit)(hSession, keyTemplate, 3);
-	if (returnValue != CKR_OK) {
-		return false;
-	}
+	//cert stuff
+	CK_OBJECT_CLASS certClass =		CKO_CERTIFICATE;
+	CK_CERTIFICATE_TYPE certType =	CKC_X_509;
+	CK_OBJECT_HANDLE *tempCert =	new CK_OBJECT_HANDLE;
 
-	returnValue = (funcList->C_FindObjects)(hSession, &privKey, 1, &count);		
+	CK_ATTRIBUTE certTemplate[] = {
+		{CKA_CLASS,				&certClass,	sizeof(CK_OBJECT_CLASS)},
+		{CKA_CERTIFICATE_TYPE,	&certType,	sizeof(CK_CERTIFICATE_TYPE)},
+		{CKA_TOKEN,				&True,		sizeof (True) },
+	};
+
+	//init the search
+	returnValue = (funcList->C_FindObjectsInit)(hSession, certTemplate, 3);
 	if (returnValue != CKR_OK) {
 		return false;
 	}
-	
+	//while more results keep searching	
+	while(true) {
+		CK_BYTE_PTR subject;
+		CK_ATTRIBUTE subjectTemplate[] = {
+			{CKA_SUBJECT, NULL_PTR, 0}
+		};
+		returnValue = (funcList->C_FindObjects)(hSession, tempCert, 1, &count);		
+		if (returnValue != CKR_OK || count == 0) {
+			setError(KEY_NOT_FOUND);
+			return false;
+		}
+		//get the subject of each key
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return false;
+		}
+		//ok now we have to allocate space for the subject
+		subject = (CK_BYTE_PTR)malloc(subjectTemplate[0].ulValueLen);
+		subjectTemplate[0].pValue = subject;
+		//get the actual value now that we have space for it
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return false;
+		}
+		//decrypt the subject line and get the information that we want
+		Subject sub(subject);
+		//free the objects used
+		free(subject);
+		//is this the key we want?
+		if(sub.getCertName().compare(keyName) == 0) {
+			//CK_BYTE *id = 0;
+			CK_ULONG size = 0;
+			returnValue = (funcList->C_FindObjectsFinal)(hSession);
+			CK_ATTRIBUTE idTemplate[] = {
+				{CKA_ID,		NULL,			0},		
+			};
+			returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert, idTemplate, 1);
+			if (returnValue != CKR_OK) {
+				return false;
+			}
+			CK_BYTE *id = (CK_BYTE*)malloc(sizeof(CK_BYTE)*idTemplate[0].ulValueLen);
+			idTemplate[0].pValue = id;
+
+			returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert, idTemplate, 1);
+			if (returnValue != CKR_OK) { 
+				return false;
+			}
+			size = idTemplate[0].ulValueLen;
+			keyTemplate[3].pValue = id;
+			keyTemplate[3].ulValueLen = idTemplate[0].ulValueLen;
+			returnValue = (funcList->C_FindObjectsInit)(hSession, keyTemplate, 4);
+			if (returnValue != CKR_OK) {
+				return false;
+			}
+
+			returnValue = (funcList->C_FindObjects)(hSession, &key, 1, &count);		
+			if (returnValue != CKR_OK) {
+				return false;
+			}
+			
+			returnValue = (funcList->C_FindObjectsFinal)(hSession);
+			if (returnValue != CKR_OK || count == 0) {
+				return false;
+			}
+			return true;
+		}
+	}
+	//finalize the seach
 	returnValue = (funcList->C_FindObjectsFinal)(hSession);
 	if (returnValue != CKR_OK) {
-		return false;
+		return NULL;
 	}
-
-	if (count < 1 ) {
-		setError(KEY_NOT_FOUND);
-		return false;
-	}
-
-	return true;
+	//no key was found
+	setError(KEY_NOT_FOUND);
+	return false;
 }
 
 string CryptoWrapper::sign( string plainText, string keyLabel )
@@ -527,4 +576,75 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 	}
 
 	return true;
+}
+
+string* CryptoWrapper::listKeys() {
+	CK_RV	returnValue;	//holds the return value
+	//set up the template
+	CK_OBJECT_CLASS certClass = CKO_CERTIFICATE;
+	CK_CERTIFICATE_TYPE certType = CKC_X_509;
+	CK_BBOOL True = TRUE;
+	CK_ULONG count;
+	CK_OBJECT_HANDLE *tempCert = new CK_OBJECT_HANDLE;
+
+	vector<string> keyList;
+
+	CK_ATTRIBUTE certTemplate[] = {
+		{CKA_CLASS,				&certClass,	sizeof(CK_OBJECT_CLASS)},
+		{CKA_CERTIFICATE_TYPE,	&certType,	sizeof(CK_CERTIFICATE_TYPE)},
+		{CKA_TOKEN,				&True,		sizeof (True) },
+	};
+	//init the search
+	returnValue = (funcList->C_FindObjectsInit)(hSession, certTemplate, 3);
+	if (returnValue != CKR_OK) {
+		return NULL;
+	}
+	//while more results keep searching	
+	while(true) {
+		CK_BYTE_PTR subject;
+		CK_ATTRIBUTE subjectTemplate[] = {
+			{CKA_SUBJECT, NULL_PTR, 0}
+		};
+		returnValue = (funcList->C_FindObjects)(hSession, tempCert, 1, &count);		
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		if(count == 0) {
+			break;
+		}
+		//get the subject of each cert
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		//ok now we have to allocate space for the subject
+		subject = (CK_BYTE_PTR)malloc(subjectTemplate[0].ulValueLen);
+		subjectTemplate[0].pValue = subject;
+		//get the actual value now that we have space for it
+		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
+			subjectTemplate, 1);
+		if (returnValue != CKR_OK) {
+			return NULL;
+		}
+		//decrypt the subject line and get the information that we want
+		//insert into vector
+		Subject sub(subject);
+		string temp = sub.getCertName();
+		keyList.insert(keyList.end(), temp);
+		//free the objects used
+		free(subject);
+	}
+	//finalize the seach
+	returnValue = (funcList->C_FindObjectsFinal)(hSession);
+	if (returnValue != CKR_OK) {
+		return NULL;
+	}
+	//turn vector into an array
+	string *stringArray = new string[keyList.size()];
+	for(int i = 0; i < keyList.size(); i++) {
+		stringArray[i] = keyList[i];
+	}
+	//return the array
+	return stringArray;
 }
