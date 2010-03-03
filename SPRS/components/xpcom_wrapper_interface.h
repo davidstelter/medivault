@@ -49,8 +49,8 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   /* boolean SPRS_selectCard (in long card, in AString pin); */
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) = 0;
 
-  /* nsIArray SPRS_listCerts (); */
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) = 0;
+  /* void SPRS_listCerts (out PRUint32 count, [array, size_is (count), retval] out string certs); */
+  NS_IMETHOD SPRS_listCerts(PRUint32 *count, char ***certs) = 0;
 
   /* boolean SPRS_createCert (in AString cert); */
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) = 0;
@@ -80,7 +80,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards); \
   NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv); \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval); \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval); \
+  NS_IMETHOD SPRS_listCerts(PRUint32 *count, char ***certs); \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval); \
   NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
   NS_IMETHOD SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval); \
@@ -96,7 +96,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards) { return _to SPRS_enumerateCards(count, cards); } \
   NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv) { return _to GetArray(count, retv); } \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return _to SPRS_selectCard(card, pin, _retval); } \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return _to SPRS_listCerts(_retval); } \
+  NS_IMETHOD SPRS_listCerts(PRUint32 *count, char ***certs) { return _to SPRS_listCerts(count, certs); } \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return _to SPRS_createCert(cert, _retval); } \
   NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SPRS_encryptFile(input, output_file, cert, _retval); } \
   NS_IMETHOD SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return _to SPRS_signFile(input_file, output_file, cert, _retval); } \
@@ -112,7 +112,7 @@ class NS_NO_VTABLE nsISPRS_PKCS11_Wrapper : public nsISupports {
   NS_IMETHOD SPRS_enumerateCards(PRUint32 *count, char ***cards) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_enumerateCards(count, cards); } \
   NS_IMETHOD GetArray(PRUint32 *count, PRInt32 **retv) { return !_to ? NS_ERROR_NULL_POINTER : _to->GetArray(count, retv); } \
   NS_IMETHOD SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_selectCard(card, pin, _retval); } \
-  NS_IMETHOD SPRS_listCerts(nsIArray **_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_listCerts(_retval); } \
+  NS_IMETHOD SPRS_listCerts(PRUint32 *count, char ***certs) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_listCerts(count, certs); } \
   NS_IMETHOD SPRS_createCert(const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_createCert(cert, _retval); } \
   NS_IMETHOD SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_encryptFile(input, output_file, cert, _retval); } \
   NS_IMETHOD SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval) { return !_to ? NS_ERROR_NULL_POINTER : _to->SPRS_signFile(input_file, output_file, cert, _retval); } \
@@ -188,8 +188,8 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-/* nsIArray SPRS_listCerts (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(nsIArray **_retval)
+/* void SPRS_listCerts (out PRUint32 count, [array, size_is (count), retval] out string certs); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }

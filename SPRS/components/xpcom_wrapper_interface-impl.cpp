@@ -6,9 +6,6 @@ NS_IMPL_ISUPPORTS1(nsSPRS_PKCS11_Wrapper, nsISPRS_PKCS11_Wrapper)
 
 nsSPRS_PKCS11_Wrapper::nsSPRS_PKCS11_Wrapper()
 {
-	m_lastError = 0;
-	PKCSLibraryModule = 0;
-	TokenCount = 0;
   /* member initializers and constructor code */
 }
 
@@ -48,17 +45,13 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 /* nsIArray SPRS_enumerateCards (); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
 {
-	
-	//const static char *strings[] = {"one", "two", "three", "four"};
 	string* strings = wrapper.enumerateCards();
-     const static PRUint32 scount = 1;//sizeof(strings)/sizeof(strings[0]);
- 
-   // if(mReceiver)
-     //   return mReceiver->GetStrings(count, str);
+    const static PRUint32 scount = 1;
 
     char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
-     if(!out)
-         return NS_ERROR_OUT_OF_MEMORY;
+    if(!out)
+        return NS_ERROR_OUT_OF_MEMORY;
+
      for(PRUint32 i = 0; i < scount; ++i)
 	 {
          out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
@@ -70,12 +63,6 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char *
      *count = scount;
      *cards = out;
      return NS_OK;
-	
-		//string* cardlist = enumerateCards();
-		//wrapper.enumerateCards();
-	
-		
-    return NS_OK;
 }
 
 /* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
@@ -89,10 +76,8 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv)
 }
 
 /* boolean SPRS_selectCard (in nsAString card); */
-
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval)
 {
-	//CK_UTF8CHAR UserPIN[] = "12345678";
 	CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
 	const PRUnichar* cur = pin.BeginReading();
 	const PRUnichar* end = pin.EndReading();
@@ -112,8 +97,8 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
     return NS_OK;
 }
 
-/* nsIArray SPRS_listCerts (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(nsIArray **_retval)
+/* void SPRS_listCerts (out PRUint32 count, [array, size_is (count), retval] out string certs); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }

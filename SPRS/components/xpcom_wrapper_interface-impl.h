@@ -28,14 +28,7 @@ public:
 
 private:
 	CryptoWrapper wrapper;
-	HMODULE PKCSLibraryModule;
-	CK_RV	returnValue;
-	CK_FUNCTION_LIST_PTR funcList;
-
-	CK_SLOT_ID_PTR pSlotWithTokenList;
-	CK_SESSION_HANDLE hSession;
-	int TokenCount;
-	int m_lastError;
+	
   ~nsSPRS_PKCS11_Wrapper();
 
 protected:
