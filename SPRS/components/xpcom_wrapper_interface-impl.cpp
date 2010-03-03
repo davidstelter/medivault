@@ -49,8 +49,9 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
 {
 	
-	const static char *strings[] = {"one", "two", "three", "four"};
-     const static PRUint32 scount = sizeof(strings)/sizeof(strings[0]);
+	//const static char *strings[] = {"one", "two", "three", "four"};
+	string* strings = wrapper.enumerateCards();
+     const static PRUint32 scount = 1;//sizeof(strings)/sizeof(strings[0]);
  
    // if(mReceiver)
      //   return mReceiver->GetStrings(count, str);
@@ -59,8 +60,8 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char *
      if(!out)
          return NS_ERROR_OUT_OF_MEMORY;
      for(PRUint32 i = 0; i < scount; ++i)
-     {
-         out[i] = (char*) nsMemory::Clone(strings[i], strlen(strings[i])+1);
+	 {
+         out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
          // failure unlikely, leakage foolishly tolerated in this test case
          if(!out[i])
              return NS_ERROR_OUT_OF_MEMORY;
