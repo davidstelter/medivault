@@ -46,7 +46,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
 {
 	string* strings = wrapper.enumerateCards();
-    const static PRUint32 scount = 1;
+	const static PRUint32 scount = wrapper.getTokenCount();
 
     char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
     if(!out)
