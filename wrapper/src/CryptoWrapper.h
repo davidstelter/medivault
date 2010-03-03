@@ -5,8 +5,6 @@
 
 #pragma once
 
-#define SC_PIN_CODE "12345678"  //pin code for testing
-
 using namespace std;
 
 class CryptoWrapper
@@ -40,11 +38,14 @@ private:
 	bool getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey);
 	bool getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key);
 	//functions for encrypting stuff
-	string encrypt(string plainText, string keyLabel);
+	CK_BYTE* encrypt( string plainText, string keyLabel, int &size);
 	//functions for dealing with decryption
 	string decrypt(string cipherText, string keyLabel);
+	string decryptFile(CK_BYTE* cipherText,CK_ULONG size, string keyLabel);
 	//functions for signing stuff
-	string CryptoWrapper::sign(string plainText, string keyLabel);
+	CK_BYTE* sign(string plainText, string keyLabel, int &size);
+	CK_BYTE* Digest(string plainText, CK_ULONG &size);
+	bool Verify(string plainText, CK_BYTE* signature, CK_ULONG sigSize, string keyLabel);
 
 	//member variables
 	int lastError;					//Holds the last error
