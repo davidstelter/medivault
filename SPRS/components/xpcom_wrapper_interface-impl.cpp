@@ -26,11 +26,11 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
 
 	if (wrapper.initCrypto()){
-		*_retval = true;
+		*_retval = PR_TRUE;
 		return NS_OK;
 	}
 	else{
-		*_retval = false;
+		*_retval = PR_FALSE;
 		return NS_OK; //not the sort of failure we'd handle with a non-ok return code here, would make JS sad
 	}
 }
@@ -89,9 +89,9 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
 
 	
 	if(wrapper.selectCard(card, UserPIN, pin.Length()))
-		*_retval = true;
+		*_retval = PR_TRUE;
 	else
-		*_retval = false;
+		*_retval = PR_FALSE;
 	
 	
     return NS_OK;

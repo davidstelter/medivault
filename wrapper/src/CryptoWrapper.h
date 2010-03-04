@@ -2,6 +2,7 @@
 
 #include "errorcodes.h"
 #include "cryptoki.h"
+#include "subject.h"
 
 #pragma once
 

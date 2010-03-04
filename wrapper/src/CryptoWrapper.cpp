@@ -5,7 +5,6 @@
 #include <fstream>
 #include <vector>
 
-#include "subject.h"
 #include "CryptoWrapper.h"
 
 CryptoWrapper::CryptoWrapper(void)

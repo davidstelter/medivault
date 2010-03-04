@@ -211,6 +211,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\wrapper\src\errorcodes.h"
+				>
+			</File>
+			<File
 				RelativePath=".\sprs_error.h"
 				>
 			</File>
