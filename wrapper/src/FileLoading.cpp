@@ -27,7 +27,7 @@ string CryptoWrapper::LoadFile(string filename) {
 	catch (ifstream::failure e) 
 	{
 		setError(FAILED_TO_OPEN_READ_FILE);
-		return false;
+		return "";
 	}
 	char first;
 	file.read(&first,1);
@@ -58,7 +58,7 @@ string CryptoWrapper::LoadFile(string filename) {
 	catch (ifstream::failure e) 
 	{
 		setError(FAILED_TO_OPEN_READ_FILE);
-		return false;
+		return "";
 	}
 	return inputStream.str();
 }
