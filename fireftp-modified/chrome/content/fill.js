@@ -1,12 +1,11 @@
 function fill() {
 
 //call numerate function fo get an array of strings 
-/*
+
 var slots = acos5.SPRS_enumerateCards();
-*/
 
 
-var slots = new Array("slot1","slot2","slot3");
+//var slots = new Array("slot1","slot2","slot3");
 
 //Filling the dropdown list with the cards available.
 var list = document.getElementById('slots');
