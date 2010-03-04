@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 
+#include "EncryptedData.h"
 #include "CryptoWrapper.h"
 
 /*
@@ -113,15 +114,11 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	{
 		/* create file */
 		fileWrite.open( encryptedFile.c_str(), fstream::binary | fstream::out | fstream::trunc );
-		
-		fileWrite << (char)9 <<"encrypted";
-		int size = strKeyLabel.size();
-		fileWrite.write((char*)&size,4);
-		fileWrite << strKeyLabel.c_str();
-		fileWrite.write((char*)&encSize,4);
-		fileWrite.write((char*)strEncrypted, encSize * sizeof(CK_BYTE));
-		
-		/* close */
+		EncryptedData data;
+		data.setCipherText(strEncrypted,encSize);
+		data.setCert(strKeyLabel);
+		data.writeToFile(fileWrite);
+		free(strEncrypted);
 		fileWrite.close();
 	}
 	catch (ofstream:: failure e) 

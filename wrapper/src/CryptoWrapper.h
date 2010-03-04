@@ -1,5 +1,7 @@
 #include <windows.h>
 
+#include "SignedData.h"
+#include "EncryptedData.h"
 #include "errorcodes.h"
 #include "cryptoki.h"
 
@@ -41,11 +43,11 @@ private:
 	CK_BYTE* encrypt( string plainText, string keyLabel, int &size);
 	//functions for dealing with decryption
 	string decrypt(string cipherText, string keyLabel);
-	string decryptFile(CK_BYTE* cipherText,CK_ULONG size, string keyLabel);
+	string decryptFile(EncryptedData &data);
 	//functions for signing stuff
 	CK_BYTE* sign(string plainText, string keyLabel, int &size);
 	CK_BYTE* Digest(string plainText, CK_ULONG &size);
-	bool Verify(string plainText, CK_BYTE* signature, CK_ULONG sigSize, string keyLabel);
+	bool Verify(SignedData &data);
 
 	//member variables
 	int lastError;					//Holds the last error
