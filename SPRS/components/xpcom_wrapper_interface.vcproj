@@ -184,6 +184,34 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\wrapper\src\Encrypt.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\EncryptedData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\FileLoading.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\KeyFunctions.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\Sign.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\SignedData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\Subject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\xpcom_wrapper_interface-impl.cpp"
 				>
 			</File>
@@ -206,7 +234,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\wrapper\src\EncryptedData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\errorcodes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\SignedData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\sprs_error.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\Subject.h"
 				>
 			</File>
 			<File
