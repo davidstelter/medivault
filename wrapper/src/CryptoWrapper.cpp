@@ -20,6 +20,13 @@ CryptoWrapper::~CryptoWrapper(void)
 	finalizeCrypto();
 }
 
+/*
+initCrypto() do the following:
+	- Makes sure that the DLL was not loaded before.
+	- Loads the DLL file.
+	- Gets the functions list from the DLL file.
+	- Initializes the Cryptoki library
+*/
 bool CryptoWrapper::initCrypto() {
 	CK_RV	returnValue;	//holds the return value
 	if(PKCSLibraryModule) {
@@ -53,6 +60,11 @@ bool CryptoWrapper::initCrypto() {
 	return true;
 }
 
+/*
+finalizeCrypto() do the following:
+	- Will finalize the Crypto library if it was loaded.
+	- Frees the the library.
+*/
 void CryptoWrapper::finalizeCrypto() {
 	if(!PKCSLibraryModule) {
 		return;  //if there is nothing loaded we are done
@@ -65,7 +77,10 @@ void CryptoWrapper::finalizeCrypto() {
 	PKCSLibraryModule = 0;  //set library to zero to be safe
 }
 
-//count the number of cards which have tokens
+/*
+getTokenCount() do the following:
+	- Returns the number of cards which have tokens
+*/
 int CryptoWrapper::getTokenCount(){
 	CK_RV	returnValue;	//holds the return value
 	CK_ULONG ulSlotCount;	//Number of connected readers with tokens
@@ -74,7 +89,15 @@ int CryptoWrapper::getTokenCount(){
 	return ulSlotCount;
 }
 
-//Get list of all slots with a token present
+/*
+enumerateCards() do the following:
+	- Gets the number of cards which have tokens.
+	- Creats a pointer to an array that contains slots info (return value).
+	- Search readers and store result in SlotWithTokenList.
+	- Gets all the slots info
+	- Returns list of all slots with a token present
+*/
+
 string* CryptoWrapper::enumerateCards(void)
 {
 	CK_RV	returnValue;			//holds the return value
@@ -119,7 +142,12 @@ string* CryptoWrapper::enumerateCards(void)
 	return SlotsArray;
 }
 
-//Selects a card to use for subsequent operations.  Returns false on failure and sets 
+/*
+selectCard() do the following:
+	- lists all slots with a token present.
+	- Opens a session for the selected card to use for subsequent operations.
+	- Logs into the selected token. 
+*/
 bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 {
 	enumerateCards(); //this does a little housekeeping for us...
@@ -148,8 +176,17 @@ bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 	}
 }
 
+/*
+encrypt() do the following:
+	- Search for label which matches our key.
+	- Initializes an encryption operation.
+	- Encrypts once to get the size.
+	- Encrypts the data.
+	- Returns the encrypted data.
+*/
+
 //encrypts data with the key given by keyLabel
-string CryptoWrapper::encrypt( string plainText, string keyLabel )
+CK_BYTE* CryptoWrapper::encrypt( string plainText, string keyLabel, int &size)
 {
 	CK_ULONG encrypted;
 	CK_OBJECT_HANDLE key;
@@ -162,25 +199,25 @@ string CryptoWrapper::encrypt( string plainText, string keyLabel )
 
 	CK_RV	returnValue;
 	
+	size = 0;
 	/* search for label which matches our key */
 	getPublicKey(keyLabel, key);
 
-//	funcList->C_FindObjectsFinal(hSession);
 	/* begin encryption */
 	if((funcList->C_EncryptInit)(hSession, &mechanism, key) != CKR_OK) 
 	{
 		setError(COULD_NOT_INIT_ENCRYPT);
-		return "";
+		return NULL;
 	}
 	
-	plainTextLength = sizeof(plainText.c_str());
+	plainTextLength = plainText.size();
 	inBuffer = (CK_BYTE*)plainText.c_str();
 	//encrypt once to get the size
 	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, plainTextLength, NULL_PTR, &encrypted);
 	if(returnValue != CKR_OK) 
 	{
 			setError(FAILED_TO_ENCRYPT);
-			return "";
+			return NULL;
 	}
 	outBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * encrypted);
 
@@ -188,13 +225,21 @@ string CryptoWrapper::encrypt( string plainText, string keyLabel )
 	if(returnValue != CKR_OK) 
 	{
 			setError(FAILED_TO_ENCRYPT);
-			return "";
+			return NULL;
 	}
 	
-	string output = (char*)outBuffer;
-	return output;
+	size = encrypted;
+	return outBuffer;
 }
 
+
+/*
+encryptFile() do the following:
+	- Opens the file that wanted to be encrypted, then reads the data, saves it, and then close the file.
+	- Encrypts the saved data by calling the encrypt function.
+	- Creates a new file to write the encryped data with a header and a footer.
+	- Closes the encrypted file.
+*/
 bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, string strKeyLabel)
 {
 	int retval = 0;
@@ -202,7 +247,7 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	ofstream fileWrite;
 	string strToEncrypt;
 	stringstream inputStream;
-	string strEncrypted;
+	CK_BYTE* strEncrypted;
 
 	
 	fileRead.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
@@ -227,9 +272,10 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	}
 	
 	/* encrypt sucka */
-	strEncrypted = encrypt(strToEncrypt, strKeyLabel);
+	int encSize;
+	strEncrypted = encrypt(strToEncrypt, strKeyLabel, encSize);
 
-	if(strEncrypted == "") {
+	if(strEncrypted == NULL) {
 		return false;
 	}
 
@@ -237,11 +283,14 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	try
 	{
 		/* create file */
-		fileWrite.open( encryptedFile.c_str(), fstream::in | fstream::out | fstream::trunc );
+		fileWrite.open( encryptedFile.c_str(), fstream::binary | fstream::out | fstream::trunc );
 		
-		fileWrite << "<type>encrypted</type>";
-		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
-		fileWrite << "<enc>" << strEncrypted.c_str() << "</enc>";
+		fileWrite << (char)9 <<"encrypted";
+		int size = strKeyLabel.size();
+		fileWrite.write((char*)&size,4);
+		fileWrite << strKeyLabel.c_str();
+		fileWrite.write((char*)&encSize,4);
+		fileWrite.write((char*)strEncrypted, encSize * sizeof(CK_BYTE));
 		
 		/* close */
 		fileWrite.close();
@@ -254,7 +303,14 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	return true;
 }
 
-string CryptoWrapper::decrypt(string cipherText, string keyLabel)
+/*
+decryptFile() do the following:
+	- Gets the private key.
+	- Initializes a decryption operation.
+	- Decrypts once to get the size.
+	- Decrypts the data.
+*/
+string CryptoWrapper::decryptFile(CK_BYTE* cipherText,CK_ULONG size, string keyLabel)
 {
 	CK_RV	returnValue;	//holds the return value
 	CK_OBJECT_HANDLE key;
@@ -267,11 +323,9 @@ string CryptoWrapper::decrypt(string cipherText, string keyLabel)
 		setError(COULD_NOT_INIT_DECRYPTION);
 		return "";
 	}
-	CK_ULONG length = cipherText.size();
 	CK_ULONG decrypted;
-	CK_BYTE* inBuffer = (CK_BYTE*)cipherText.c_str();
 	//encrypt once to get the size
-	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, length, NULL_PTR, &decrypted);
+	returnValue = (funcList->C_Decrypt)(hSession, cipherText, size, NULL_PTR, &decrypted);
 	if(returnValue != CKR_OK) 
 	{
 			setError(FAILED_TO_ENCRYPT);
@@ -279,21 +333,83 @@ string CryptoWrapper::decrypt(string cipherText, string keyLabel)
 	}
 	CK_BYTE* outBuffer = (CK_BYTE*)malloc(decrypted);
 
-	if(funcList->C_Decrypt(hSession, inBuffer, length, outBuffer, &decrypted)
+	if(funcList->C_Decrypt(hSession, cipherText, size, outBuffer, &decrypted)
 		!= CKR_OK) {
 			setError(FAILED_TO_DECRYPT);
 			return "";
 	}
-	string output = (char*)outBuffer;
+	string output = "";/*(char*)outBuffer;*/
+	for(int i = 0; i < decrypted; i++) {
+		output = output + (char)outBuffer[i];
+	}
 	return output;
 }
 
+/*
+LoadFile() do the following:
+	- Opens the file that wanted to be Decryped, reads the data and saves it, then closes the file.
+	- Skips over the first encoding of the data.
+	- Skips over the cipherText of the data.
+	- Decrypts the data by calling Decrypt function.
+*/
 string CryptoWrapper::LoadFile(string filename) {
 	stringstream inputStream;
 	string buffer;
 
 	ifstream file;
 	file.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
+	try 
+	{
+		file.open( filename.c_str(), fstream::binary | fstream::in );
+	}
+	catch (ifstream::failure e) 
+	{
+		setError(FAILED_TO_OPEN_READ_FILE);
+		return false;
+	}
+	char first;
+	file.read(&first,1);
+	if(first == 9) {
+		char type[10];
+		file.read(type, 9);
+		if(strncmp(type, "encrypted", 9) == 0){
+			int certSize;
+			file.read((char*)&certSize, 4);
+			char *temp = (char *)malloc((certSize + 1) * sizeof(char));
+			file.read(temp, certSize);
+			temp[certSize] = '\0';
+			string cert(temp);
+			free(temp);
+			CK_LONG encSize;
+			file.read((char*)&encSize, 4);
+			CK_BYTE *encData = (CK_BYTE *)malloc(encSize * sizeof(CK_BYTE));
+			file.read((char *)encData, encSize);
+			return decryptFile(encData,encSize,cert);			
+		} else if(strncmp(type, "signature", 9) == 0) {
+			int certSize;
+			file.read((char*)&certSize, 4);
+			char *temp = (char *)malloc((certSize + 1) * sizeof(char));
+			file.read(temp, certSize);
+			temp[certSize] = '\0';
+			string cert(temp);
+			free(temp);
+			CK_LONG dataSize;
+			file.read((char*)&dataSize, 4);
+			char *data = (char *)malloc((dataSize + 1) * sizeof(char));
+			file.read((char *)data, dataSize);
+			data[dataSize] = '\0';
+			string plainText(data);
+			CK_LONG sigSize;
+			file.read((char*)&sigSize, 4);
+			CK_BYTE *sig = (CK_BYTE *)malloc(sigSize * sizeof(CK_BYTE));
+			file.read((char *)sig,sigSize);
+			if(!Verify(plainText,sig,sigSize,cert)) {
+				return "";
+			}
+			return plainText;
+		}
+	}
+	file.close();
 	try 
 	{
 		file.open( filename.c_str() );
@@ -306,40 +422,41 @@ string CryptoWrapper::LoadFile(string filename) {
 		setError(FAILED_TO_OPEN_READ_FILE);
 		return false;
 	}
-	if(buffer.substr(0,6) == "<type>") {
-		if(buffer.substr(6,9) == "encrypted") {
-			string temp;
-			//skip over the first encoding
-			string::size_type pos = buffer.find_first_of("<",22);
-			if(string::npos == pos) {
-				return inputStream.str();
-			}
-			buffer = buffer.substr(pos);
-			pos = buffer.find_first_of("<",6);
-			string cert = buffer.substr(6,pos-6);
-			//skip over the cipherText
-			pos = buffer.find_first_of("<",pos + 1);
-			if(string::npos == pos) {
-				return inputStream.str();
-			}
-			buffer = buffer.substr(pos);
-			string cipherText = buffer.substr(5,buffer.find_last_of("<") - 5);
-			return decrypt(cipherText, cert);
-		}
-	}
 	return inputStream.str();
 }
 
+/*
+getPublicKey() do the following:
+	- Gets the public key.
+*/
 bool CryptoWrapper::getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey) {
 	CK_OBJECT_CLASS pubKeyClass  = CKO_PUBLIC_KEY;
 	return getKey(keyName, pubKeyClass, pubKey);
 }
 
+/*
+getPrivateKey() do the following:
+	- Gets the private key.
+*/
 bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
 	CK_OBJECT_CLASS keyClass  = CKO_PRIVATE_KEY;
 	return getKey(keyName,keyClass, privKey);
 }
 
+/*
+getKey() do the following:
+	- Sets up the template for the key and the certificate.
+	- Initializes the certificate search operation.
+	- Starts searching for certificate.
+	- Gets the subject field for each certificate it finds.
+	- Compares if it is the desired key.
+	- If no, Keep searching for another certificate.
+	- If yes, it finishes the certificate search operation.
+	- Gets the Key ID.
+	- Initializes the key search operation.
+	- Starts searching for the key.
+	- finishes the key search operation.
+*/
 bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key) {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
@@ -449,56 +566,41 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 	return false;
 }
 
-string CryptoWrapper::sign( string plainText, string keyLabel )
+/*
+sign() do the following:
+	- gets private keys for signing, verify using public key.
+	- Initializes a message-digesting operation.
+	- Digests once to get the size.
+	- Starts digesting the data.
+	- Initializes a signature operation
+	- Signs once to get the size.
+	- Starts signing the data.
+*/
+CK_BYTE*  CryptoWrapper::sign(string plainText, string keyLabel, int &size)
 {
 	CK_RV	returnValue;	//holds the return value
 	CK_OBJECT_HANDLE key;
-	CK_ULONG PlainTextLength;
 	CK_ULONG DigestLen;			
 	CK_ULONG SignatureLen;								
-	CK_BYTE* inBuffer;
 	CK_BYTE* signBuffer;
 	CK_BYTE* digestBuffer;
-	CK_MECHANISM mechanism_digest = {CKM_SHA_1, NULL_PTR, 0};
 	CK_MECHANISM mechanism_sign = {CKM_RSA_PKCS, NULL_PTR, 0};
 
 	/* get private keys for signing, verify using public key */
 	getPrivateKey(keyLabel, key);
-	
-	/* init digest */
-	returnValue = (funcList->C_DigestInit)(hSession, &mechanism_digest);
-	if(returnValue != CKR_OK)
-	{
-		setError(COULD_NOT_INIT_DIGEST);
-		return"";
-	}
 
-	PlainTextLength = plainText.size();
-	inBuffer = (CK_BYTE*)plainText.c_str();
-	
-	/* do to get length for digest buffer */
-	returnValue = (funcList->C_Digest)(hSession, inBuffer, PlainTextLength, NULL_PTR, &DigestLen);
-	if(returnValue != CKR_OK)
-	{ 
+	digestBuffer = Digest(plainText, digestLen);
+	if(digestBuffer == NULL) {
 		setError(FAILED_TO_DIGEST);
-		return "";
+		return NULL;
 	}
-	
-	/* digest data */
-	digestBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * DigestLen);
-	returnValue = (funcList->C_Digest)(hSession, inBuffer, PlainTextLength, digestBuffer, &DigestLen);
-	if(returnValue != CKR_OK)
-	{
-		setError(FAILED_TO_DIGEST);
-		return ""; 
-	}
-	
+		
 	/* init sign function */
 	returnValue = (funcList->C_SignInit)(hSession, &mechanism_sign, key);
 	if(returnValue != CKR_OK)
 	{
 		setError(COULD_NOT_INIT_SIGN);
-		return ""; 
+		return NULL; 
 	}
 	
 	/* get length for sign buffer */
@@ -506,7 +608,7 @@ string CryptoWrapper::sign( string plainText, string keyLabel )
 	if(returnValue != CKR_OK)
 	{
 		setError(FAILED_TO_SIGN);
-		return ""; 
+		return NULL; 
 	}
 	
 	/* sign */
@@ -515,18 +617,24 @@ string CryptoWrapper::sign( string plainText, string keyLabel )
 	if(returnValue != CKR_OK)
 	{
 		setError(FAILED_TO_SIGN);
-		return ""; 
+		return NULL; 
 	}
-	
-	string output = (char*)signBuffer;
-	return output;
+	size = SignatureLen;
+	return signBuffer;
 }
 
+/*
+signFile() do the following:
+	- Opens the file that wanted to be signed, then reads the data, saves it, and then close the file.
+	- Signs the saved data by calling the sign function.
+	- Creates a new file to write the signed data with a header and a footer.
+	- Closes the signed file.
+*/
 bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKeyLabel )
 {
 	ifstream fileRead;
 	ofstream fileWrite;
-	string strSigned;
+	CK_BYTE* signature;
 	string strToDigestSign;
 	stringstream inputStream;
 	
@@ -551,21 +659,25 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 		setError(FAILED_TO_OPEN_READ_FILE);
 	       	return	false;
 	}
-
-	strSigned = sign(strToDigestSign, strKeyLabel);
+	int signedSize;
+	signature = sign(strToDigestSign, strKeyLabel,signedSize);
 	
-	if (strSigned == "")
+	if (signature == NULL)
 		return false;
 
 	try 
 	{
-		fileWrite.open( signedFile.c_str(), fstream::in | fstream::out | fstream::trunc );
+		fileWrite.open( signedFile.c_str(), fstream::binary | fstream::out | fstream::trunc );
 		
-		/* write stream to file, TRUNCATE MODE */
-		fileWrite << "<type>signed</type>";
-		fileWrite << "<cert>" << strKeyLabel.c_str() << "</cert>";
-		fileWrite << "<data>" << strToDigestSign << "</data>";
-		fileWrite << "<sign>" << strSigned.c_str() << "</sign>";
+		fileWrite << (char)9 <<"signature";
+		int size = strKeyLabel.size();
+		fileWrite.write((char*)&size,4);
+		fileWrite << strKeyLabel.c_str();
+		size = strToDigestSign.size();
+		fileWrite.write((char*)&size,4);
+		fileWrite << strToDigestSign.c_str();
+		fileWrite.write((char*)&signedSize,4);
+		fileWrite.write((char*)signature, signedSize * sizeof(CK_BYTE));
 		
 		fileWrite.close();
 	}
@@ -578,6 +690,17 @@ bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKe
 	return true;
 }
 
+/*
+listKeys() do the following:
+	- Sets up the template for the certificate.
+	- Initializes the certificate search operation.
+	- Starts and keeps searching for certificate.
+	- Gets the subject field for each certificate it finds.
+	- Decrypts the subject line and get the information that we want.
+	- Adds the key to the list.
+	- Finishes the certificate search operation.
+	- Turns vector into an array.
+*/
 string* CryptoWrapper::listKeys() {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
@@ -647,4 +770,72 @@ string* CryptoWrapper::listKeys() {
 	}
 	//return the array
 	return stringArray;
+}
+
+CK_BYTE* CryptoWrapper::Digest(string plainText, CK_ULONG &size) {
+	CK_RV	returnValue;
+	CK_ULONG plainTextLength;
+	CK_BYTE *buffer;
+	CK_BYTE *digested;
+	CK_MECHANISM mechanism = {CKM_SHA_1, NULL_PTR, 0};
+
+	returnValue = (funcList->C_DigestInit)(hSession, &mechanism);
+	if(returnValue != CKR_OK) {
+		setError(COULD_NOT_INIT_DIGEST);
+		return NULL;
+	}
+
+	plainTextLength = plainText.size();
+	buffer = (CK_BYTE*)plainText.c_str();
+	
+	/* do to get length for digest buffer */
+	returnValue = (funcList->C_Digest)(hSession, buffer, plainTextLength, NULL_PTR, &size);
+	if(returnValue != CKR_OK) { 
+		setError(FAILED_TO_DIGEST);
+		return NULL;
+	}
+	
+	/* digest data */
+	digested = (CK_BYTE*)malloc(sizeof(CK_BYTE) * size);
+	returnValue = (funcList->C_Digest)(hSession, buffer, plainTextLength, digested, &size);
+	if(returnValue != CKR_OK) {
+		setError(FAILED_TO_DIGEST);
+		return NULL; 
+	}
+	return digested;
+}
+
+bool CryptoWrapper::Verify(string plainText, CK_BYTE* signature, CK_ULONG sigSize, string keyLabel)
+{
+	CK_RV	returnValue;
+	CK_OBJECT_HANDLE key;
+	CK_ULONG digestSize = 0;								
+	CK_BYTE* digestBuffer = NULL;
+	CK_MECHANISM mechanism = {CKM_RSA_PKCS, NULL_PTR, 0};
+	CK_UTF8CHAR* label = (CK_UTF8CHAR*)keyLabel.c_str();
+	CK_ATTRIBUTE searchKey[] = {CKA_LABEL, label, sizeof(label) - 1};
+	
+	//get private keys for signing, verify using public key 
+	getPublicKey(keyLabel, key);
+
+	//digest data
+	digestBuffer = Digest(plainText, digestSize);
+	if(digestBuffer == NULL) {
+		return false;
+	}
+
+	//1. Initialize verification
+	returnValue = (funcList->C_VerifyInit)(hSession, &mechanism, key);	
+	if (returnValue != CKR_OK) {
+		setError(FAILED_TO_VERIFY);
+		return false;
+	}	
+
+	//Verifying
+	returnValue = (funcList->C_Verify)(hSession, digestBuffer, digestSize, signature, sigSize);
+	if(returnValue != CKR_OK) {
+		setError(FAILED_TO_VERIFY);
+		return false; 
+	}
+	return true;
 }
