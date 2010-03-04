@@ -124,9 +124,29 @@ function startup() {
   }
 
 	initCrypto();
+	
+//******************************************************************
+  
+  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 
+var items = ["cert1", "cert2", "cert3", "cert4"];
+
+var selected = {};
+
+var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+
+// sellected cert index
+var index = selected.value;
+
+alert(index);
+  
+//******************************************************************
+	
+/*
 	var strWindowFeatures = "height=300,width=300,chrome=yes,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
 	window.open("cardselect.xul", "chrome",strWindowFeatures);	
+	
+*/
 }
 
 function beforeUnload() {
