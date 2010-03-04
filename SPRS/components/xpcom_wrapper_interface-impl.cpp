@@ -6,9 +6,6 @@ NS_IMPL_ISUPPORTS1(nsSPRS_PKCS11_Wrapper, nsISPRS_PKCS11_Wrapper)
 
 nsSPRS_PKCS11_Wrapper::nsSPRS_PKCS11_Wrapper()
 {
-	m_lastError = 0;
-	PKCSLibraryModule = 0;
-	TokenCount = 0;
   /* member initializers and constructor code */
 }
 
@@ -29,11 +26,11 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
 
 	if (wrapper.initCrypto()){
-		*_retval = true;
+		*_retval = PR_TRUE;
 		return NS_OK;
 	}
 	else{
-		*_retval = false;
+		*_retval = PR_FALSE;
 		return NS_OK; //not the sort of failure we'd handle with a non-ok return code here, would make JS sad
 	}
 }
@@ -46,20 +43,41 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto()
 }
 
 /* nsIArray SPRS_enumerateCards (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(nsIArray **_retval)
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards)
 {
-		
-		//string* cardlist = enumerateCards();
-		wrapper.enumerateCards();
-		
+	string* strings = wrapper.enumerateCards();
+	const static PRUint32 scount = wrapper.getTokenCount();
+
+    char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
+    if(!out)
+        return NS_ERROR_OUT_OF_MEMORY;
+
+     for(PRUint32 i = 0; i < scount; ++i)
+	 {
+         out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
+         // failure unlikely, leakage foolishly tolerated in this test case
+         if(!out[i])
+             return NS_ERROR_OUT_OF_MEMORY;
+     }
+ 
+     *count = scount;
+     *cards = out;
+     return NS_OK;
+}
+
+/* void getArray (out unsigned long count, [array, size_is (count), retval] out long retv); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv)
+{
+	*count = 10;
+	*retv = (PRInt32*)nsMemory::Alloc(*count * sizeof(PRInt32));
+	for (int i = 0; i < 10; ++i) (*retv)[i] = i;
+
     return NS_OK;
 }
 
 /* boolean SPRS_selectCard (in nsAString card); */
-
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval)
 {
-	//CK_UTF8CHAR UserPIN[] = "12345678";
 	CK_UTF8CHAR* UserPIN = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (pin.Length()+1));
 	const PRUnichar* cur = pin.BeginReading();
 	const PRUnichar* end = pin.EndReading();
@@ -69,18 +87,37 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
 	}
 	UserPIN[pin.Length()] = 0;
 
+	
 	if(wrapper.selectCard(card, UserPIN, pin.Length()))
-		*_retval = true;
+		*_retval = PR_TRUE;
 	else
-		*_retval = false;
+		*_retval = PR_FALSE;
+	
 	
     return NS_OK;
 }
 
-/* nsIArray SPRS_listCerts (); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(nsIArray **_retval)
+/* void SPRS_listCerts (out PRUint32 count, [array, size_is (count), retval] out string certs); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	string* strings = wrapper.listKeys();
+	const static PRUint32 scount = 1;//wrapper.getTokenCount();
+
+    char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
+    if(!out)
+        return NS_ERROR_OUT_OF_MEMORY;
+
+     for(PRUint32 i = 0; i < scount; ++i)
+	 {
+         out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
+         // failure unlikely, leakage foolishly tolerated in this test case
+         if(!out[i])
+             return NS_ERROR_OUT_OF_MEMORY;
+     }
+ 
+     *count = scount;
+     *certs = out;
+     return NS_OK;
 }
 
 /* boolean SPRS_createCert (in nsAString cert); */
