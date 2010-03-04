@@ -238,12 +238,13 @@
         <grippy/>
       </splitter>
       <vbox       pack="center">
-        <box      id="retrbutton">
+       <!--
+	   <box      id="retrbutton">
           <button id="retrieveButton" oncommand="new transfer().start(true)"  tooltiptext="&download.label;"/>
         </box>
 				<box      id="storbutton">
 					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
-				</box>
+				</box>  --> 
 				<box      id="encryptbutton">
 				<button id="encryptButton" oncommand="temp()" label="Encrypt"/>
 				</box>

@@ -81,8 +81,7 @@ function startup() {
     $('searchWhich').selectedIndex = 0;
   }
 
-	var strWindowFeatures = "height=300,width=300,chrome=yes,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
-	window.open("cardselect.xul", "chrome",strWindowFeatures);
+
 	searchSelectType();
 	showSearchDates();
 	securityPopup();
@@ -125,10 +124,9 @@ function startup() {
   }
 
 	initCrypto();
-	
-	//here you go 
-	
-	
+
+	var strWindowFeatures = "height=300,width=300,chrome=yes,menubar=no,location=no,resizable=no,scrollbars=no,status=no";
+	window.open("cardselect.xul", "chrome",strWindowFeatures);	
 }
 
 function beforeUnload() {
