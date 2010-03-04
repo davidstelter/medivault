@@ -62,7 +62,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/NODEFAULTLIB:library"
 				AdditionalDependencies="nspr4.lib xpcom.lib xpcomglue_s.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;..\..\..\gecko-sdk\lib&quot;"
@@ -185,6 +184,30 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\wrapper\src\Encrypt.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\EncryptedData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\FileLoading.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\KeyFunctions.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\Sign.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\SignedData.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\wrapper\src\Subject.cpp"
 				>
 			</File>
@@ -211,7 +234,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\wrapper\src\EncryptedData.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\wrapper\src\errorcodes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\wrapper\src\SignedData.h"
 				>
 			</File>
 			<File
