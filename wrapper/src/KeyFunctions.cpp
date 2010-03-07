@@ -158,7 +158,7 @@ listKeys() do the following:
 	- Finishes the certificate search operation.
 	- Turns vector into an array.
 */
-string* CryptoWrapper::listKeys() {
+vector<string> CryptoWrapper::listKeys() {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
 	CK_OBJECT_CLASS certClass = CKO_CERTIFICATE;
@@ -168,6 +168,7 @@ string* CryptoWrapper::listKeys() {
 	CK_OBJECT_HANDLE *tempCert = new CK_OBJECT_HANDLE;
 
 	vector<string> keyList;
+	vector<string> nullVec;
 
 	CK_ATTRIBUTE certTemplate[] = {
 		{CKA_CLASS,				&certClass,	sizeof(CK_OBJECT_CLASS)},
@@ -177,7 +178,7 @@ string* CryptoWrapper::listKeys() {
 	//init the search
 	returnValue = (funcList->C_FindObjectsInit)(hSession, certTemplate, 3);
 	if (returnValue != CKR_OK) {
-		return NULL;
+		return nullVec;
 	}
 	//while more results keep searching	
 	while(true) {
@@ -187,7 +188,7 @@ string* CryptoWrapper::listKeys() {
 		};
 		returnValue = (funcList->C_FindObjects)(hSession, tempCert, 1, &count);		
 		if (returnValue != CKR_OK) {
-			return NULL;
+			return nullVec;
 		}
 		if(count == 0) {
 			break;
@@ -196,7 +197,7 @@ string* CryptoWrapper::listKeys() {
 		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
 			subjectTemplate, 1);
 		if (returnValue != CKR_OK) {
-			return NULL;
+			return nullVec;
 		}
 		//ok now we have to allocate space for the subject
 		subject = (CK_BYTE_PTR)malloc(subjectTemplate[0].ulValueLen);
@@ -205,7 +206,7 @@ string* CryptoWrapper::listKeys() {
 		returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert,
 			subjectTemplate, 1);
 		if (returnValue != CKR_OK) {
-			return NULL;
+			return nullVec;
 		}
 		//decrypt the subject line and get the information that we want
 		//insert into vector
@@ -218,8 +219,10 @@ string* CryptoWrapper::listKeys() {
 	//finalize the seach
 	returnValue = (funcList->C_FindObjectsFinal)(hSession);
 	if (returnValue != CKR_OK) {
-		return NULL;
+		return nullVec;
 	}
+	return keyList;
+	/*
 	//turn vector into an array
 	string *stringArray = new string[keyList.size()];
 	for(int i = 0; i < keyList.size(); i++) {
@@ -227,4 +230,5 @@ string* CryptoWrapper::listKeys() {
 	}
 	//return the array
 	return stringArray;
+	*/
 }

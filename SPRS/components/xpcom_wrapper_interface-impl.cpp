@@ -100,8 +100,9 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
 /* void SPRS_listCerts (out PRUint32 count, [array, size_is (count), retval] out string certs); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs)
 {
-	string* strings = wrapper.listKeys();
-	const static PRUint32 scount = 1;//wrapper.getTokenCount();
+	vector<string> keyVec = wrapper.listKeys();
+	//string* strings = wrapper.listKeys();
+	static PRUint32 scount = keyVec.size();
 
     char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
     if(!out)
@@ -109,7 +110,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***cer
 
      for(PRUint32 i = 0; i < scount; ++i)
 	 {
-         out[i] = (char*) nsMemory::Clone(strings[i].c_str(), strlen(strings[i].c_str())+1);
+         out[i] = (char*) nsMemory::Clone(keyVec[i].c_str(), strlen(keyVec[i].c_str())+1);
          // failure unlikely, leakage foolishly tolerated in this test case
          if(!out[i])
              return NS_ERROR_OUT_OF_MEMORY;

@@ -23,15 +23,15 @@
 					alert("Cards: " + cards);
 					alert("Error code: " + obj.SPRS_getLastError());
 
-					var count2 = {};
-					//var keys = obj.SPRS_listCerts(count2);
-					//alert("Count.value: " + count2.value);
-					//alert("Keys: " + keys);
-					//alert("Error code: " + obj.SPRS_getLastError());
 					
 					alert("Login: " + obj.SPRS_selectCard(0, "12345678"));
 					alert("Error code: " + obj.SPRS_getLastError());
-					obj.SPRS_finalizeCrypto();
+
+					var count2 = {};
+					var keys = obj.SPRS_listCerts(count2);
+					alert("Count.value: " + count2.value);
+					alert("Keys: " + keys);
+					alert("Error code: " + obj.SPRS_getLastError());
 				}
 				else{
 					alert("Initialization failed: " + obj.SPRS_getLastError());
@@ -50,6 +50,7 @@
         return;
 				*/
       }
+			obj.SPRS_finalizeCrypto();
 			alert('maybe worked?');
 /*
       var res = obj.add(3, 4);

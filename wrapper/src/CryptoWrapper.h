@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <vector>
 
 #include "SignedData.h"
 #include "EncryptedData.h"
@@ -31,7 +32,7 @@ public:
 	//functions for signing files
 	bool signFile(string fileToSign, string signedFile, string strKeyLabel);
 	//functions for finding keys
-	string* listKeys();
+	vector<string> listKeys();
 private:
 	//error functions
 	void setError(int errorCode) {lastError = errorCode;}
