@@ -102,7 +102,7 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***cer
 {
 	vector<string> keyVec = wrapper.listKeys();
 	//string* strings = wrapper.listKeys();
-	static PRUint32 scount = keyVec.size();
+	static PRUint32 scount = (PRUint32) keyVec.size();
 
     char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
     if(!out)
