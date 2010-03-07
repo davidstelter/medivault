@@ -125,33 +125,6 @@ function startup() {
 
 	initCrypto();
 	
-//******************************************************************
-
-//Getting the slot  
-var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
-
-//var items = ["cert1", "cert2", "cert3", "cert4"];
-var items = acos5.SPRS_enumerateCards({});
-
-var selected = {};
-
-var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
-
-// sellected cert index
-var index = selected.value;
-
-alert(index);
-
-
-  
-//Getting the pin
-var pin = prompt("Please enter your PIN");
-alert("After prompt");  
-// loading the slot
-var flag = acos5.SPRS_selectCard(index, pin);
-alert("Login result: " + flag);
-  
-//******************************************************************
 }
 
 function beforeUnload() {
