@@ -32,6 +32,8 @@
 	<!-- ACOS5/PKCS11 initialization -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
 
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/dialogs/encrypt.js"/>
+
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/controlSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/dataSocket.js"/>
   <script type="application/x-javascript" src="chrome://fireftp/content/js/connection/ftpController.js"/>
@@ -246,7 +248,7 @@
 					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
 				</box>  --> 
 				<box      id="encryptbutton">
-				<button id="encryptButton" oncommand="temp()" label="Encrypt"/>
+				<button id="encryptButton" oncommand="encryptButton()" label="Encrypt"/>
 				</box>
 				<box      id="signbutton">
 				<button id="singButton" oncommand="temp()" label="Sign"/>
