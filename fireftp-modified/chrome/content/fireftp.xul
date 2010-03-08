@@ -29,8 +29,8 @@
  <script src="neww.js"/>
  <script src="openStringInNewWindow.js"/>
  
-	<!-- ACOS5/PKCS11 initialization -->
-  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/initacos5.js"/>
+	<!-- ACOS5/PKCS11 wrapper functions -->
+  <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/acos5crypto.js"/>
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/dialogs/encrypt.js"/>
 

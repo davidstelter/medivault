@@ -101,7 +101,6 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAStri
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs)
 {
 	vector<string> keyVec = wrapper.listKeys();
-	//string* strings = wrapper.listKeys();
 	static PRUint32 scount = (PRUint32) keyVec.size();
 
     char** out = (char**) nsMemory::Alloc(scount * sizeof(char*));
@@ -128,8 +127,52 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_createCert(const nsAString & cert, PRB
 }
 
 /* boolean SPRS_encryptFile (in nsAString input, in nsAString output_file, in nsAString cert); */
-NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, const nsAString & output_file, const nsAString & cert, PRBool *_retval)
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, const nsAString & output, const nsAString & cert, PRBool *_retval)
 {
+/*
+	CK_UTF8CHAR* plaintext = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (input.Length()+1));
+	const PRUnichar* cur = input.BeginReading();
+	const PRUnichar* end = input.EndReading();
+	int i;
+	for(i=0; cur < end; ++cur, ++i){
+		plaintext[i] = (CK_UTF8CHAR)*cur;
+	}
+	plaintext[input.Length()] = 0;
+	*/
+
+
+	nsCString inCString;
+	nsCString outCString;
+	nsCString certCString;
+	NS_UTF16ToCString(input,  NS_CSTRING_ENCODING_UTF8, inCString);
+	NS_UTF16ToCString(output, NS_CSTRING_ENCODING_UTF8, outCString);
+	NS_UTF16ToCString(cert,   NS_CSTRING_ENCODING_UTF8, certCString);
+	
+	//PRUnichar* inData   = NS_StringCloneData(input);
+	//PRUnichar* outData  = NS_StringCloneData(input);
+	//PRUnichar* certData = NS_StringCloneData(input);
+	string sInfile;
+	string sOutfile;
+	string sCert;
+	//sInfile.assign((char*)inData, input.Length());
+	sInfile.assign(inCString.get());
+	sOutfile.assign(outCString.get());
+	sCert.assign(certCString.get());
+	//sOutfile.assign((char*)outData, output.Length());
+	//sCert.assign((char*)certData, cert.Length());
+	//nsMemory::Free(inData);
+	//nsMemory::Free(outData);
+	//nsMemory::Free(certData);
+
+	
+	if(wrapper.encryptFile(sInfile, sOutfile, sCert))
+		*_retval = PR_TRUE;
+	else
+		*_retval = PR_FALSE;
+	
+	
+    return NS_OK;
+		
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
