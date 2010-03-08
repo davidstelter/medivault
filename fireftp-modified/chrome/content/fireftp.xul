@@ -124,7 +124,7 @@
     <popup id="remotemenu" onpopupshowing="localTree2.createContextMenu()">
       <menuitem oncommand="localTree2.openContainingFolder();"  label="&openContaining.label;"                                      id="OpenCont"/>
       <menuseparator                                                                                                                id="OpenContSep"/>
-      <menuitem oncommand="loadFile()"    label="Read"            key="key_transfer"              id="Move"/>
+      <menuitem oncommand="loadButton()"    label="Read"            key="key_transfer"              id="Move"/>
       <menuitem oncommand="localTree2.launch()"                 label="&open.label;"                key="key_open"                  id="Download"/>
       <menu label="&openwith.label;"                                                                                                id="OpenWith">
         <menupopup id="OpenWithMenu">
