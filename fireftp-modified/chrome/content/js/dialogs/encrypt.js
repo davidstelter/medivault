@@ -1,4 +1,6 @@
 function encryptButton() {
+	if(!checkForSession)
+		return;
 
 	var count = {};
 	var items = acos5.SPRS_listCerts(count)// getting the list of certs.
@@ -6,31 +8,55 @@ function encryptButton() {
 		//prompting with a list box with the certs available.
 		var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 
-	//var items = ["cert1", "cert2", "cert3", "cert4"];
-
 	var selected = {};
-
 	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
 
 	// selected cert index
 	var index = selected.value;
 
 	// getting the output file name.
-	var FileName = prompt("Please enter the file name: ");
+	var FileName = prompt("Please enter the output file name: ");
 
+/*
 	//Getting the input file name and path.
 	var tree = document.getElementById("localtree");
 	var cellIndex = 0;
 	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
 
-	var FileIn = document.getElementById('localpath').value + cellText; 
+*/
+	var FileIn = getLocalFileSelection();
 
 	//Getting the path for the output file.
-	var FileOut = document.getElementById('remotepath').value + FileName;
+	var FileOut = getRemoteDirSelection() + FileName;
 
 	//alert("File Out\n" + FileOut + "\n File In!! \n" + FileIn + '\n' + "cert!! \n"+ items[index]);   
 
 	encryptFile(FileIn, FileOut, items[index]);
+}
+
+function signButton() {
+	if(!checkForSession)
+		return;
+
+	var count = {};
+	var items = acos5.SPRS_listCerts(count)// getting the list of certs.
+
+		//prompting with a list box with the certs available.
+		var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
+
+	var selected = {};
+	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+
+	// selected cert index
+	var index = selected.value;
+
+	// getting the output file name.
+	var FileName = prompt("Please enter the output file name: ");
+	var FileOut = getRemoteDirSelection() + FileName;
+
+	var FileIn = getLocalFileSelection();
+
+	signFile(FileIn, FileOut, items[index]);
 }
 
 //get file selected in local (left) file tree
@@ -39,7 +65,7 @@ function getLocalFileSelection(){
 	var cellIndex = 0;
 	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
 
-	return document.getElementById('localpath').value + cellText; 
+	return getLocalDirSelection() + cellText; 
 }
 
 //get file selected in remote (right) file tree
@@ -48,7 +74,17 @@ function getRemoteFileSelection(){
 	var cellIndex = 0;
 	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
 
-	return document.getElementById('remotepath').value + cellText; 
+	return getRemoteDirSelection() + cellText; 
+}
+
+//get directory selected in local (left) file tree
+function getLocalDirSelection(){
+	return document.getElementById('localpath').value;
+}
+
+//get directory selected in remote (right) file tree
+function getRemoteDirSelection(){
+	return document.getElementById('remotepath').value;
 }
 
 function loadButton(){

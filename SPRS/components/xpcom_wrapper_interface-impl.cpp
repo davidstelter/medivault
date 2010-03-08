@@ -156,7 +156,26 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, c
 /* boolean signFile (in nsAString input_file, in nsAString output_file, in nsAString cert); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval)
 {
-    return NS_ERROR_NOT_IMPLEMENTED;
+	nsCString inCString;
+	nsCString outCString;
+	nsCString certCString;
+	NS_UTF16ToCString(input_file,  NS_CSTRING_ENCODING_UTF8, inCString);
+	NS_UTF16ToCString(output_file, NS_CSTRING_ENCODING_UTF8, outCString);
+	NS_UTF16ToCString(cert,   NS_CSTRING_ENCODING_UTF8, certCString);
+	
+	string sInfile;
+	string sOutfile;
+	string sCert;
+	sInfile.assign(inCString.get());
+	sOutfile.assign(outCString.get());
+	sCert.assign(certCString.get());
+	
+	if(wrapper.signFile(sInfile, sOutfile, sCert))
+		*_retval = PR_TRUE;
+	else
+		*_retval = PR_FALSE;
+	
+    return NS_OK;
 }
 
 /* nsAString SPRS_decrypt (in nsAString input_file); */

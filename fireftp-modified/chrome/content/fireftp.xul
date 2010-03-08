@@ -252,7 +252,7 @@
 						label="&wrap.btn.encrypt;" tooltiptext="&wrap.tip.encrypt;"/>
 				</box>
 				<box      id="signbutton">
-					<button id="signButton" oncommand="loadButton()" 
+					<button id="signButton" oncommand="signButton()" 
 						label="&wrap.btn.sign;" tooltiptext="&wrap.tip.sign;"/>
 				</box>
 				<box      id="readbutton">
