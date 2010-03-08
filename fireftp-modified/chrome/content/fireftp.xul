@@ -96,7 +96,10 @@
     <popup id="localmenu" onpopupshowing="localTree.createContextMenu()">
       <menuitem oncommand="localTree.openContainingFolder();"   label="&openContaining.label;"                                      id="localOpenCont"/>
       <menuseparator                                                                                                                id="localOpenContSep"/>
-      <menuitem oncommand="new transfer().start(false);"        label="&upload.label;"              key="key_transfer"              id="localUpload"/>
+
+      <!--menuitem oncommand="new transfer().start(false);"        label="&upload.label;"              key="key_transfer"              id="localUpload"/ -->
+      <menuitem oncommand="encryptButton();"        label="Encrypt"              key="key_transfer"              id="localUpload"/>
+      <menuitem oncommand="signButton();"        label="Sign"                  id="localSign"/>
       <menuitem oncommand="localTree.launch()"                  label="&open.label;"                key="key_open"                  id="localOpen"/>
       <menu label="&openwith.label;"                                                                                                id="localOpenWith">
         <menupopup id="openWithMenu">
@@ -121,7 +124,7 @@
     <popup id="remotemenu" onpopupshowing="localTree2.createContextMenu()">
       <menuitem oncommand="localTree2.openContainingFolder();"  label="&openContaining.label;"                                      id="OpenCont"/>
       <menuseparator                                                                                                                id="OpenContSep"/>
-      <menuitem oncommand="new transfer().start(true)"    label="&download.label;"            key="key_transfer"              id="Move"/>
+      <menuitem oncommand="loadFile()"    label="Read"            key="key_transfer"              id="Move"/>
       <menuitem oncommand="localTree2.launch()"                 label="&open.label;"                key="key_open"                  id="Download"/>
       <menu label="&openwith.label;"                                                                                                id="OpenWith">
         <menupopup id="OpenWithMenu">

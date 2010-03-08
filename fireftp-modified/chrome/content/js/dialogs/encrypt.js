@@ -10,12 +10,16 @@ function encryptButton() {
 
 	var selected = {};
 	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+	if(!result)
+		return;
 
 	// selected cert index
 	var index = selected.value;
 
 	// getting the output file name.
 	var FileName = prompt("Please enter the output file name: ");
+	if(!FileName)
+		return;
 
 	var FileIn = getLocalFileSelection();
 
@@ -40,12 +44,17 @@ function signButton() {
 
 	var selected = {};
 	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+	if(!result)
+		return;
 
 	// selected cert index
 	var index = selected.value;
 
 	// getting the output file name.
 	var FileName = prompt("Please enter the output file name: ");
+	if(!FileName)
+		return;
+
 	var FileOut = getRemoteDirSelection() + FileName;
 
 	var FileIn = getLocalFileSelection();
