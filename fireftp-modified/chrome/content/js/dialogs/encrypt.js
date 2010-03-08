@@ -23,14 +23,41 @@ function encryptButton() {
 	var cellIndex = 0;
 	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
 
-	var FileIn = document.getElementById('localpath').value + /*'\\' +*/ cellText; 
+	var FileIn = document.getElementById('localpath').value + cellText; 
 
 	//Getting the path for the output file.
-	var FileOut = document.getElementById('remotepath').value + '\\' + FileName;
+	var FileOut = document.getElementById('remotepath').value + FileName;
 
 	//alert("File Out\n" + FileOut + "\n File In!! \n" + FileIn + '\n' + "cert!! \n"+ items[index]);   
 
 	encryptFile(FileIn, FileOut, items[index]);
+}
+
+//get file selected in local (left) file tree
+function getLocalFileSelection(){
+	var tree = document.getElementById("localtree");
+	var cellIndex = 0;
+	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
+
+	return document.getElementById('localpath').value + cellText; 
+}
+
+//get file selected in remote (right) file tree
+function getRemoteFileSelection(){
+	var tree = document.getElementById("remotetree");
+	var cellIndex = 0;
+	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
+
+	return document.getElementById('remotepath').value + cellText; 
+}
+
+function loadButton(){
+	var FileIn = getRemoteFileSelection();
+	var clear = loadFile(FileIn);
+	if(clear!=null){
+		myWindow = window.open('','','resizable=yes,scrollbars=yes,width=1000,height=800');
+		myWindow.document.body.innerHTML = "<div><pre>" + clear +"</pre></div>";
+	}
 
 }
 
@@ -46,20 +73,25 @@ function cardSelectDialog(){
 
 	var result = prompts.select(null, "Select Card", "Please choose a card", items.length,items, selected);
 
-	// sellected cert index
 	var index = selected.value;
 
 //	alert(index);
 
-	//Getting the pin
-	var pin = prompt("Please enter your PIN");
-	// loading the slot
-	var login = acos5.SPRS_selectCard(index, pin);
-	//TODO: loop here to allow retries
-	if(login)
-		appendLog("Login successful");
-	else{
-		appendLog("Login failed!");
+	var attempt=1;
+	do{
+		var pin = prompt("Please enter your PIN");
+		var login = acos5.SPRS_selectCard(index, pin);
+		if(login)
+			appendLog("Login successful");
+		else{
+			appendLog("Login attempt "+attempt+" failed!");
+		}
+		++attempt;
+	}
+	while(!login && attempt < 3);
+
+	if(!login){
+		alert("Login failed after " + attempt +" attempts!");
 		finalizeCrypto();
 	}
 }

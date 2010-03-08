@@ -118,4 +118,12 @@
 <!ENTITY wrap.oneToken "One cryptographic token detected">
 <!ENTITY wrap.nTokens  " cryptographic tokens detected">
 
+<!ENTITY wrap.btn.encrypt "&gt; Encrypt &gt;">
+<!ENTITY wrap.btn.read "Read &lt;">
+<!ENTITY wrap.btn.sign "&gt; Sign &gt;">
+<!ENTITY wrap.btn.reinit "Reinitialize">
+
 <!ENTITY wrap.tip.reinit "Detect cryptographic tokens">
+<!ENTITY wrap.tip.encrypt "Encrypt file from left saving on right">
+<!ENTITY wrap.tip.read "Display an encrypted file from right pane">
+<!ENTITY wrap.tip.sign "Sign file from left saving result on right">

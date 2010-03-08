@@ -2,7 +2,7 @@ function encryptFile(FileIn, FileOut, CertName){
 	if(!checkForSession())
 		return;
 
-	appendLog("encrypting file "+FileIn+" with cert"+CertName+", writing to "+FileOut);
+	appendLog("encrypting file "+FileIn+" with cert \""+CertName+"\", writing to "+FileOut);
 	var result = acos5.SPRS_encryptFile(FileIn, FileOut, CertName);
 
 	if(result){
@@ -12,6 +12,24 @@ function encryptFile(FileIn, FileOut, CertName){
 		appendLog("Encrypt failed!");
 		logIfWrapperError();
 	}
+}
+
+function loadFile(FileIn){
+	if(!checkForSession())
+		return null;
+
+	appendLog("loading file "+FileIn);
+
+	var status;
+	var clear = {};
+	if(status = acos5.SPRS_loadFile(FileIn, clear)){
+		//alert("Cleartext: " +clear.value);
+	}
+	else{
+		appendLog("load file failed:");
+		logWrapperError();
+	}
+	return clear.value;
 }
 
 function checkForSession(){

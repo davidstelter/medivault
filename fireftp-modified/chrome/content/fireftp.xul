@@ -26,8 +26,8 @@
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
  
  
- <script src="neww.js"/>
- <script src="openStringInNewWindow.js"/>
+ <!--script src="neww.js"/ -->
+ <!--script src="openStringInNewWindow.js"/ -->
  
 	<!-- ACOS5/PKCS11 wrapper functions -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/acos5crypto.js"/>
@@ -248,18 +248,21 @@
 					<button id="storeButton"    oncommand="new transfer().start(false)" tooltiptext="&upload.label;"/>
 				</box>  --> 
 				<box      id="encryptbutton">
-				<button id="encryptButton" oncommand="encryptButton()" label="Encrypt"/>
+					<button id="encryptButton" oncommand="encryptButton()" 
+						label="&wrap.btn.encrypt;" tooltiptext="&wrap.tip.encrypt;"/>
 				</box>
 				<box      id="signbutton">
-				<button id="singButton" oncommand="temp()" label="Sign"/>
+					<button id="signButton" oncommand="loadButton()" 
+						label="&wrap.btn.sign;" tooltiptext="&wrap.tip.sign;"/>
 				</box>
 				<box      id="readbutton">
-					<button id="readButton" 	  oncommand="openStringInNewWindow()"  label="Read"/>
+					<button id="readButton" oncommand="loadButton()"
+						label="&wrap.btn.read;" tooltiptext="&wrap.tip.read;"/>
 				</box>
 				
 				<box			id="reinitbutton">
-					<button id="reinitButton" 	  oncommand="reinitializeCrypto()" label="Detect Token"  tooltiptext="&wrap.tip.reinit;"/>
-			<!--		<button id="reinitButton" 	oncommand="reinitializeCrypto()"  label="Detect Token" tooltiptext="&wrap.tip.reinit;"/> -->
+					<button id="reinitButton" oncommand="reinitializeCrypto()"
+						label="&wrap.btn.reinit;"  tooltiptext="&wrap.tip.reinit;"/>
 				</box>
 				
 				</vbox>

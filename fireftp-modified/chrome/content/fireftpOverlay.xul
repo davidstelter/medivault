@@ -19,7 +19,8 @@
 							oncommand="loadFireFTP()"
 							class="menuitem-iconic"	/>
 				<menuitem 	label="Create Digital Cert"
-							position="2"/>
+							position="2"
+							oncommand="alert('Not implemented')" />
 				<menuseparator/>
 				<menuitem label="Exit"/>
 			</menupopup>
