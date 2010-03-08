@@ -20,10 +20,11 @@ interface nsISPRS_PKCS11_Wrapper : nsISupports
   boolean SPRS_createCert(in AString cert);
 
   //File Functions
-  boolean SPRS_encryptFile(in AString input, in AString output_file, in AString cert);
+  boolean SPRS_encryptFile(in AString input_file, in AString output_file, in AString cert);
   boolean SPRS_signFile(in AString input_file, in AString output_file, in AString cert);
   nsAString SPRS_decrypt(in AString input_file);
   nsAString SPRS_verify(in AString input_file);
+	boolean SPRS_loadFile(in AString input_file, out AString output);
   
 	//stuff not in the wrapper API
 	long SPRS_getTokenCount();

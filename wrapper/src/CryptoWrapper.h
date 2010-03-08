@@ -17,6 +17,7 @@ public:
 	~CryptoWrapper(void);
 	//functions for handling errors
 	int getLastError() {return lastError;}
+	void clearError() {lastError = OK; }
 	//utility functions
 	int getTokenCount();
 	//functions for setting up the crypto environment

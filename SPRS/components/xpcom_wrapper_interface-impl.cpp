@@ -129,17 +129,6 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_createCert(const nsAString & cert, PRB
 /* boolean SPRS_encryptFile (in nsAString input, in nsAString output_file, in nsAString cert); */
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, const nsAString & output, const nsAString & cert, PRBool *_retval)
 {
-/*
-	CK_UTF8CHAR* plaintext = (CK_UTF8CHAR*)malloc(sizeof(CK_UTF8CHAR) * (input.Length()+1));
-	const PRUnichar* cur = input.BeginReading();
-	const PRUnichar* end = input.EndReading();
-	int i;
-	for(i=0; cur < end; ++cur, ++i){
-		plaintext[i] = (CK_UTF8CHAR)*cur;
-	}
-	plaintext[input.Length()] = 0;
-	*/
-
 
 	nsCString inCString;
 	nsCString outCString;
@@ -148,22 +137,12 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, c
 	NS_UTF16ToCString(output, NS_CSTRING_ENCODING_UTF8, outCString);
 	NS_UTF16ToCString(cert,   NS_CSTRING_ENCODING_UTF8, certCString);
 	
-	//PRUnichar* inData   = NS_StringCloneData(input);
-	//PRUnichar* outData  = NS_StringCloneData(input);
-	//PRUnichar* certData = NS_StringCloneData(input);
 	string sInfile;
 	string sOutfile;
 	string sCert;
-	//sInfile.assign((char*)inData, input.Length());
 	sInfile.assign(inCString.get());
 	sOutfile.assign(outCString.get());
 	sCert.assign(certCString.get());
-	//sOutfile.assign((char*)outData, output.Length());
-	//sCert.assign((char*)certData, cert.Length());
-	//nsMemory::Free(inData);
-	//nsMemory::Free(outData);
-	//nsMemory::Free(certData);
-
 	
 	if(wrapper.encryptFile(sInfile, sOutfile, sCert))
 		*_retval = PR_TRUE;
@@ -172,8 +151,6 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, c
 	
 	
     return NS_OK;
-		
-    return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 /* boolean signFile (in nsAString input_file, in nsAString output_file, in nsAString cert); */
@@ -186,6 +163,37 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_signFile(const nsAString & input_file,
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_decrypt(const nsAString & input_file, nsAString **_retval)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
+}
+
+/* boolean SPRS_loadFile (in AString input_file, out AString output); */
+NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_loadFile(const nsAString & input_file, nsAString & output, PRBool *_retval)
+{
+	//LoadFile uses empty string to indicate error, so we need to check
+	//the error code in the event of an empty string
+	wrapper.clearError();
+
+	nsCString inCString;
+	nsCString outCString;
+	NS_UTF16ToCString(input_file,  NS_CSTRING_ENCODING_UTF8, inCString);
+	
+	string sInfile;
+	string sClear;
+	sInfile.assign(inCString.get());
+	
+	sClear = wrapper.LoadFile(sInfile);
+	if(sClear.length()>0){
+		outCString.Assign(sClear.c_str());
+		NS_CStringToUTF16(outCString, NS_CSTRING_ENCODING_ASCII, output);
+		*_retval = PR_TRUE;
+	}
+	else{
+		if(wrapper.getLastError()==OK)
+			//no error, plaintext must really be empty string...
+			*_retval = PR_TRUE;
+		else
+			*_retval = PR_FALSE;
+	}
+  return NS_OK;
 }
 
 /* nsAString SPRS_verify (in nsAString input_file); */

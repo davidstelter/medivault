@@ -12,26 +12,32 @@
 				if(obj.SPRS_initCrypto()){
 					alert("Successful initialization");
 					//alert(obj.SPRS_getTokenCount());
-					alert("Error code: " + obj.SPRS_getLastError());
+					//alert("Error code: " + obj.SPRS_getLastError());
 					//var arr = alert(obj.getArray({}));
-					alert(obj.getArray({}));
+					//alert(obj.getArray({}));
 					//alert(arr);
 
 					var count = {};
 					var cards = obj.SPRS_enumerateCards(count);
 					alert("Count.value: " + count.value);
 					alert("Cards: " + cards);
-					alert("Error code: " + obj.SPRS_getLastError());
+					//alert("Error code: " + obj.SPRS_getLastError());
 
 					
 					alert("Login: " + obj.SPRS_selectCard(0, "12345678"));
-					alert("Error code: " + obj.SPRS_getLastError());
+					//alert("Error code: " + obj.SPRS_getLastError());
 
 					var count2 = {};
 					var keys = obj.SPRS_listCerts(count2);
 					alert("Count.value: " + count2.value);
 					alert("Keys: " + keys);
 					alert("Keys.length: " + keys.length);
+					//alert("Error code: " + obj.SPRS_getLastError());
+				
+					var cleartext = {};
+					var loadclear = obj.SPRS_loadFile('c:\\foo.txt', cleartext);
+					alert("load status: " + loadclear);
+					alert("Cleartext: " + cleartext.value);
 					alert("Error code: " + obj.SPRS_getLastError());
 				}
 				else{
