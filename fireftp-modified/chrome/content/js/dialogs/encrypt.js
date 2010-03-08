@@ -17,21 +17,15 @@ function encryptButton() {
 	// getting the output file name.
 	var FileName = prompt("Please enter the output file name: ");
 
-/*
-	//Getting the input file name and path.
-	var tree = document.getElementById("localtree");
-	var cellIndex = 0;
-	var cellText = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(cellIndex));
-
-*/
 	var FileIn = getLocalFileSelection();
 
 	//Getting the path for the output file.
 	var FileOut = getRemoteDirSelection() + FileName;
 
-	//alert("File Out\n" + FileOut + "\n File In!! \n" + FileIn + '\n' + "cert!! \n"+ items[index]);   
-
 	encryptFile(FileIn, FileOut, items[index]);
+	//refresh file view, there's a new file
+	localTree.refresh(false, true);
+	localTree2.refresh(false, true);
 }
 
 function signButton() {
@@ -57,6 +51,9 @@ function signButton() {
 	var FileIn = getLocalFileSelection();
 
 	signFile(FileIn, FileOut, items[index]);
+	//refresh file view, there's a new file
+	localTree.refresh(false, true);
+	localTree2.refresh(false, true);
 }
 
 //get file selected in local (left) file tree

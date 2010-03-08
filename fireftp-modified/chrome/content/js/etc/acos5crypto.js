@@ -14,6 +14,22 @@ function encryptFile(FileIn, FileOut, CertName){
 	}
 }
 
+function signFile(FileIn, FileOut, CertName){
+	if(!checkForSession())
+		return;
+
+	appendLog("signing file "+FileIn+" with cert \""+CertName+"\", writing to "+FileOut);
+	var result = acos5.SPRS_signFile(FileIn, FileOut, CertName);
+
+	if(result){
+		appendLog("Sign reports success");
+	}
+	else{
+		appendLog("Sign failed!");
+		logIfWrapperError();
+	}
+}
+
 function loadFile(FileIn){
 	if(!checkForSession())
 		return null;
@@ -33,8 +49,10 @@ function loadFile(FileIn){
 }
 
 function checkForSession(){
-	alert("Checking for session...");
-	return true;
+	if(!crypto_session_active)
+		alert("No active session with crypto hardware!");
+
+	return crypto_session_active;
 }
 
 //Attempt to initialize the crypto hardware
@@ -55,12 +73,14 @@ function initCrypto(){
 				msg = gStrbundle.getFormattedString("wrap.nTokens", [tokens]);
 			}
 		}
+		crypto_session_active=true;
 		appendLog(msg);
 
 		//user must select card now
 		cardSelectDialog();
 	}
 	else{
+		crypto_session_active=false;
 		alert('Hardware initialization has failed, is your device connected?');
 		logWrapperError();
 		//appendLog(gStrbundle.getString("wrap.initFailure")+": "+strings.getFormattedString("wrap.errorCode", [acos5.SPRS_getLastError()]));
@@ -70,6 +90,7 @@ function initCrypto(){
 
 
 function finalizeCrypto(){
+	crypto_session_active=false;
 	acos5.SPRS_finalizeCrypto();
 }
 
