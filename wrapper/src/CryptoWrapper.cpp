@@ -55,7 +55,7 @@ bool CryptoWrapper::initCrypto() {
 		return false;
 	}
 	//Load the DLL file.
-	if (!(PKCSLibraryModule = LoadLibrary(".\\acospkcs11.dll"))) {
+	if (!(PKCSLibraryModule = LoadLibrary(L".\\acospkcs11.dll"))) {
 		setError(DLL_LOAD_ERROR);
 		return false;
 	}
