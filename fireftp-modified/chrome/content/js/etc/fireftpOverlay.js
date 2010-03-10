@@ -18,7 +18,7 @@ function loadFireFTP() {
     var theTab          = gBrowser.addTab('chrome://fireftp/content/');
     theTab.label        = "Persona";
     gBrowser.selectedTab = theTab;
-    var func = function () { gBrowser.setIcon(theTab, "chrome://fireftp/skin/icons/logo.png"); };
+    var func = function () { gBrowser.setIcon(theTab, "chrome://fireftp/skin/icons/caduceus3.png"); };
     setTimeout(func, 500);
   } else {
     toOpenWindowByType('mozilla:fireftp', 'chrome://fireftp/content/');

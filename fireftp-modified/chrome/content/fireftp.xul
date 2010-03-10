@@ -7,8 +7,8 @@
 <!DOCTYPE window SYSTEM "chrome://fireftp/locale/fireftp.dtd">
 <window id            = "fireftp-main-window"
         title         = "Persona"
-        width         = "800"
-        height        = "600"
+        width         = "1280"
+        height        = "1024"
         orient        = "vertical"
         xmlns         = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html    = "http://www.w3.org/1999/xhtml"
@@ -25,9 +25,6 @@
 
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/globals.js"/>
  
- 
- <!--script src="neww.js"/ -->
- <!--script src="openStringInNewWindow.js"/ -->
  
 	<!-- ACOS5/PKCS11 wrapper functions -->
   <script type="application/x-javascript" src="chrome://fireftp/content/js/etc/acos5crypto.js"/>

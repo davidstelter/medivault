@@ -33,6 +33,6 @@
         <em:maxVersion>3.6.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-    <em:iconURL>chrome://fireftp/skin/icons/caduceus_shadow.png</em:iconURL>
+    <em:iconURL>chrome://fireftp/skin/icons/caduceus.png</em:iconURL>
   </Description>
 </RDF>

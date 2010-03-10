@@ -18,11 +18,11 @@
 							position="1"
 							oncommand="loadFireFTP()"
 							class="menuitem-iconic"	/>
-				<menuitem 	label="Create Digital Cert"
+				<!-- menuitem 	label="Create Digital Cert"
 							position="2"
-							oncommand="alert('Not implemented')" />
-				<menuseparator/>
-				<menuitem label="Exit"/>
+							oncommand="alert('Not implemented')" / -->
+				<!-- menuseparator/ -->
+				<!-- menuitem label="Exit"/ -->
 			</menupopup>
 		</menu>
 	</menubar>

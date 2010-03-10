@@ -1,11 +1,11 @@
 #fireftp-button {
-  list-style-image    : url("chrome://fireftp/skin/icons/logo24.png");
+  list-style-image    : url("chrome://fireftp/skin/icons/caduceus2.png");
 }
 
 toolbar[iconsize="small"] #fireftp-button {
-  list-style-image    : url("chrome://fireftp/skin/icons/logo.png");
+  list-style-image    : url("chrome://fireftp/skin/icons/caduceus2.png");
 }
 
 #fireftptoolsmenu, #fireftpcontentarea, #fireftpcontextmenu {
-  list-style-image    : url("chrome://fireftp/skin/icons/logo.png");
+  list-style-image    : url("chrome://fireftp/skin/icons/caduceus2.png");
 }
