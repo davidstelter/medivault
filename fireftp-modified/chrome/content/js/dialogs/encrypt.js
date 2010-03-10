@@ -65,6 +65,13 @@ function signButton() {
 	localTree2.refresh(false, true);
 }
 
+function ensureSlash(path){
+	if(path.charAt(path.length-1)!='\\')
+		return path + '\\';
+	else
+		return path;
+}
+
 //get file selected in local (left) file tree
 function getLocalFileSelection(){
 	var tree = document.getElementById("localtree");
@@ -85,12 +92,12 @@ function getRemoteFileSelection(){
 
 //get directory selected in local (left) file tree
 function getLocalDirSelection(){
-	return document.getElementById('localpath').value;
+	return ensureSlash(document.getElementById('localpath').value);
 }
 
 //get directory selected in remote (right) file tree
 function getRemoteDirSelection(){
-	return document.getElementById('remotepath').value;
+	return ensureSlash(document.getElementById('remotepath').value);
 }
 
 function loadButton(){
@@ -100,7 +107,6 @@ function loadButton(){
 		myWindow = window.open('','','resizable=yes,scrollbars=yes,width=1000,height=800');
 		myWindow.document.body.innerHTML = "<div><pre>" + clear +"</pre></div>";
 	}
-
 }
 
 function cardSelectDialog(){
