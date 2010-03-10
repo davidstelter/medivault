@@ -52,9 +52,9 @@ private:
 	bool Verify(SignedData &data);
 
 	//member variables
-	int lastError;					//Holds the last error
-	HMODULE PKCSLibraryModule;		//Holds the library which we will load
-	CK_FUNCTION_LIST_PTR funcList;  //Holds enterance point for the functions
+	int lastError;						//Holds the last error
+	HMODULE PKCSLibraryModule;			//Holds the library which we will load
+	CK_FUNCTION_LIST_PTR funcList;  	//Holds enterance point for the functions
 	CK_SLOT_ID_PTR SlotWithTokenList;	//Holds a list of slots with tokens
-	CK_SESSION_HANDLE hSession;		//Holds the session with the token
+	CK_SESSION_HANDLE hSession;			//Holds the session with the token
 };

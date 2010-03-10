@@ -6,16 +6,24 @@
 #include "EncryptedData.h"
 #include "CryptoWrapper.h"
 
-/*
-encrypt() do the following:
-	- Search for label which matches our key.
-	- Initializes an encryption operation.
-	- Encrypts once to get the size.
-	- Encrypts the data.
-	- Returns the encrypted data.
-*/
 
-//encrypts data with the key given by keyLabel
+/*!
+*	@brief
+*	Functions for encrypting data with the key given
+*	encrypt() do the following:
+*		- Search for label which matches our key.
+*		- Initializes an encryption operation.
+*		- Encrypts once to get the size.
+*		- Encrypts the data.
+*		- Returns the encrypted data.
+*	@param [in] plainText Text string to be encrypt
+* 	@param [in] keyLabel Name of certificate to be used
+*   @param [in] &size Size of plaintext
+*	@retval CK_BYTE Returns encrypted buffer pointer
+*	@remarks
+* 	Passes the inputed buffer string and encrypts with public key using acospkcs
+* 	functional calls.
+*/
 CK_BYTE* CryptoWrapper::encrypt( string plainText, string keyLabel, int &size)
 {
 	CK_ULONG encrypted;
@@ -50,7 +58,8 @@ CK_BYTE* CryptoWrapper::encrypt( string plainText, string keyLabel, int &size)
 			return NULL;
 	}
 	outBuffer = (CK_BYTE*)malloc(sizeof(CK_BYTE) * encrypted);
-
+	
+	//now really going to encrypt with given buffer
 	returnValue = (funcList->C_Encrypt)(hSession, inBuffer, plainTextLength, outBuffer, &encrypted);
 	if(returnValue != CKR_OK) 
 	{
@@ -63,12 +72,19 @@ CK_BYTE* CryptoWrapper::encrypt( string plainText, string keyLabel, int &size)
 }
 
 
-/*
-encryptFile() do the following:
-	- Opens the file that wanted to be encrypted, then reads the data, saves it, and then close the file.
-	- Encrypts the saved data by calling the encrypt function.
-	- Creates a new file to write the encryped data with a header and a footer.
-	- Closes the encrypted file.
+/*!
+*	@brief
+*	Functions for dealing with encryption
+*	encryptFile() do the following:
+*		- Opens the file that wanted to be encrypted, then reads the data, saves it, and then close the file.
+*		- Encrypts the saved data by calling the encrypt function.
+*		- Creates a new file to write the encryped data with a header and a footer.
+*		- Closes the encrypted file.
+*	@param [in] fileToEncrypt Name of file to be encrypted
+* 	@param [out] encryptedFile Name of file to write encrypted data
+* 	@param [in] strKeyLabel Certificate Name to use
+*	@retval	bool Returns false on failure and sets
+*	@remarks Encrypts data with the key given by keyLabel
 */
 bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, string strKeyLabel)
 {
@@ -83,6 +99,7 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	fileRead.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
 	fileWrite.exceptions ( ofstream::eofbit | ofstream::failbit | ofstream::badbit );
 	
+	/* opens the file to read content */
 	try 
 	{
 		fileRead.open( fileToEncrypt.c_str() );
@@ -95,7 +112,7 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	
 		fileRead.close();
 	}
-	catch (ifstream::failure e) 
+	catch (ifstream::failure e) /* catching error */
 	{
 		setError(FAILED_TO_OPEN_READ_FILE);
 		return false;

@@ -7,12 +7,20 @@
 #include "EncryptedData.h"
 #include "CryptoWrapper.h"
 
-/*
-LoadFile() do the following:
-	- Opens the file that wanted to be Decryped, reads the data and saves it, then closes the file.
-	- Skips over the first encoding of the data.
-	- Skips over the cipherText of the data.
-	- Decrypts the data by calling Decrypt function.
+
+/*!
+*	@brief
+*	Functions for dealing with files
+*	LoadFile() do the following:
+*		- Opens the file that wanted to be Decryped or Verify, reads the data and saves it, then closes the file.
+*		- Parse out whether decrypted or verify.
+*		- Skips over the first encoding of the data.
+*		- Skips over the cipherText of the data.
+*		- Decrypts the data by calling Decrypt function.
+*		- Verify the signature by calling verify function.
+*	@param [in] filename Name of file to load
+*	@retval string
+*	@remarks
 */
 string CryptoWrapper::LoadFile(string filename) {
 	stringstream inputStream;
@@ -20,6 +28,8 @@ string CryptoWrapper::LoadFile(string filename) {
 
 	ifstream file;
 	file.exceptions ( ifstream::eofbit | ifstream::failbit | ifstream::badbit );
+
+	//read file get retrieve data
 	try 
 	{
 		file.open( filename.c_str(), fstream::binary | fstream::in );
@@ -29,16 +39,18 @@ string CryptoWrapper::LoadFile(string filename) {
 		setError(FAILED_TO_OPEN_READ_FILE);
 		return "";
 	}
+
+	//parsing data retrieve
 	char first;
 	file.read(&first,1);
 	if(first == 9) {
 		char type[10];
 		file.read(type, 9);
-		if(strncmp(type, "encrypted", 9) == 0){
+		if(strncmp(type, "encrypted", 9) == 0){	//parsing...if file data is encrypted then decrypt
 			EncryptedData data;
 			data.readFromFile(file);
 			return decryptFile(data);			
-		} else if(strncmp(type, "signature", 9) == 0) {
+		} else if(strncmp(type, "signature", 9) == 0) {//else then the user wants to verify signature
 			SignedData data;
 			data.readFromFile(file);
 			if(!Verify(data)) {
@@ -48,6 +60,8 @@ string CryptoWrapper::LoadFile(string filename) {
 		}
 	}
 	file.close();
+
+	//falls through above if file is not binary
 	try 
 	{
 		file.open( filename.c_str() );
@@ -63,36 +77,44 @@ string CryptoWrapper::LoadFile(string filename) {
 	return inputStream.str();
 }
 
-/*
-decryptFile() do the following:
-	- Gets the private key.
-	- Initializes a decryption operation.
-	- Decrypts once to get the size.
-	- Decrypts the data.
+
+/*!
+*	@brief
+*	Functions for dealing with decryption
+*	decryptFile() do the following:
+*		- Gets the private key.
+*		- Initializes a decryption operation.
+*		- Decrypts once to get the size.
+*		- Decrypts the data.
+* 	@param [in] &data EncryptedData type passed in to be decrypt
+*	@retval string Returns decyphered string
+*	@remarks
+* 	Passes the inputed buffer string and decrypts with private key using acospkcs11 function calls.
 */
 string CryptoWrapper::decryptFile(EncryptedData &data)
 {
-	CK_RV	returnValue;	//holds the return value
+	CK_RV	returnValue;									//holds the return value
 	CK_OBJECT_HANDLE key;
-	//we will be decrypting using RSA PKCS
-	CK_MECHANISM mechanism = {CKM_RSA_PKCS, NULL_PTR, 0};
-	//get the key
-	getPrivateKey(data.getCert(), key);
-	//begin decryption
-	if(funcList->C_DecryptInit(hSession, &mechanism, key) != CKR_OK) {
+	CK_MECHANISM mechanism = {CKM_RSA_PKCS, NULL_PTR, 0};	//we will be decrypting using RSA PKCS
+	
+	getPrivateKey(data.getCert(), key); //get the key
+	
+	if(funcList->C_DecryptInit(hSession, &mechanism, key) != CKR_OK) {  //begin decryption
 		setError(COULD_NOT_INIT_DECRYPTION);
 		return "";
 	}
 	CK_ULONG decrypted;
-	//encrypt once to get the size
+
+	//decrypt once to get the size
 	returnValue = (funcList->C_Decrypt)(hSession, data.getCipherText(), data.getCipherSize(), NULL_PTR, &decrypted);
 	if(returnValue != CKR_OK) 
 	{
 			setError(FAILED_TO_ENCRYPT);
 			return "";
 	}
-	CK_BYTE* outBuffer = (CK_BYTE*)malloc(decrypted);
+	CK_BYTE* outBuffer = (CK_BYTE*)malloc(decrypted); //alloc the buffer memory for decrypt 
 
+	//decrypt the data
 	if(funcList->C_Decrypt(hSession, data.getCipherText(), data.getCipherSize(), outBuffer, &decrypted)
 		!= CKR_OK) {
 			setError(FAILED_TO_DECRYPT);
@@ -105,6 +127,17 @@ string CryptoWrapper::decryptFile(EncryptedData &data)
 	return output;
 }
 
+
+/*!
+*	@brief
+*	Function for verifying signature
+*	Verify() do the following:
+*		- Get public key for verifying against signature
+*		- Digest the plaintext given
+*		- Verify digest data against given signature using given public key
+*	@param [in] &data Type signData passed in to be verify
+*	@retval bool Returns True if signature verified, False if not
+*/
 bool CryptoWrapper::Verify(SignedData &data)
 {
 	CK_RV	returnValue;
@@ -122,7 +155,7 @@ bool CryptoWrapper::Verify(SignedData &data)
 		return false;
 	}
 
-	//1. Initialize verification
+	//Initialize verification
 	returnValue = (funcList->C_VerifyInit)(hSession, &mechanism, key);	
 	if (returnValue != CKR_OK) {
 		setError(FAILED_TO_VERIFY);

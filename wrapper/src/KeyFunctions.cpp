@@ -6,37 +6,62 @@
 #include "CryptoWrapper.h"
 
 
-/*
-getPublicKey() do the following:
-	- Gets the public key.
+/*!
+*	@brief
+*	Functions for getting the public key from given x509 certificates
+*	getPublicKey() do the following:
+*		- Gets the public key.
+*	@param [in] keyName Name of certificate key
+* 	@param [in] pubKey Handler to save the public key once found
+*	@retval bool True for succesful transaction, False if not
+*	@remarks
+* 	Call getKey function to retrieve public key for given x509 Certificates
 */
 bool CryptoWrapper::getPublicKey(string keyName, CK_OBJECT_HANDLE &pubKey) {
 	CK_OBJECT_CLASS pubKeyClass  = CKO_PUBLIC_KEY;
 	return getKey(keyName, pubKeyClass, pubKey);
 }
 
-/*
-getPrivateKey() do the following:
-	- Gets the private key.
+
+/*!
+*	@brief
+*	Functions for getting the public key from given x509 certificates
+*	getPrivateKey() do the following:
+*		- Gets the private key.
+*	@param [in] keyName Name of certificate key
+* 	@param [in] privKey Handler to save the private key once found
+*	@retval bool True for succesful transaction, False if not
+*	@remarks
+* 	Call getKey function to retrieve private key for given x509 Certificates
 */
 bool CryptoWrapper::getPrivateKey(string keyName, CK_OBJECT_HANDLE &privKey) {
 	CK_OBJECT_CLASS keyClass  = CKO_PRIVATE_KEY;
 	return getKey(keyName,keyClass, privKey);
 }
 
-/*
-getKey() do the following:
-	- Sets up the template for the key and the certificate.
-	- Initializes the certificate search operation.
-	- Starts searching for certificate.
-	- Gets the subject field for each certificate it finds.
-	- Compares if it is the desired key.
-	- If no, Keep searching for another certificate.
-	- If yes, it finishes the certificate search operation.
-	- Gets the Key ID.
-	- Initializes the key search operation.
-	- Starts searching for the key.
-	- finishes the key search operation.
+/*!
+*	@brief
+*	Functions for getting the public key from given x509 certificates
+*	getKey() do the following:
+*		- Sets up the template for the key and the certificate.
+*		- Initializes the certificate search operation.
+*		- Starts searching for certificate.
+*		- Gets the subject field for each certificate it finds.
+*		- Compares if it is the desired key.
+*		- If no, Keep searching for another certificate.
+*		- If yes, it finishes the certificate search operation.
+*		- Gets the Key ID.
+*		- Initializes the key search operation.
+*		- Starts searching for the key.
+*		- finishes the key search operation.
+*	@param [in] keyName Name of certificate key
+* 	@param [in] keyClass Class of keys, whether public or private
+* 	@param [in] key	Handle to save key
+*	@retval bool True for succesful transaction, False if not
+*	@remarks
+* 	Given the type of key to retrieve and the certificate where the keys
+* 	are embedded, this class will parse through the certificate to find 
+* 	subjects fields and search for the keys.
 */
 bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_HANDLE &key) {
 	CK_RV	returnValue;	//holds the return value
@@ -147,16 +172,25 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 	return false;
 }
 
+/*!
+*	@brief
+*	Functions for getting the public key from given x509 certificates
+*	listKeys() do the following:
+*		- Sets up the template for the certificate.
+*		- Initializes the certificate search operation.
+*		- Starts and keeps searching for certificate.
+*		- Gets the subject field for each certificate it finds.
+*		- Decrypts the subject line and get the information that we want.
+*		- Adds the key to the list.
+*		- Finishes the certificate search operation.
+*	@retval vector<string> return a vector string of keys available
+*	@remarks
+*	Search for certificate and retrieve all subject field within certificate
+* 	and decrypt to get information we need before allow keys to be use in
+* 	transactions.
+*/
 /*
-listKeys() do the following:
-	- Sets up the template for the certificate.
-	- Initializes the certificate search operation.
-	- Starts and keeps searching for certificate.
-	- Gets the subject field for each certificate it finds.
-	- Decrypts the subject line and get the information that we want.
-	- Adds the key to the list.
-	- Finishes the certificate search operation.
-	- Turns vector into an array.
+
 */
 vector<string> CryptoWrapper::listKeys() {
 	CK_RV	returnValue;	//holds the return value
