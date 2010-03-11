@@ -39,11 +39,12 @@ function cardSelectDialog(){
 	var selected = {};
 
 	var result = prompts.select(null, "Select Card", "Please choose a card", items.length,items, selected);
+	if(!result)
+		return;
 
 	// sellected cert index
 	var index = selected.value;
 
-//	alert(index);
 
 	//Getting the pin
 	var pin = prompt("Please enter your PIN");

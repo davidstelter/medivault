@@ -57,6 +57,7 @@ function checkForSession(){
 
 //Attempt to initialize the crypto hardware
 function initCrypto(){
+	var msg;
 	var status;
 	if(status = acos5.SPRS_initCrypto()){
 		var initSucc = gStrbundle.getString("wrap.initSuccess");
@@ -95,7 +96,6 @@ function finalizeCrypto(){
 }
 
 function reinitializeCrypto(){
-	alert("reinitializing");
 	finalizeCrypto();
 	initCrypto();
 }

@@ -10,21 +10,22 @@ function encryptButton() {
 
 	var selected = {};
 	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
-	if(!result)
-		return;
+	//if(!result)
+//		return;
 
 	// selected cert index
 	var index = selected.value;
 
 	// getting the output file name.
-	var FileName = prompt("Please enter the output file name: ");
-	if(!FileName)
-		return;
+	var FileName = {};
+	result = prompts.prompt(null, "Enter Filename", "Please enter the output file name:", FileName, null, {});
+//	if(!result)
+//		return;
 
 	var FileIn = getLocalFileSelection();
 
 	//Getting the path for the output file.
-	var FileOut = getRemoteDirSelection() + FileName;
+	var FileOut = getRemoteDirSelection() + FileName.value;
 
 	encryptFile(FileIn, FileOut, items[index]);
 	//refresh file view, there's a new file
@@ -51,11 +52,12 @@ function signButton() {
 	var index = selected.value;
 
 	// getting the output file name.
-	var FileName = prompt("Please enter the output file name: ");
-	if(!FileName)
+	var FileName = {};
+	var ok = prompts.prompt(null, "Enter filename", "Please enter the output file name:", FileName,null,{});
+	if(!ok)
 		return;
 
-	var FileOut = getRemoteDirSelection() + FileName;
+	var FileOut = getRemoteDirSelection() + FileName.value;
 
 	var FileIn = getLocalFileSelection();
 
@@ -125,18 +127,30 @@ function cardSelectDialog(){
 
 //	alert(index);
 
-	var attempt=1;
+	var attempt=0;
+	var ok;
 	do{
-		var pin = prompt("Please enter your PIN");
-		var login = acos5.SPRS_selectCard(index, pin);
-		if(login)
+		var pin = {};
+		ok = prompts.promptPassword(null, "Enter PIN", "Please enter your PIN", pin, null, {});
+		if(ok){
+		  var login = acos5.SPRS_selectCard(index, pin.value);
+		  if(login)
 			appendLog("Login successful");
-		else{
+		  else{
 			appendLog("Login attempt "+attempt+" failed!");
+		  }
+		  ++attempt;
 		}
-		++attempt;
+		else
+			break;
 	}
 	while(!login && attempt < 3);
+
+	if(!ok){
+		appendLog("Login aborted by user");
+		finalizeCrypto();
+		return;
+	}
 
 	if(!login){
 		alert("Login failed after " + attempt +" attempts!");
