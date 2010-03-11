@@ -6,13 +6,28 @@
 #include "CryptoWrapper.h"
 
 
+/*!
+*	@brief
+*	Functions for digesting
+*	Digest() do the following:
+*		- Initializes a message-digesting operation.
+*		- Digests once to get the size.
+*		- Starts digesting the data.
+*	@param [in] plainText Text string to be digest and sign
+* 	@param [in] &size name of certificate to be used 
+*	@retval CK_BYTE Returns bytes of digest data
+*	@remarks
+* 	Passes the inputed buffer string and tries to digest data and pass back
+*	the digested data in byte format.
+*/
 CK_BYTE* CryptoWrapper::Digest(string plainText, CK_ULONG &size) {
-	CK_RV	returnValue;
+	CK_RV returnValue;
 	CK_ULONG plainTextLength;
 	CK_BYTE *buffer;
 	CK_BYTE *digested;
 	CK_MECHANISM mechanism = {CKM_SHA_1, NULL_PTR, 0};
 
+	/* initialize digest function call */
 	returnValue = (funcList->C_DigestInit)(hSession, &mechanism);
 	if(returnValue != CKR_OK) {
 		setError(COULD_NOT_INIT_DIGEST);
@@ -39,19 +54,29 @@ CK_BYTE* CryptoWrapper::Digest(string plainText, CK_ULONG &size) {
 	return digested;
 }
 
-/*
-sign() do the following:
-	- gets private keys for signing, verify using public key.
-	- Initializes a message-digesting operation.
-	- Digests once to get the size.
-	- Starts digesting the data.
-	- Initializes a signature operation
-	- Signs once to get the size.
-	- Starts signing the data.
+
+/*!
+*	@brief
+*	Functions for dealing with signature
+*	sign() do the following:
+*		- gets private keys for signing, verify using public key.
+*		- Initializes a message-digesting operation.
+*		- Digests once to get the size.
+*		- Starts digesting the data.
+*		- Initializes a signature operation
+*		- Signs once to get the size.
+*		- Starts signing the data.
+*	@param [in] plainText Text string to be digest and sign
+*	@param [in] &size Size of plaintext
+* 	@param [in] keyLabel name of certificate to be used
+*	@retval string Returns signed string
+*	@remarks
+* 	Passes the inputed buffer string and tries to digest and sign given with 
+* 	private key using acospkcs functional calls.
 */
 CK_BYTE*  CryptoWrapper::sign(string plainText, string keyLabel, int &size)
 {
-	CK_RV	returnValue;	//holds the return value
+	CK_RV returnValue;	//holds the return value
 	CK_OBJECT_HANDLE key;
 	CK_ULONG digestLen;			
 	CK_ULONG signatureLen;								
@@ -96,12 +121,20 @@ CK_BYTE*  CryptoWrapper::sign(string plainText, string keyLabel, int &size)
 	return signBuffer;
 }
 
-/*
-signFile() do the following:
-	- Opens the file that wanted to be signed, then reads the data, saves it, and then close the file.
-	- Signs the saved data by calling the sign function.
-	- Creates a new file to write the signed data with a header and a footer.
-	- Closes the signed file.
+
+/*!
+*	@brief
+*	Functions for signing files
+*	signFile() do the following:
+*		- Opens the file that wanted to be signed, then reads the data, saves it, and then close the file.
+*		- Signs the saved data by calling the sign function.
+*		- Creates a new file to write the signed data with a header and a footer.
+*		- Closes the signed file.
+*	@param [in] fileToSign Name of file to be signed
+* 	@param [out] signedFile Name of file to write signed data
+* 	@param [in] strKeyLabel Certificate Name to use
+*	@retval	bool Returns false on failure and sets
+*	@remarks digest data with the key given by keyLabel and sign data
 */
 bool CryptoWrapper::signFile( string fileToSign, string signedFile, string strKeyLabel )
 {

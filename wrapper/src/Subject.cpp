@@ -4,6 +4,22 @@
 
 using namespace std;
 
+/*!
+*	\class Subject
+*	@brief
+*	A parser to traverse through and parse a given Certificate for subject fields
+*/
+
+/*!
+*	@brief
+*	Functions for parsing out subject fields from x509 Certificates
+*	Subject() do the following:
+*		- Parse the certificate
+*	@param [in] *data Certificate bytes to parse through
+*	@retval NULL
+*	@remarks
+* 	Parse though data and match up certian values to guess whether we have valid subject data
+*/
 Subject::Subject(CK_BYTE *data) : fields(6)
 {
 	int i=0;
@@ -24,6 +40,13 @@ Subject::Subject(CK_BYTE *data) : fields(6)
 	}
 }
 
+/*!
+*	@brief
+*	Subject deconstructor
+*	@param void
+*	@retval
+*	@remarks Subject class deconstructor
+*/
 Subject::~Subject(void)
 {
 }

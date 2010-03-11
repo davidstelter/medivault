@@ -8,24 +8,45 @@
 #include "subject.h"
 #include "CryptoWrapper.h"
 
+/*!
+*	\class CryptoWrapper
+*	@brief
+*	Interface with acospkcs11.dll to provide cryptographic functionality.
+*/
 CryptoWrapper::CryptoWrapper(void)
 {
 	this->PKCSLibraryModule = 0;
 	lastError = OK;
 }
 
+
+/*!
+*	@brief
+*	Interface wrapper constructor
+*	@param void
+*	@retval
+*	@remarks Constructor for the wrapper API calls
+*/
 CryptoWrapper::~CryptoWrapper(void)
 {
 	//destroy the crypto environment
 	finalizeCrypto();
 }
 
-/*
-initCrypto() do the following:
-	- Makes sure that the DLL was not loaded before.
-	- Loads the DLL file.
-	- Gets the functions list from the DLL file.
-	- Initializes the Cryptoki library
+
+/*!
+*	@brief
+*	Functions for setting up the crypto environment
+*	initCrypto() do the following:
+*		- Makes sure that the DLL was not loaded before.
+*		- Loads the DLL file.
+*		- Gets the functions list from the DLL file.
+*		- Initializes the Cryptoki library
+*	@param void
+*	@retval bool Returns false on failure and sets
+*	@remarks
+* 	Initializes the crypto enviroment by loading the 
+* 	acospkcs11.dll into memory and retrieve it's functionlist.
 */
 bool CryptoWrapper::initCrypto() {
 	CK_RV	returnValue;	//holds the return value
@@ -34,7 +55,7 @@ bool CryptoWrapper::initCrypto() {
 		return false;
 	}
 	//Load the DLL file.
-	if (!(PKCSLibraryModule = LoadLibrary(L".\\acospkcs11.dll"))) {
+	if (!(PKCSLibraryModule = LoadLibrary(".\\acospkcs11.dll"))) {
 		setError(DLL_LOAD_ERROR);
 		return false;
 	}
@@ -60,10 +81,16 @@ bool CryptoWrapper::initCrypto() {
 	return true;
 }
 
-/*
-finalizeCrypto() do the following:
-	- Will finalize the Crypto library if it was loaded.
-	- Frees the the library.
+
+/*!
+*	@brief
+*	Functions for taking down the crypto environment
+*	finalizeCrypto() do the following:
+*		- Will finalize the Crypto library if it was loaded.
+*		- Frees the the library.
+*	@param void
+*	@retval
+*	@remarks Unload acospkcs11 DLL and free memory allocated, destroy enviroment
 */
 void CryptoWrapper::finalizeCrypto() {
 	if(!PKCSLibraryModule) {
@@ -77,9 +104,16 @@ void CryptoWrapper::finalizeCrypto() {
 	PKCSLibraryModule = 0;  //set library to zero to be safe
 }
 
-/*
-getTokenCount() do the following:
-	- Returns the number of cards which have tokens
+
+
+/*!
+*	@brief
+*	Utility function
+*	getTokenCount() do the following:
+*		- Returns the number of cards which have tokens
+*	@param void
+*	@retval int
+*	@remarks Count the number of cards which have tokens
 */
 int CryptoWrapper::getTokenCount(){
 	CK_RV	returnValue;	//holds the return value
@@ -89,15 +123,22 @@ int CryptoWrapper::getTokenCount(){
 	return ulSlotCount;
 }
 
-/*
-enumerateCards() do the following:
-	- Gets the number of cards which have tokens.
-	- Creats a pointer to an array that contains slots info (return value).
-	- Search readers and store result in SlotWithTokenList.
-	- Gets all the slots info
-	- Returns list of all slots with a token present
-*/
 
+/*!
+*	@brief
+*	Function return list of token present
+*	enumerateCards() do the following:
+*		- Gets the number of cards which have tokens.
+*		- Creats a pointer to an array that contains slots info (return value).
+*		- Search readers and store result in SlotWithTokenList.
+*		- Gets all the slots info
+*		- Returns list of all slots with a token present
+*	@param void
+*	@retval *string Returns pointer to string of tokens
+*	@remarks
+* 	Get list of all slots with a token present when there is a 
+* 	acos5 detected within the system
+*/
 string* CryptoWrapper::enumerateCards(void)
 {
 	CK_RV	returnValue;			//holds the return value
@@ -142,16 +183,25 @@ string* CryptoWrapper::enumerateCards(void)
 	return SlotsArray;
 }
 
-/*
-selectCard() do the following:
-	- lists all slots with a token present.
-	- Opens a session for the selected card to use for subsequent operations.
-	- Logs into the selected token. 
+
+/*!
+*	@brief
+*	Function to select inserted smartcard
+*	selectCard() do the following:
+*		- lists all slots with a token present.
+*		- Opens a session for the selected card to use for subsequent operations.
+*		- Logs into the selected token. 
+*	@param [in] SlotID The slotid token to be used
+*   @param [in] pin	Pointer to pin authentication
+*   @param [in] pinlen Length of given pin input
+*	@retval	bool Returns false on failure and sets 
+*	@remarks Selects a card to use for subsequent operations.  
 */
 bool CryptoWrapper::selectCard(int SlotID, CK_UTF8CHAR* UserPIN, int pinlen)
 {
-	enumerateCards(); //this does a little housekeeping for us...
+	enumerateCards();		//this does a little housekeeping for us...
 	CK_RV	returnValue;	//holds the return value
+
 	//Open session for selected card
 	returnValue = (funcList->C_OpenSession)(SlotWithTokenList[SlotID],
 					CKF_SERIAL_SESSION| CKF_RW_SESSION, NULL, NULL, &hSession);
