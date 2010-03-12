@@ -50,7 +50,7 @@ function loadFile(FileIn){
 
 function checkForSession(){
 	if(!crypto_session_active)
-		alert("No active session with crypto hardware!");
+		gPromptService.alert(null, "Error", "No active session with crypto hardware!");
 
 	return crypto_session_active;
 }
@@ -82,7 +82,7 @@ function initCrypto(){
 	}
 	else{
 		crypto_session_active=false;
-		alert('Hardware initialization has failed, is your device connected?');
+		gPromptService.alert(null, 'Error', 'Hardware initialization has failed, is your device connected?');
 		logWrapperError();
 		//appendLog(gStrbundle.getString("wrap.initFailure")+": "+strings.getFormattedString("wrap.errorCode", [acos5.SPRS_getLastError()]));
 	}

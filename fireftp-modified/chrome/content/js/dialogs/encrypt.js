@@ -1,15 +1,12 @@
 function encryptButton() {
-	if(!checkForSession)
+	if(!checkForSession())
 		return;
 
 	var count = {};
 	var items = acos5.SPRS_listCerts(count)// getting the list of certs.
 
-		//prompting with a list box with the certs available.
-		var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
-
 	var selected = {};
-	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+	var result = gPromptService.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
 	//if(!result)
 //		return;
 
@@ -18,7 +15,7 @@ function encryptButton() {
 
 	// getting the output file name.
 	var FileName = {};
-	result = prompts.prompt(null, "Enter Filename", "Please enter the output file name:", FileName, null, {});
+	result = gPromptService.prompt(null, "Enter Filename", "Please enter the output file name:", FileName, null, {});
 //	if(!result)
 //		return;
 
@@ -34,17 +31,15 @@ function encryptButton() {
 }
 
 function signButton() {
-	if(!checkForSession)
+	if(!checkForSession())
 		return;
 
 	var count = {};
 	var items = acos5.SPRS_listCerts(count)// getting the list of certs.
 
-		//prompting with a list box with the certs available.
-		var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 
 	var selected = {};
-	var result = prompts.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
+	var result = gPromptService.select(null, "Select Cert", "Please choose a certificate", items.length,items, selected);
 	if(!result)
 		return;
 
@@ -53,7 +48,7 @@ function signButton() {
 
 	// getting the output file name.
 	var FileName = {};
-	var ok = prompts.prompt(null, "Enter filename", "Please enter the output file name:", FileName,null,{});
+	var ok = gPromptService.prompt(null, "Enter filename", "Please enter the output file name:", FileName,null,{});
 	if(!ok)
 		return;
 
@@ -103,6 +98,8 @@ function getRemoteDirSelection(){
 }
 
 function loadButton(){
+	if(!checkForSession())
+		return;
 	var FileIn = getRemoteFileSelection();
 	var clear = loadFile(FileIn);
 	if(clear!=null){
@@ -113,25 +110,18 @@ function loadButton(){
 
 function cardSelectDialog(){
 
-	//Getting the slot  
-	var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
-
-	//var items = ["cert1", "cert2", "cert3", "cert4"];
 	var items = acos5.SPRS_enumerateCards({});
 
 	var selected = {};
-
-	var result = prompts.select(null, "Select Card", "Please choose a card", items.length,items, selected);
+	var result = gPromptService.select(null, "Select Card", "Please choose a card", items.length,items, selected);
 
 	var index = selected.value;
-
-//	alert(index);
 
 	var attempt=0;
 	var ok;
 	do{
 		var pin = {};
-		ok = prompts.promptPassword(null, "Enter PIN", "Please enter your PIN", pin, null, {});
+		ok = gPromptService.promptPassword(null, "Enter PIN", "Please enter your PIN", pin, null, {});
 		if(ok){
 		  var login = acos5.SPRS_selectCard(index, pin.value);
 		  if(login)

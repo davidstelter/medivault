@@ -9,6 +9,7 @@ function startup() {
   gConnectButton         = $('connectbutton');
   gAccountField          = $('account');
   gFolderField           = $('folder');
+  gFolderField2          = $('folder2');
   gLocalPath             = $('localpath');
   gLocalTree             = $('localtree');
   gLocalDirTree          = $('localdirtree');
@@ -93,8 +94,8 @@ function startup() {
 //  connectedButtonsDisabler();
   localDirTree.changeDir(gLocalPath.value);
 // this was causing a non-fatal error...
-  //localDirTree2.changeDir(gRemotePath.value);
-  localDirTree2.changeDir(gLocalPath.value);
+  localDirTree2.changeDir(gRemotePath.value);
+  //localDirTree2.changeDir(gLocalPath.value);
 
   //loadSiteManager(true);
   loadPrograms();
@@ -113,7 +114,7 @@ function startup() {
 
 	//This was breaking too...
  // onAccountChange(gDefaultAccount);
-  setTimeout("gAccountField.focus()", 0);
+  //setTimeout("gAccountField.focus()", 0);
 
   tipJar();
 

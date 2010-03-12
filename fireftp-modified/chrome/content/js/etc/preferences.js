@@ -52,9 +52,25 @@ function readPreferences(startup) {
       }
       gPrefs.setComplexValue("folder", Components.interfaces.nsISupportsString, sString);
     }
+/*
+    if (gPrefs.getComplexValue("folder2", Components.interfaces.nsISupportsString).data == "") {
+      var file2 = Components.classes["@mozilla.org/file/directory_service;1"].createInstance(Components.interfaces.nsIProperties)
+                           .get("Desk", Components.interfaces.nsILocalFile);
+
+      var sString2  = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+      if (file2.path.indexOf('/') != -1) {
+        sString2.data = file2.path.substring(0, file2.path.indexOf('/') + 1);
+      } else if (file2.path.indexOf('\\') != -1) {
+        sString2.data = file2.path.substring(0, file2.path.indexOf('\\') + 1);
+      }
+      gPrefs.setComplexValue("folder2", Components.interfaces.nsISupportsString, sString2);
+    }
+		*/
+		
 
     if (startup) {
       gLocalPath.value = gPrefs.getComplexValue("folder", Components.interfaces.nsISupportsString).data;
+      gRemotePath.value = gPrefs.getComplexValue("folder", Components.interfaces.nsISupportsString).data;
       gLoadUrl         = gPrefs.getComplexValue("loadurl", Components.interfaces.nsISupportsString).data;
     }
 
