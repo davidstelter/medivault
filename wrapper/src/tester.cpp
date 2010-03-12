@@ -1,3 +1,11 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * Tester.cpp
+ * This file contains the tests for the CryptoWrapper system.
+ * */
+
 #include <iostream>
 
 #include "CryptoWrapper.h"

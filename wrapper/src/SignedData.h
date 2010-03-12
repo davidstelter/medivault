@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * SignedData.h
+ * Contains the definition of the SignedData class which is used for loading
+ * and writing signed data files.
+ * */
+
 #include "cryptoki.h"
 #include <fstream>
 #include <string>

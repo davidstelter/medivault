@@ -1,3 +1,13 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * EncryptedData.h
+ * This is the class definition for the EncryptedData class. This class
+ * Handles the reading and writing of encrypted files.  It does not actually
+ * do the encrypting.
+ * */
+
 #include "cryptoki.h"
 #include <fstream>
 #include <string>

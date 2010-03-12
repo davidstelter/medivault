@@ -1,3 +1,17 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * Sign.cpp
+ * This file contains the functions for signing files as part of the 
+ * CryptoWrapper class.
+ *
+ * Functions:
+ *		Digest
+ *		sign
+ *		signFile
+ * */
+
 #include "cryptoki.h"
 #include <string>
 #include <sstream>

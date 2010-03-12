@@ -1,3 +1,22 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * CryptoWrapper.cpp
+ * This file contains functions which provide basic functionality to the
+ * CryptoWrapper class. This includes things like loading the DLL, loging into
+ * the crypto tokens and listing the avalible tokens on the system.
+ *
+ * Functions :
+ *		CryptoWrapper
+ *		~CryptoWrapper
+ *		initCrypto
+ *		finalizeCrypto
+ *		getTokenCount
+ *		enumerateCards
+ *		selectCard
+ * */
+
 #include "cryptoki.h"
 #include <windows.h>
 #include <string>
@@ -15,6 +34,7 @@
 */
 CryptoWrapper::CryptoWrapper(void)
 {
+	//set everything to sane values
 	this->PKCSLibraryModule = 0;
 	lastError = OK;
 }

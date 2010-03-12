@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * errorcodes.h
+ * This file contains the definitions of the error codes used by the 
+ * CryptoWrapper system.
+ * */
+
 #pragma once
 
 #define OK							0

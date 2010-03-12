@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * FileLoading.cpp
+ * This class contains the functions for loading files that are either plain
+ * text or were created using the encrypt or sign functions of the
+ * CryptoWrapper class.  They are also part of the CryptoWrapper class.
+ *
+ * Functions:
+ *		LoadFile
+ *		decryptFile
+ *		Verify
+ * */
+
 #include "cryptoki.h"
 #include <string>
 #include <sstream>
@@ -61,7 +76,7 @@ string CryptoWrapper::LoadFile(string filename) {
 	}
 	file.close();
 
-	//falls through above if file is not binary
+	//falls through above if file is not one of our filetypes
 	try 
 	{
 		file.open( filename.c_str() );

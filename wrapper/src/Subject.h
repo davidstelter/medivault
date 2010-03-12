@@ -1,3 +1,12 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * Subject.h
+ * This file contains the defition of the subject class.  This class is for
+ * decoding and storing data having to do with the subject of a certificate.
+ * */
+
 #include <string>
 #include <vector>
 #include "cryptoki.h"

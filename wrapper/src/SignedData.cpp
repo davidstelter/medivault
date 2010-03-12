@@ -76,19 +76,29 @@ void SignedData::writeToFile(ofstream &file) {
 * 	for signing of data
 */
 void SignedData::readFromFile(ifstream &file) {
+	//get the size of the cert.
 	int size;
 	file.read((char*)&size, sizeof(int));
+	//allocate space for and read in the cert string
 	char *temp = (char *)malloc((size + 1) * sizeof(char));
 	file.read(temp, size);
+	//terminate the string to avoid problems
 	temp[size] = '\0';
+	//turn into a string for use
 	this->cert = string(temp);
+	//free your memory
 	free(temp);
+	//get the size of the plain text
 	file.read((char*)&size, sizeof(int));
+	//allocate space for the plain text, read it in and terminate it
 	temp = (char *)malloc((size + 1) * sizeof(char));
 	file.read((char *)temp, size);
 	temp[size] = '\0';
 	this->plainText = string(temp);
+	free(temp);
+	//get the size of the signature
 	file.read((char*)&sigSize, sizeof(CK_ULONG));
+	//read in the signature
 	signature = (CK_BYTE *)malloc(sigSize * sizeof(CK_BYTE));
 	file.read((char *)signature,sigSize);
 }

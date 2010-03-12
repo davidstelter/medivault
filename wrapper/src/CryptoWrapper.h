@@ -1,3 +1,14 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * CryptoWrapper.h
+ * This file contains the definition of the the CryptoWrapper Class.  This
+ * Class is a wrapper to wrap the functionality of the acospkcs11.dll.
+ * It contains functions to encrypt, decrypt, sign, verify files.  As well
+ * as function to load, initialize and log into ACOS5 sim tokens.
+ * */
+
 #include <windows.h>
 #include <vector>
 

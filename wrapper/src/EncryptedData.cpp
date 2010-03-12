@@ -1,3 +1,11 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * EncryptedData.cpp
+ * This file contains the implementation of the EncryptedData class.
+ * */
+
 #include "EncryptedData.h"
 
 using namespace std;
@@ -51,14 +59,19 @@ EncryptedData::~EncryptedData(void)
 * 	for encrypting of data
 */
 void EncryptedData::readFromFile(ifstream &file) {
+	//the first X bytes contain the length of the cert
 	int certSize;
 	file.read((char*)&certSize, sizeof(int));
+	//allocate memory to hold the cert name and read the name in
 	char *temp = (char *)malloc((certSize + 1) * sizeof(char));
 	file.read(temp, certSize);
+	//terminate the string as otherwise there may be garbage at the end
 	temp[certSize] = '\0';
 	cert = string(temp);
 	free(temp);
+	//read in the next X bytes which is the size of the cipher text
 	file.read((char*)&cipherSize, sizeof(CK_ULONG));
+	//Allocate space for and read the cipher text
 	cipherText = (CK_BYTE *)malloc(cipherSize * sizeof(CK_BYTE));
 	file.read((char *)cipherText, cipherSize);
 }
@@ -76,10 +89,13 @@ void EncryptedData::readFromFile(ifstream &file) {
 * 	for future decrypting action.
 */
 void EncryptedData::writeToFile(ofstream &file) {
+	//write out the header
 	file << (char)9 <<"encrypted";
 	int size = cert.size();
+	//write out the size
 	file.write((char*)&size,sizeof(int));
 	file << cert.c_str();
+	//write out the cipher text
 	file.write((char*)&cipherSize, sizeof(CK_ULONG));
 	file.write((char*)cipherText, cipherSize * sizeof(CK_BYTE));
 }
@@ -97,6 +113,7 @@ void EncryptedData::writeToFile(ofstream &file) {
 * 	allocated memory and place set signature
 */
 void EncryptedData::setCipherText(CK_BYTE *cipherText, CK_ULONG size) {
+	//This is a deep copy so that we don't have to worry about allocation issues
 	this->cipherSize = size;
 	if(this->cipherText) {
 		free(this->cipherText);

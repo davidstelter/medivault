@@ -1,3 +1,16 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * Encrypt.cpp
+ * This file contains the implementation of the functions for encrypting data
+ * as part of the CryptoWrapper class.
+ *
+ * Functions:
+ *		encrypt
+ *		encryptFile
+ * */
+
 #include "cryptoki.h"
 #include <string>
 #include <sstream>
@@ -131,11 +144,14 @@ bool CryptoWrapper::encryptFile(string fileToEncrypt, string encryptedFile, stri
 	{
 		/* create file */
 		fileWrite.open( encryptedFile.c_str(), fstream::binary | fstream::out | fstream::trunc );
+		//load the data into the handy file creator class
 		EncryptedData data;
 		data.setCipherText(strEncrypted,encSize);
 		data.setCert(strKeyLabel);
 		data.writeToFile(fileWrite);
+		//don't forget to clean up the memory
 		free(strEncrypted);
+		//all done
 		fileWrite.close();
 	}
 	catch (ofstream:: failure e) 

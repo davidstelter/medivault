@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2010 Dylan Enloe, Vincent Cao, Muath Alissa
+ * ALL RIGHTS RESERVED
+ *
+ * KeyFunctions.cpp
+ * This file contains functions for finding and listing keys on the ACOS5 card
+ * as part of the CryptoWrapper class.
+ *
+ * Functions
+ *		getPublicKey
+ *		getPrivateKey
+ *		getKey
+ *		listKeys
+ * */
+
 #include "cryptoki.h"
 #include <string>
 #include <vector>
@@ -99,6 +114,7 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 		CK_ATTRIBUTE subjectTemplate[] = {
 			{CKA_SUBJECT, NULL_PTR, 0}
 		};
+		//Get the next cert
 		returnValue = (funcList->C_FindObjects)(hSession, tempCert, 1, &count);		
 		if (returnValue != CKR_OK || count == 0) {
 			setError(KEY_NOT_FOUND);
@@ -125,19 +141,22 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 		free(subject);
 		//is this the key we want?
 		if(sub.getCertName().compare(keyName) == 0) {
-			//CK_BYTE *id = 0;
 			CK_ULONG size = 0;
+			//finalize the certificate search as we have found the one we want
 			returnValue = (funcList->C_FindObjectsFinal)(hSession);
 			CK_ATTRIBUTE idTemplate[] = {
 				{CKA_ID,		NULL,			0},		
 			};
+			//Get the id number of the cert that we just found
 			returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert, idTemplate, 1);
 			if (returnValue != CKR_OK) {
 				return false;
 			}
+			//allocate space for the id and link the template and the id
 			CK_BYTE *id = (CK_BYTE*)malloc(sizeof(CK_BYTE)*idTemplate[0].ulValueLen);
 			idTemplate[0].pValue = id;
-
+			
+			//get the id for real this time.
 			returnValue = (funcList->C_GetAttributeValue)(hSession, *tempCert, idTemplate, 1);
 			if (returnValue != CKR_OK) { 
 				return false;
@@ -145,11 +164,12 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 			size = idTemplate[0].ulValueLen;
 			keyTemplate[3].pValue = id;
 			keyTemplate[3].ulValueLen = idTemplate[0].ulValueLen;
+			//start a new search.  This time we are looking for keys
 			returnValue = (funcList->C_FindObjectsInit)(hSession, keyTemplate, 4);
 			if (returnValue != CKR_OK) {
 				return false;
 			}
-
+			//find the key with the id that is the same as the cert.
 			returnValue = (funcList->C_FindObjects)(hSession, &key, 1, &count);		
 			if (returnValue != CKR_OK) {
 				return false;
@@ -256,13 +276,4 @@ vector<string> CryptoWrapper::listKeys() {
 		return nullVec;
 	}
 	return keyList;
-	/*
-	//turn vector into an array
-	string *stringArray = new string[keyList.size()];
-	for(int i = 0; i < keyList.size(); i++) {
-		stringArray[i] = keyList[i];
-	}
-	//return the array
-	return stringArray;
-	*/
 }
