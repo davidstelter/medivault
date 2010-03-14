@@ -23,8 +23,12 @@ projectroot/
 	-medivault/
 		+.git/
 		| ...
-		-SPRS/
-			+content/
-			+components/
-			+skin/
+		-wrapper/
+			+src/
+			+xpcom/
+			+docs/
+
+Then the Visual Studio project in projectroot/medivault/wrapper/xpcom should build you a working component.
+
+Refer to http://wanderingstan.com/2007-11-16/geekout_how_to_make_a_c_xpcom_component/ for more information (and some excellent links) on setting up XPCOM build environment for Visual Studio.
 
