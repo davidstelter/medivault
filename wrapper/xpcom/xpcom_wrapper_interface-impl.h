@@ -33,6 +33,7 @@ public:
 
   //these public members are handled by the above IDL wizardry, 
   //they only need to be listed here to make Doxygen happy.
+  /*
   ~nsSPRS_PKCS11_Wrapper();
   NS_IMETHODIMP  SPRS_getLastError(PRInt32 *_retVal);
   NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval);
@@ -48,6 +49,7 @@ public:
   NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_createCert(const nsAString & cert, PRBool *_retval);
   NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_decrypt(const nsAString & input_file, nsAString **_retval);
   NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv);
+  */
 
 private:
 	CryptoWrapper wrapper;
