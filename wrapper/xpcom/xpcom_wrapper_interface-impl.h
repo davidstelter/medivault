@@ -26,6 +26,24 @@ public:
 
   nsSPRS_PKCS11_Wrapper();
 
+  //these public members are handled by the above IDL wizardry, 
+  //they only need to be listed here to make Doxygen happy.
+  ~nsSPRS_PKCS11_Wrapper();
+  NS_IMETHODIMP  SPRS_getLastError(PRInt32 *_retVal);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_finalizeCrypto();
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_enumerateCards(PRUint32 *count, char ***cards);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_selectCard(PRInt32 card, const nsAString & pin, PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_listCerts(PRUint32 *count, char ***certs);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_encryptFile(const nsAString & input, const nsAString & output, const nsAString & cert, PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_signFile(const nsAString & input_file, const nsAString & output_file, const nsAString & cert, PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_loadFile(const nsAString & input_file, nsAString & output, PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getTokenCount(PRInt32 *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_verify(const nsAString & input_file, nsAString **_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_createCert(const nsAString & cert, PRBool *_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_decrypt(const nsAString & input_file, nsAString **_retval);
+  NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::GetArray(PRUint32 *count, PRInt32 **retv);
+
 private:
 	CryptoWrapper wrapper;
 	

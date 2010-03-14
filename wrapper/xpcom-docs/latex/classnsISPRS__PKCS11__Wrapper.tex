@@ -1,0 +1,159 @@
+\hypertarget{classnsISPRS__PKCS11__Wrapper}{
+\section{nsISPRS\_\-PKCS11\_\-Wrapper Interface Reference}
+\label{classnsISPRS__PKCS11__Wrapper}\index{nsISPRS\_\-PKCS11\_\-Wrapper@{nsISPRS\_\-PKCS11\_\-Wrapper}}
+}
+Inheritance diagram for nsISPRS\_\-PKCS11\_\-Wrapper::\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2cm]{classnsISPRS__PKCS11__Wrapper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a8b61744812237ba63b1d6078a7140850}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-getLastError} (PRInt32 $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a8b61744812237ba63b1d6078a7140850}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_add3cdf2b5b2bb0fe00e0f0b881185043}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-initCrypto} (PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_add3cdf2b5b2bb0fe00e0f0b881185043}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a7f251f3a01110110ba3ed2efefc4f09f}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-finalizeCrypto} (void)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a7f251f3a01110110ba3ed2efefc4f09f}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a25acd085528efa457da74b5d7a5d7939}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-enumerateCards} (PRUint32 $\ast$count, char $\ast$$\ast$$\ast$cards)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a25acd085528efa457da74b5d7a5d7939}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a48e756de78fe5eb3542704505d62a543}{
+NS\_\-IMETHOD {\bfseries GetArray} (PRUint32 $\ast$count, PRInt32 $\ast$$\ast$retv)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a48e756de78fe5eb3542704505d62a543}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ac9a82527bf2c835839532302b64d3ada}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-selectCard} (PRInt32 card, const nsAString \&pin, PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_ac9a82527bf2c835839532302b64d3ada}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a9817e5d58cb533d81e4bcf129d05cccb}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-listCerts} (PRUint32 $\ast$count, char $\ast$$\ast$$\ast$certs)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a9817e5d58cb533d81e4bcf129d05cccb}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a985c8fdb86adba1b1c5f1bf33240d43a}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-createCert} (const nsAString \&cert, PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a985c8fdb86adba1b1c5f1bf33240d43a}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_af54922c905efcea0787d2a874d9a89a5}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-encryptFile} (const nsAString \&input\_\-file, const nsAString \&output\_\-file, const nsAString \&cert, PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_af54922c905efcea0787d2a874d9a89a5}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a75f07f75db48863b369f7737322290af}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-signFile} (const nsAString \&input\_\-file, const nsAString \&output\_\-file, const nsAString \&cert, PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a75f07f75db48863b369f7737322290af}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ab427cbee7f436f59428c4623e60c0241}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-decrypt} (const nsAString \&input\_\-file, nsAString $\ast$$\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_ab427cbee7f436f59428c4623e60c0241}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ab7a5864e8c3884b39b76d87cf8bf7a29}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-verify} (const nsAString \&input\_\-file, nsAString $\ast$$\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_ab7a5864e8c3884b39b76d87cf8bf7a29}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a4014c1fdcaa95ba3655b68c68d03721c}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-loadFile} (const nsAString \&input\_\-file, nsAString \&output, PRBool $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a4014c1fdcaa95ba3655b68c68d03721c}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a0fb1d00e8b1e8c0d72a393c3dfcadbc9}{
+NS\_\-IMETHOD {\bfseries SPRS\_\-getTokenCount} (PRInt32 $\ast$\_\-retval)=0}
+\label{classnsISPRS__PKCS11__Wrapper_a0fb1d00e8b1e8c0d72a393c3dfcadbc9}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_aa1a33b3f4065b99d44dc5d8607ad0487}{
+long {\bfseries SPRS\_\-getLastError} ()}
+\label{classnsISPRS__PKCS11__Wrapper_aa1a33b3f4065b99d44dc5d8607ad0487}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a0ae334160bc947c3ba068ad2bc12e683}{
+boolean {\bfseries SPRS\_\-initCrypto} ()}
+\label{classnsISPRS__PKCS11__Wrapper_a0ae334160bc947c3ba068ad2bc12e683}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a64a6e7824caf4c175e8f1b4fb18c7f4e}{
+void {\bfseries SPRS\_\-finalizeCrypto} ()}
+\label{classnsISPRS__PKCS11__Wrapper_a64a6e7824caf4c175e8f1b4fb18c7f4e}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_aa9be6c1fd0973916152ad82fd60e186a}{
+void {\bfseries SPRS\_\-enumerateCards} (out PRUint32 count,\mbox{[}retval, array, size\_\-is(count)\mbox{]} out string cards)}
+\label{classnsISPRS__PKCS11__Wrapper_aa9be6c1fd0973916152ad82fd60e186a}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a127c335a5ec8ba9ad64218beda932e49}{
+void {\bfseries getArray} (out unsigned long count,\mbox{[}array, size\_\-is(count), retval\mbox{]} out long retv)}
+\label{classnsISPRS__PKCS11__Wrapper_a127c335a5ec8ba9ad64218beda932e49}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ae1d9a88278e5fc06fd68c36db061e814}{
+boolean {\bfseries SPRS\_\-selectCard} (in long card, in AString pin)}
+\label{classnsISPRS__PKCS11__Wrapper_ae1d9a88278e5fc06fd68c36db061e814}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_aaad4ef266e0a525e99763d32497e968e}{
+void {\bfseries SPRS\_\-listCerts} (out PRUint32 count,\mbox{[}retval, array, size\_\-is(count)\mbox{]} out string certs)}
+\label{classnsISPRS__PKCS11__Wrapper_aaad4ef266e0a525e99763d32497e968e}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ae276d3e673f616d997e2f01efb61666e}{
+boolean {\bfseries SPRS\_\-createCert} (in AString cert)}
+\label{classnsISPRS__PKCS11__Wrapper_ae276d3e673f616d997e2f01efb61666e}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_aef0c4b224729d300b574673e4d5ed9b9}{
+boolean {\bfseries SPRS\_\-encryptFile} (in AString input\_\-file, in AString output\_\-file, in AString cert)}
+\label{classnsISPRS__PKCS11__Wrapper_aef0c4b224729d300b574673e4d5ed9b9}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a12fd84a1bfdadca5898a97674abcc7d2}{
+boolean {\bfseries SPRS\_\-signFile} (in AString input\_\-file, in AString output\_\-file, in AString cert)}
+\label{classnsISPRS__PKCS11__Wrapper_a12fd84a1bfdadca5898a97674abcc7d2}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a29ba55c7ae20fe78275247a5122817cc}{
+nsAString {\bfseries SPRS\_\-decrypt} (in AString input\_\-file)}
+\label{classnsISPRS__PKCS11__Wrapper_a29ba55c7ae20fe78275247a5122817cc}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_a689e52a981017658e697a91de211cac4}{
+nsAString {\bfseries SPRS\_\-verify} (in AString input\_\-file)}
+\label{classnsISPRS__PKCS11__Wrapper_a689e52a981017658e697a91de211cac4}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_ad4590f99278e01515bafe280b1d80faf}{
+boolean {\bfseries SPRS\_\-loadFile} (in AString input\_\-file, out AString output)}
+\label{classnsISPRS__PKCS11__Wrapper_ad4590f99278e01515bafe280b1d80faf}
+
+\item 
+\hypertarget{classnsISPRS__PKCS11__Wrapper_aeb44d733b48bfd31ca69b803bb120387}{
+long {\bfseries SPRS\_\-getTokenCount} ()}
+\label{classnsISPRS__PKCS11__Wrapper_aeb44d733b48bfd31ca69b803bb120387}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this interface was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+xpcom\_\-wrapper\_\-interface.h\item 
+xpcom\_\-wrapper\_\-interface.idl\end{DoxyCompactItemize}
