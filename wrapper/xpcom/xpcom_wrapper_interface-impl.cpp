@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2010 David Stelter
+ * ALL RIGHTS RESERVED
+ *
+ */
 #include "xpcom_wrapper_interface-impl.h"
 
 using namespace std;
@@ -25,14 +30,12 @@ NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_getLastError(PRInt32 *_retval)
 NS_IMETHODIMP nsSPRS_PKCS11_Wrapper::SPRS_initCrypto(PRBool *_retval)
 {
 
-	if (wrapper.initCrypto()){
+	if (wrapper.initCrypto())
 		*_retval = PR_TRUE;
-		return NS_OK;
-	}
-	else{
+	else
 		*_retval = PR_FALSE;
-		return NS_OK; //not the sort of failure we'd handle with a non-ok return code here, would make JS sad
-	}
+
+	return NS_OK;
 }
 
 /* void SPRS_finalizeCrypto (); */
