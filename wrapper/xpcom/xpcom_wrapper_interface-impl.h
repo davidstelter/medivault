@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2010 David Stelter
+ * ALL RIGHTS RESERVED
+ */
+
 #ifndef __SPRS_PKCS11_WRAPPER_IMPL_H__
 #define __SPRS_PKCS11_WRAPPER_IMPL_H__
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2010 David Stelter
+ * ALL RIGHTS RESERVED
+ *
+ */
 #include "xpcom_wrapper_interface-impl.h"
 
 using namespace std;
