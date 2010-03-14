@@ -100,23 +100,12 @@ function startup() {
   //loadSiteManager(true);
   loadPrograms();
 
-/*  var trht = 'http://www.trht.net/fireftp';
-  appendLog("<span id='opening' style='line-height:16px'><span style='cursor:pointer;text-decoration:underline;color:blue;' onclick=\"window.open('http://fireftp.mozdev.org/donate.html','FireFTP');\">"
-      + "FireFTP</span> <span>" + gVersion
-      + "  '</span><span style='cursor:pointer;text-decoration:underline;' onclick=\"window.open('" + trht + "','trht');\">"
-      + "Human Being</span>'"
-      + " <img style='cursor:pointer;text-decoration:underline;' onclick=\"window.open('"
-      + trht + "','trht');\" src='chrome://fireftp/skin/icons/trht.png'/>"
-      + " " + gStrbundle.getString("opening")
-      + "</span><br style='font-size:5pt'/><br style='font-size:5pt'/>", 'blue', "info");
-	*/
   gCmdlogBody.scrollTop = 0;
 
 	//This was breaking too...
  // onAccountChange(gDefaultAccount);
   //setTimeout("gAccountField.focus()", 0);
 
-  tipJar();
 
   setTimeout(doResizeHack, 0);
 
