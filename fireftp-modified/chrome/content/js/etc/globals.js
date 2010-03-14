@@ -102,6 +102,8 @@ var gPrefsService;
 var gPrefs;
 var gFireFTPUtils;
 
+//var nsPrompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
+
 const wrapper_cid = "@capstone.pdx.edu/sprs;1";
 var acos5 = Components.classes[wrapper_cid].createInstance();
 acos5 = acos5.QueryInterface(Components.interfaces.nsISPRS_PKCS11_Wrapper);
