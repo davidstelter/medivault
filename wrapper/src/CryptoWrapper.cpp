@@ -42,10 +42,10 @@ CryptoWrapper::CryptoWrapper(void)
 
 /*!
 *	@brief
-*	Interface wrapper constructor
+*	Interface wrapper destructor for CrytoWrapper
 *	@param void
 *	@retval
-*	@remarks Constructor for the wrapper API calls
+*	@remarks Destructor for the wrapper API calls
 */
 CryptoWrapper::~CryptoWrapper(void)
 {

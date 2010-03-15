@@ -209,9 +209,6 @@ bool CryptoWrapper::getKey(string keyName, CK_OBJECT_CLASS keyClass, CK_OBJECT_H
 * 	and decrypt to get information we need before allow keys to be use in
 * 	transactions.
 */
-/*
-
-*/
 vector<string> CryptoWrapper::listKeys() {
 	CK_RV	returnValue;	//holds the return value
 	//set up the template
